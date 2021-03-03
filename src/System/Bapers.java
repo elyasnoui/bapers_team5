@@ -7,6 +7,7 @@ public class Bapers {
     private ApplicationWindow applicationWindow = new ApplicationWindow("Bapers Team 5");
     private Login login;
     private Staff staff;
+    private Customer customer;
 
     public Bapers() {
         /*
@@ -19,6 +20,9 @@ public class Bapers {
 
         staff = new Staff();
         applicationWindow.add(staff.getPanel());
+
+        customer = new Customer();
+        applicationWindow.add(customer.getPanel());
 
         Also make sure you create getters and setters inside your GUI class for the panels, otherwise you
         wont be able to add it to the applicationWindow.
@@ -37,6 +41,13 @@ public class Bapers {
         staff = new Staff();
         applicationWindow.add(staff.getPanel());
          */
+
+        /*
+        customer = new Customer();
+        applicationWindow.add(customer.getPanel());
+        */
+
+
 
         applicationWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         applicationWindow.setVisible(true);
