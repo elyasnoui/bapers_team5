@@ -34,13 +34,13 @@ public class Bapers {
         so we can have the program default to the login screen.
          */
 
-        login = new Login();
-        applicationWindow.add(login.getPanel());
+        //login = new Login();
+        //applicationWindow.add(login.getPanel());
 
-        /*
+
         staff = new Staff();
         applicationWindow.add(staff.getPanel());
-         */
+
 
         /*
         customer = new Customer();
