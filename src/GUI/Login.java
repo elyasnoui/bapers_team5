@@ -5,17 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Login {
+    private JPanel panel;
     private JButton loginButton;
-
-    public JPanel getPanel1() {
-        return panel1;
-    }
-
-    public void setPanel1(JPanel panel1) {
-        this.panel1 = panel1;
-    }
-
-    private JPanel panel1;
 
     public Login() {
         loginButton.addActionListener(new ActionListener() {
@@ -24,5 +15,13 @@ public class Login {
                 System.out.println("Login");
             }
         });
+    }
+
+    public JPanel getPanel() {
+        return panel;
+    }
+
+    public void setPanel(JPanel panel) {
+        this.panel = panel;
     }
 }
