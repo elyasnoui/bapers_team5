@@ -14,4 +14,8 @@ public class Bapers {
     int sunil() {
         return(2);
     }
+
+    int efte() {
+        return(5);
+    }
 }
