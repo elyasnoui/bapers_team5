@@ -7,7 +7,7 @@ public class Bapers {
         System.out.println("Team 5");
     }
 
-    public static void asad(String [] args) {
-        System.out.println("asad");
+    int asad() {
+        return(1);
     }
 }
