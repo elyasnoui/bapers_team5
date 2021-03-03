@@ -7,4 +7,8 @@ public class Bapers {
         System.out.println("Team 5");
         System.out.println("Team 5");
     }
+
+    int asad() {
+        return(1);
+    }
 }
