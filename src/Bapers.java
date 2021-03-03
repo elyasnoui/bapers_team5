@@ -11,4 +11,8 @@ public class Bapers {
     int asad() {
         return(1);
     }
+
+    int sunil() {
+        return(2);
+    }
 }
