@@ -3,11 +3,14 @@ package System;
 import javax.swing.*;
 import GUI.*;
 
+import java.awt.*;
+
 public class Bapers {
     private ApplicationWindow applicationWindow = new ApplicationWindow("Bapers Team 5");
     private Login login;
     private Staff staff;
     private Customer customer;
+    public String currentPanel = "Login";  // This is 'Login' by default.
 
     public Bapers() {
         /*
@@ -15,8 +18,8 @@ public class Bapers {
 
         For example, Asad would do this to view his Staff panel:
 
-        //login = new Login();
-        //applicationWindow.add(login.getPanel());
+        // login = new Login();
+        // applicationWindow.add(login.getPanel());
 
         staff = new Staff();
         applicationWindow.add(staff.getPanel());
@@ -34,22 +37,21 @@ public class Bapers {
         so we can have the program default to the login screen.
          */
 
-        //login = new Login();
-        //applicationWindow.add(login.getPanel());
+        login = new Login();
+        applicationWindow.add(login.getMainPanel(), BorderLayout.CENTER);
 
-
+        /*
         staff = new Staff();
         applicationWindow.add(staff.getPanel());
-
+        */
 
         /*
         customer = new Customer();
         applicationWindow.add(customer.getPanel());
         */
 
-
-
         applicationWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        applicationWindow.pack();
         applicationWindow.setVisible(true);
         applicationWindow.setSize(1280, 720);
         applicationWindow.setResizable(false);
