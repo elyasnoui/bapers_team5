@@ -37,13 +37,13 @@ public class Bapers {
         so we can have the program default to the login screen.
          */
 
-        login = new Login();
-        applicationWindow.add(login.getMainPanel(), BorderLayout.CENTER);
+        //login = new Login();
+        //applicationWindow.add(login.getMainPanel(), BorderLayout.CENTER);
 
-        /*
+
         staff = new Staff();
-        //applicationWindow.add(staff.getPanel());
-        */
+        applicationWindow.add(staff.getPanel());
+
 
 
         //customer = new Customer();
@@ -59,13 +59,15 @@ public class Bapers {
         applicationWindow.setFocusTraversalKeysEnabled(false);
         applicationWindow.setIconImage(null);
 
-        try {
+       /* try {
             DatabaseConnection db = new DatabaseConnection();
             db.createTable();
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
     }
+
+
 
     public static void main(String[] args) {
         System.out.println("Team 5");

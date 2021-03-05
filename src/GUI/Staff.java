@@ -13,9 +13,8 @@ public class Staff {
     private JButton CreateButton;
     private JButton editButton;
     private JButton deleteButton;
-    private JLabel title;
-    private JScrollBar scrollBar1;
     private JTable staffTable;
+    private JLabel banner;
 
 
     private String [] ColumnNames = {
