@@ -40,10 +40,10 @@ public class Bapers {
         login = new Login();
         applicationWindow.add(login.getMainPanel(), BorderLayout.CENTER);
 
-        /*
-        staff = new Staff();
-        //applicationWindow.add(staff.getPanel());
-        */
+
+        //staff = new Staff();
+        //applicationWindow.add(staff.getMainPanel());
+
 
         //customer = new Customer();
         //applicationWindow.add(customer.getPanel());
@@ -58,11 +58,13 @@ public class Bapers {
         applicationWindow.setFocusTraversalKeysEnabled(false);
         applicationWindow.setIconImage(null);
 
+        /*
         try {
             DatabaseConnection db = new DatabaseConnection();
         } catch (Exception e) {
             e.printStackTrace();
         }
+         */
     }
 
     public static void main(String[] args) {

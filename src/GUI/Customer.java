@@ -9,8 +9,13 @@ public class Customer extends JFrame{
     private JPanel sidePanel;
     private JButton customerButton;
     private JPanel contentPanel;
+    private JLabel bannerLabel;
+    private ImageIcon bannerIcon;
 
     public Customer() {
+        bannerIcon = new ImageIcon("data/banners/customer.png");
+        bannerLabel.setIcon(bannerIcon);
+
         //add(panel);
         //setTitle("My Title");
         //setSize(1280,720);
