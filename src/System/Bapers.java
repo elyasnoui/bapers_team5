@@ -10,6 +10,7 @@ public class Bapers {
     private Login login;
     private Staff staff;
     private Customer customer;
+    private UpdateProfile UpdateProfile;
     public String currentPanel = "Login";  // This is 'Login' by default.
 
     public Bapers() {
@@ -27,6 +28,9 @@ public class Bapers {
         customer = new Customer();
         applicationWindow.add(customer.getPanel());
 
+
+
+
         Also make sure you create getters and setters inside your GUI class for the panels, otherwise you
         wont be able to add it to the applicationWindow.
 
@@ -37,14 +41,17 @@ public class Bapers {
         so we can have the program default to the login screen.
          */
 
-        login = new Login();
-        applicationWindow.add(login.getMainPanel(), BorderLayout.CENTER);
+        //login = new Login();
+        //applicationWindow.add(login.getMainPanel(), BorderLayout.CENTER);
 
         //staff = new Staff();
         //applicationWindow.add(staff.getMainPanel());
 
         //customer = new Customer();
         //applicationWindow.add(customer.getPanel());
+
+        UpdateProfile = new UpdateProfile();
+        applicationWindow.add(UpdateProfile.getMainPanel());
 
         applicationWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         applicationWindow.pack();
