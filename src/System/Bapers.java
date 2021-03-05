@@ -28,9 +28,6 @@ public class Bapers {
         customer = new Customer();
         applicationWindow.add(customer.getPanel());
 
-
-
-
         Also make sure you create getters and setters inside your GUI class for the panels, otherwise you
         wont be able to add it to the applicationWindow.
 
