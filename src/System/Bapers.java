@@ -40,14 +40,12 @@ public class Bapers {
         login = new Login();
         applicationWindow.add(login.getMainPanel(), BorderLayout.CENTER);
 
-        /*
-        staff = new Staff();
+        //staff = new Staff();
         //applicationWindow.add(staff.getPanel());
-        */
 
 
-        //customer = new Customer();
-        //applicationWindow.add(customer.getPanel());
+/*        customer = new Customer();
+        applicationWindow.add(customer.getPanel());*/
 
 
         applicationWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -59,12 +57,12 @@ public class Bapers {
         applicationWindow.setFocusTraversalKeysEnabled(false);
         applicationWindow.setIconImage(null);
 
-        try {
+/*        try {
             DatabaseConnection db = new DatabaseConnection();
             db.createTable();
         } catch (Exception e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     public static void main(String[] args) {
