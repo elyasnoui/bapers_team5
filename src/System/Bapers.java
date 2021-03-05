@@ -41,8 +41,8 @@ public class Bapers {
         //applicationWindow.add(login.getMainPanel(), BorderLayout.CENTER);
 
 
-        staff = new Staff();
-        applicationWindow.add(staff.getPanel());
+        //staff = new Staff();
+        //applicationWindow.add(staff.getPanel());
 
 
         //customer = new Customer();
