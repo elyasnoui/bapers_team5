@@ -61,14 +61,6 @@ public class Bapers {
         applicationWindow.setFocusable(true);
         applicationWindow.setFocusTraversalKeysEnabled(false);
         applicationWindow.setIconImage(null);
-
-        /*
-        try {
-            DatabaseConnection db = new DatabaseConnection();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-         */
     }
 
     public static void main(String[] args) {
