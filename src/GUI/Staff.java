@@ -39,7 +39,7 @@ public class Staff {
 
 
     public Staff() {
-        bannerIcon = new ImageIcon("data/banners/test.png");
+        bannerIcon = new ImageIcon("data/banners/staff.png");
         bannerLabel.setIcon(bannerIcon);
 
         CreateButton.addActionListener(new ActionListener() {

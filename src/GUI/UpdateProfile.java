@@ -11,7 +11,7 @@ public class UpdateProfile {
     private ImageIcon bannerIcon;
 
     public UpdateProfile() {
-        bannerIcon = new ImageIcon("data/banners/test2.png");
+        bannerIcon = new ImageIcon("data/banners/updateProfile.png");
         bannerLabel.setIcon(bannerIcon);
     }
 
