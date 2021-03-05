@@ -13,30 +13,6 @@ public class DatabaseConnection {
 
     public DatabaseConnection() throws Exception {}
 
-    public static ArrayList<String> getData(String tableName, String columns) throws Exception {
-        try {
-            Connection conn = Connect();
-            PreparedStatement statement = conn.prepareStatement(
-                    "SELECT "+columns+" FROM "+tableName
-            );
-            ResultSet res = statement.executeQuery();
-            ArrayList<String> rows = new ArrayList<String>();
-            String[] cArr = columns.split(",");
-            String row;
-            while (res.next()) {
-                row = "";
-                for (String s : cArr)
-                    row += res.getString(s) + ", ";
-                row = row.substring(0, row.length() - 2); // Removes last ', '
-                System.out.println(row);
-                rows.add(row);
-            }
-            System.out.println("All names have been received");
-            return rows;
-        } catch (Exception e) { System.out.println(e); }
-        return null;
-    }
-
     public static String md5(String input) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         MessageDigest md5 = MessageDigest.getInstance("MD5");
         byte[] digest = md5.digest(input.getBytes("UTF-8"));
