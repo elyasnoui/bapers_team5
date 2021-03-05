@@ -34,4 +34,8 @@ public class Login {
     public void setMainPanel(JPanel mainPanel) {
         this.mainPanel = mainPanel;
     }
+
+    private void createUIComponents() {
+        // TODO: place custom component creation code here
+    }
 }

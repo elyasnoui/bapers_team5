@@ -45,10 +45,10 @@ public class Bapers {
         applicationWindow.add(staff.getPanel());
         */
 
-        /*
-        customer = new Customer();
-        applicationWindow.add(customer.getPanel());
-        */
+
+        //customer = new Customer();
+        //applicationWindow.add(customer.getPanel());
+
 
         applicationWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         applicationWindow.pack();
