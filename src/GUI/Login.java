@@ -20,11 +20,18 @@ public class Login {
     private ImageIcon bannerIcon;
 
     public Login() {
-        bannerIcon = new ImageIcon("data/banners/test.png");
+        bannerIcon = new ImageIcon("data/banners/login.png");
         bannerLabel.setIcon(bannerIcon);
 
         usernameField.setBorder(null);
         passwordField.setBorder(null);
+
+        loginButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
     }
 
     public JPanel getMainPanel() {
