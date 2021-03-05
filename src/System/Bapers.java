@@ -42,7 +42,7 @@ public class Bapers {
 
         /*
         staff = new Staff();
-        applicationWindow.add(staff.getPanel());
+        //applicationWindow.add(staff.getPanel());
         */
 
 
@@ -58,6 +58,13 @@ public class Bapers {
         applicationWindow.setFocusable(true);
         applicationWindow.setFocusTraversalKeysEnabled(false);
         applicationWindow.setIconImage(null);
+
+        try {
+            DatabaseConnection db = new DatabaseConnection();
+            db.createTable();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {
