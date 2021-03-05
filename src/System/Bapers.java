@@ -45,7 +45,6 @@ public class Bapers {
         applicationWindow.add(staff.getPanel());
 
 
-
         //customer = new Customer();
         //applicationWindow.add(customer.getPanel());
 
@@ -61,7 +60,6 @@ public class Bapers {
 
        /* try {
             DatabaseConnection db = new DatabaseConnection();
-            db.createTable();
         } catch (Exception e) {
             e.printStackTrace();
         }*/
