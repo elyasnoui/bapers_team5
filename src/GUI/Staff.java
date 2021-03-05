@@ -1,7 +1,6 @@
 package GUI;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import java.awt.event.ActionEvent;
@@ -9,13 +8,17 @@ import java.awt.event.ActionListener;
 
 public class Staff {
 
-    private JPanel panel;
+    private JPanel contentPanel;
     private JButton CreateButton;
     private JButton editButton;
     private JButton deleteButton;
+    private JLabel title;
     private JTable staffTable;
-    private JLabel banner;
-
+    private JPanel mainPanel;
+    private JPanel sidePanel;
+    private JLabel bannerLabel;
+    private JButton logoutButton;
+    private ImageIcon bannerIcon;
 
     private String [] ColumnNames = {
                 "ID",
@@ -36,6 +39,9 @@ public class Staff {
 
 
     public Staff() {
+        bannerIcon = new ImageIcon("data/banners/test.png");
+        bannerLabel.setIcon(bannerIcon);
+
         CreateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -61,13 +67,12 @@ public class Staff {
 
     }
 
-
-    public JPanel getPanel() {
-        return panel;
+    public JPanel getMainPanel() {
+        return mainPanel;
     }
 
-    public void setPanel(JPanel panel) {
-        this.panel = panel;
+    public void setMainPanel(JPanel mainPanel) {
+        this.mainPanel = mainPanel;
     }
 
     private void createTable(){
