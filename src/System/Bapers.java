@@ -47,11 +47,11 @@ public class Bapers {
         //staff = new Staff();
         //applicationWindow.add(staff.getMainPanel());
 
-        //customer = new Customer();
-        //applicationWindow.add(customer.getPanel());
+        customer = new Customer();
+        applicationWindow.add(customer.getPanel());
 
-        UpdateProfile = new UpdateProfile();
-        applicationWindow.add(UpdateProfile.getMainPanel());
+        //UpdateProfile = new UpdateProfile();
+        //applicationWindow.add(UpdateProfile.getMainPanel());
 
         applicationWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         applicationWindow.pack();
