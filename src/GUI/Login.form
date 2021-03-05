@@ -53,6 +53,7 @@
               <background color="-11774858"/>
               <borderPainted value="false"/>
               <contentAreaFilled value="true"/>
+              <enabled value="false"/>
               <focusable value="false"/>
               <foreground color="-1"/>
               <label value="Log In"/>

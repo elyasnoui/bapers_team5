@@ -40,14 +40,11 @@ public class Bapers {
         login = new Login();
         applicationWindow.add(login.getMainPanel(), BorderLayout.CENTER);
 
-
         //staff = new Staff();
         //applicationWindow.add(staff.getMainPanel());
 
-
         //customer = new Customer();
         //applicationWindow.add(customer.getPanel());
-
 
         applicationWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         applicationWindow.pack();
