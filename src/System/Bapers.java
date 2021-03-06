@@ -4,6 +4,8 @@ import javax.swing.*;
 import GUI.*;
 
 import java.awt.*;
+import java.sql.SQLException;
+import java.time.LocalDate;
 
 public class Bapers {
     private ApplicationWindow applicationWindow = new ApplicationWindow("Bapers Team 5");
@@ -58,6 +60,21 @@ public class Bapers {
         applicationWindow.setFocusable(true);
         applicationWindow.setFocusTraversalKeysEnabled(false);
         applicationWindow.setIconImage(null);
+
+        /* debug
+        try {
+            //boolean db_cust = DatabaseConnection.addCustomer("test", "test", "test", "test", "test");
+            //boolean db_valuedCust = DatabaseConnection.addValuedCustomer(13, "Fixed Discount", "0%");
+            //boolean db_staff = DatabaseConnection.addStaff("test", "test", "test", "test", "test",
+            //        "test", 0, "test", "test", "test", "test");
+            boolean db_job = DatabaseConnection.addJob((byte) 0, 1.00, LocalDate.now(), LocalDate.of(2021, 10, 9),
+                    LocalDate.of(2021, 10, 10), "confirmed", 13);
+            System.out.println(db_job);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+         */
+
     }
 
     public static void main(String[] args) {

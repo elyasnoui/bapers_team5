@@ -32,8 +32,7 @@ public class Login {
             public void actionPerformed(ActionEvent e) {
                 DatabaseConnection db = null;
                 try {
-                    db = new DatabaseConnection();
-                    if (db.VerifyLogInCredentials(usernameField.getText(), passwordField.getPassword()))
+                    if (DatabaseConnection.VerifyLogInCredentials(usernameField.getText(), passwordField.getPassword()))
                         JOptionPane.showMessageDialog(mainPanel, "Logged in");
                     else JOptionPane.showMessageDialog(mainPanel, "Invalid Credentials");
                 } catch (Exception exception) {
