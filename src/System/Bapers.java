@@ -28,9 +28,6 @@ public class Bapers {
         customer = new Customer();
         applicationWindow.add(customer.getPanel());
 
-
-
-
         Also make sure you create getters and setters inside your GUI class for the panels, otherwise you
         wont be able to add it to the applicationWindow.
 
@@ -50,8 +47,8 @@ public class Bapers {
         //customer = new Customer();
         //applicationWindow.add(customer.getPanel());
 
-/*        UpdateProfile = new UpdateProfile();
-        applicationWindow.add(UpdateProfile.getMainPanel());*/
+        //UpdateProfile = new UpdateProfile();
+        //applicationWindow.add(UpdateProfile.getMainPanel());
 
         applicationWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         applicationWindow.pack();
@@ -61,14 +58,6 @@ public class Bapers {
         applicationWindow.setFocusable(true);
         applicationWindow.setFocusTraversalKeysEnabled(false);
         applicationWindow.setIconImage(null);
-
-        /*
-        try {
-            DatabaseConnection db = new DatabaseConnection();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-         */
     }
 
     public static void main(String[] args) {

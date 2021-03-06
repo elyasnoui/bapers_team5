@@ -36,6 +36,7 @@ public class Customer extends JFrame{
             {"02","Bob", "Marley","07888804444", "5 Bookers, SW11 KWE","Variable", "5,0,3,0,0,0,1"},
             {"03","Game", "Stop","07656186388","74A Snooker, W1 2BA","Flexible","0,1,2"},
             {"04","Doge", "Coin","07563656556","4a Shareholder, NBA 2K","None","None"}
+
     };
 
     public Customer() {
@@ -91,9 +92,9 @@ public class Customer extends JFrame{
         columns.getColumn(5).setCellRenderer(centerRenderer);
         columns.getColumn(6).setCellRenderer(centerRenderer);
 
-        columns.getColumn(0).setMinWidth(50);
-        columns.getColumn(1).setMinWidth(50);
-        columns.getColumn(2).setMinWidth(50);
+        columns.getColumn(0).setMinWidth(30);
+        columns.getColumn(1).setMinWidth(30);
+        columns.getColumn(2).setMinWidth(30);
 
     }
 }
