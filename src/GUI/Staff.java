@@ -17,6 +17,13 @@ public class Staff {
     private JPanel contentPanel;
     private JButton createButton;
     private JLabel bannerLabel;
+    private JPanel navigationPanel;
+    private JButton customerButton;
+    private JButton paymentButton;
+    private JButton staffButton;
+    private JButton taskButton;
+    private JButton jobButton;
+    private JButton reportButton;
     private ImageIcon bannerIcon;
 
     private String [] ColumnNames = {
