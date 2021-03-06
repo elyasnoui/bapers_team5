@@ -44,17 +44,17 @@ public class Bapers {
         //login = new Login();
         //applicationWindow.add(login.getMainPanel(), BorderLayout.CENTER);
 
-  //      staff = new Staff();
-  //      applicationWindow.add(staff.getMainPanel());
+        //staff = new Staff();
+        //applicationWindow.add(staff.getMainPanel());
 
- //       customer = new Customer();
-//        applicationWindow.add(customer.getPanel());
+        //customer = new Customer();
+        //applicationWindow.add(customer.getPanel());
 
-      UpdateProfile = new UpdateProfile();
+        UpdateProfile = new UpdateProfile();
         applicationWindow.add(UpdateProfile.getMainPanel());
 
-//        Job = new Job();
-//        applicationWindow.add(Job.getMainPanel());
+        //Job = new Job();
+        //applicationWindow.add(Job.getMainPanel());
 
         applicationWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         applicationWindow.pack();
