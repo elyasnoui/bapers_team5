@@ -7,12 +7,12 @@ import javax.swing.table.TableColumnModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class Staff {
+public class Job {
 
     private JButton CreateButton;
     private JButton editButton;
     private JButton deleteButton;
-    private JTable staffTable;
+    private JTable jobTable;
     private JPanel mainPanel;
     private JPanel sidePanel;
     private JPanel contentPanel;
@@ -28,49 +28,49 @@ public class Staff {
     private ImageIcon bannerIcon;
 
     private String [] ColumnNames = {
-                "ID",
-                "First Name",
-                "Surname",
-                "Role",
-                "Username",
-                "Password",
-                "Address",
-                "Contact Number",
-                "Email Address"
-        };
+            "Job ID",
+            "Customer ID",
+            "Task(s)",
+            "Price (£)",
+            "Urgency",
+            "Duration",
+            "Instructions",
+            "Current Task",
+            "Status",
+            "Payment Received",
+            "Start/End Date"
+    };
 
-        private Object [][] data = {
-                {"01","Kathy", "Smith","Office Manager","Kathy01","password","64 road road","+44854548544", "kathy@email.com"}
-        };
+    private Object [][] data = {
+            {"871","02", "1,4,6","107.30","Urgent","4 Hours, 45 Mins","Quality Check","4", "Pending", "Yes","17/02/21 - 19.02.21"}
+    };
 
 
 
-    public Staff() {
-        bannerIcon = new ImageIcon("data/banners/staff.png");
+    public Job() {
+        bannerIcon = new ImageIcon("data/banners/Job.png");
         bannerLabel.setIcon(bannerIcon);
 
-         createButton.addActionListener(new ActionListener() {
+        createButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Create Staff");
-            }
-        });
-
-        deleteButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Delete Staff");
+                System.out.println("Create Job");
             }
         });
 
         editButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Edit Staff");
+                System.out.println("Edit Job");
             }
         });
 
-
+        deleteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println("Delete Job");
+            }
+        });
 
         createTable();
 
@@ -85,9 +85,11 @@ public class Staff {
     }
 
     private void createTable(){
-        staffTable.setModel(new DefaultTableModel(data,ColumnNames));
-        TableColumnModel columns = staffTable.getColumnModel();
-        columns.getColumn(8).setMinWidth(100);
+        jobTable.setModel(new DefaultTableModel(data,ColumnNames));
+        TableColumnModel columns = jobTable.getColumnModel();
+        columns.getColumn(9).setMinWidth(100);
+        columns.getColumn(10).setMinWidth(100);
+        columns.setColumnMargin(10);
     }
 
 
