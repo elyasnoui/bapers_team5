@@ -8,16 +8,15 @@ import java.awt.event.ActionListener;
 
 public class Staff {
 
-    private JPanel contentPanel;
     private JButton CreateButton;
     private JButton editButton;
     private JButton deleteButton;
-    private JLabel title;
     private JTable staffTable;
     private JPanel mainPanel;
     private JPanel sidePanel;
+    private JPanel contentPanel;
+    private JButton createButton;
     private JLabel bannerLabel;
-    private JButton logoutButton;
     private ImageIcon bannerIcon;
 
     private String [] ColumnNames = {
@@ -42,7 +41,7 @@ public class Staff {
         bannerIcon = new ImageIcon("data/banners/staff.png");
         bannerLabel.setIcon(bannerIcon);
 
-        CreateButton.addActionListener(new ActionListener() {
+         createButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Create Staff");
@@ -62,6 +61,8 @@ public class Staff {
                 System.out.println("Edit Staff");
             }
         });
+
+
 
         createTable();
 
