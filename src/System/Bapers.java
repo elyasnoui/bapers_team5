@@ -65,9 +65,9 @@ public class Bapers {
         applicationWindow.setFocusTraversalKeysEnabled(false);
         applicationWindow.setIconImage(null);
 
-        /* DEBUG
         try {
-            //boolean db_cust = DatabaseConnection.addCustomer("test", "test", "test", "test", "test");
+            //boolean db_cust = DatabaseConnection.addCustomer("test2", "test2", "test2",
+            //        "test2", "test2");
             //boolean db_valuedCust = DatabaseConnection.addValuedCustomer(13, "Fixed Discount", "0%");
             //boolean db_staff = DatabaseConnection.addStaff("test", "test", "test", "test", "test",
             //        "test", 0, "test", "test", "test", "test");
@@ -87,11 +87,13 @@ public class Bapers {
             //boolean db_staffPerformanceReport = DatabaseConnection.addStaffPerformanceReport(4, 12, 1, 9);
             //boolean db_taskSummaryReport = DatabaseConnection.addTaskSummaryReport(4, 1, 9);
             //boolean db_jobJobReport = DatabaseConnection.addJobJobReport(4, 9, 1, 12);
-            //System.out.println(db_jobJobReport);
+
+            boolean db_removeCustomer = DatabaseConnection.removeCustomer(15);
+
+            System.out.println(db_removeCustomer);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-         */
     }
 
     public static void main(String[] args) {
