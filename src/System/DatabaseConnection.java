@@ -1,49 +1,284 @@
 package System;
 
-import javax.swing.*;
-import javax.xml.transform.Result;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.sql.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 public class DatabaseConnection {
 
-    public DatabaseConnection() throws Exception {}
+    public DatabaseConnection() {}
 
-    // Inserting a new job - not working yet
+    // TODO: Reminder -> Add method to reduce code repetition
+
+    // Inserting a new job_jobReport - working
     public static boolean
-        addJob(final byte isUrgent, final double price, final LocalDate startDate, final LocalDate endDate,
-               final LocalDate deadline, final String status, final int customerID) throws SQLException {
+        addJobJobReport(final int reportID, final int jobID, final int taskID, final int staffID) throws SQLException {
         Connection conn = Connect();
         try {
             assert conn != null;
-
-
             PreparedStatement statement = conn.prepareStatement(
-                    "INSERT IGNORE INTO job (ID, isUrgent, price, startDate, endDate, deadline, status, customerID) " +
-                            "VALUES (NULL, "+isUrgent+", '"+price+"', '"+startDate+"', '"+endDate+"', '"+deadline+"', '" +
-                            status+"', '"+customerID+"')"
+                    "INSERT INTO job_jobReport SELECT * FROM (SELECT "+reportID+", "+jobID+", " +
+                            ""+taskID+", "+staffID+") AS tmp WHERE NOT EXISTS (SELECT * FROM job_jobReport " +
+                            "WHERE reportID = "+reportID+" AND jobID = "+jobID+" AND taskID = "+taskID+" AND " +
+                            "staffID = "+staffID+") LIMIT 1"
             );
-
-            /*
-            PreparedStatement statement = conn.prepareStatement(
-                    "MERGE INTO job WITH (HOLDLOCK) AS t " +
-                            "USING (VALUES ("+isUrgent+", '"+price+"', '"+startDate+"', '"+endDate+"', '"+deadline+"', " +
-                            "'"+status+"', '"+customerID+"')) s (isUrgent, price, startDate, endDate, deadline, status, customerID) " +
-                            "ON t.isUrgent = s.isUrgent AND t.price = s.price AND t.startDate = s.startDate AND t.deadline = s.deadline " +
-                            "AND t.status = s.status AND t.customerID = s.customerID WHEN NOT MATCHED THEN " +
-                            "INSERT VALUES (s.isUrgent, s.price, s.startDate, s.endDate, s.deadline, s.status, s.customerID)"
-            );
-
-             */
             statement.executeUpdate();
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally { conn.close(); }
+        } finally {
+            assert conn != null;
+            conn.close(); }
+        return false;
+    }
+
+    // Inserting a new task_summaryReport - working
+    public static boolean
+        addTaskSummaryReport(final int reportID, final int taskID, final int jobID) throws SQLException {
+        Connection conn = Connect();
+        try {
+            assert conn != null;
+            PreparedStatement statement = conn.prepareStatement(
+                    "INSERT INTO task_summaryReport SELECT * FROM (SELECT "+reportID+", "+taskID+", "+jobID+") AS " +
+                            "tmp WHERE NOT EXISTS (SELECT * FROM task_summaryReport WHERE reportID = "+reportID+" AND " +
+                            "taskID = "+taskID+" AND jobID = "+jobID+") LIMIT 1"
+            );
+            statement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            assert conn != null;
+            conn.close(); }
+        return false;
+    }
+
+    // Inserting a new staff_performanceReport - working
+    public static boolean
+        addStaffPerformanceReport(final int reportID, final int staffID, final int taskID, final int jobID) throws SQLException {
+        Connection conn = Connect();
+        try {
+            assert conn != null;
+            PreparedStatement statement = conn.prepareStatement(
+                    "INSERT INTO staff_performanceReport SELECT * FROM (SELECT "+reportID+", "+staffID+", " +
+                            ""+taskID+", "+jobID+") AS tmp WHERE NOT EXISTS (SELECT * FROM staff_performanceReport " +
+                            "WHERE reportID = "+reportID+" AND staffID = "+staffID+" AND taskID = "+taskID+" AND " +
+                            "jobID = "+jobID+") LIMIT 1"
+            );
+            statement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            assert conn != null;
+            conn.close(); }
+        return false;
+    }
+
+    // Inserting a new job report - working
+    public static boolean
+        addJobReport(final int reportID, final int numberOfJobs) throws SQLException {
+        Connection conn = Connect();
+        try {
+            assert conn != null;
+            PreparedStatement statement = conn.prepareStatement(
+                    "INSERT INTO jobReport SELECT * FROM (SELECT '"+reportID+"', '"+numberOfJobs+"') AS tmp " +
+                            "WHERE NOT EXISTS (SELECT * FROM jobReport WHERE reportID = '"+reportID+"' AND " +
+                            "numberOfJobs = '"+numberOfJobs+"') LIMIT 1"
+            );
+            statement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            assert conn != null;
+            conn.close(); }
+        return false;
+    }
+
+    // Inserting a new summary report - working
+    public static boolean
+        addSummaryReport(final int reportID, final int numberOfTasks) throws SQLException {
+        Connection conn = Connect();
+        try {
+            assert conn != null;
+            PreparedStatement statement = conn.prepareStatement(
+                    "INSERT INTO summaryReport SELECT * FROM (SELECT '"+reportID+"', '"+numberOfTasks+"') AS tmp " +
+                            "WHERE NOT EXISTS (SELECT * FROM summaryReport WHERE reportID = '"+reportID+"' AND " +
+                            "numberOfTasks = '"+numberOfTasks+"') LIMIT 1"
+            );
+            statement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            assert conn != null;
+            conn.close(); }
+        return false;
+    }
+
+    // Inserting a new performance report - working
+    public static boolean
+        addPerformanceReport(final int reportID, final int numberOfStaff) throws SQLException {
+        Connection conn = Connect();
+        try {
+            assert conn != null;
+            PreparedStatement statement = conn.prepareStatement(
+                    "INSERT INTO performanceReport SELECT * FROM (SELECT '"+reportID+"', '"+numberOfStaff+"') AS tmp " +
+                            "WHERE NOT EXISTS (SELECT * FROM performanceReport WHERE reportID = '"+reportID+"' AND " +
+                            "numberOfStaff = '"+numberOfStaff+"') LIMIT 1"
+            );
+            statement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            assert conn != null;
+            conn.close(); }
+        return false;
+    }
+
+    // Inserting a new report - working
+    public static boolean
+        addReport(final String reportType, final String content, final LocalDate startDate, final LocalDate endDate) throws SQLException {
+        Connection conn = Connect();
+        try {
+            assert conn != null;
+            PreparedStatement statement = conn.prepareStatement(
+                    "INSERT INTO report (reportType, content, startDate, endDate) SELECT * FROM (SELECT '"+reportType+"', " +
+                            "'"+content+"', '"+startDate+"', '"+endDate+"') AS tmp WHERE NOT EXISTS (SELECT reportType, " +
+                            "content, startDate, endDate FROM report WHERE reportType = '"+reportType+"' AND content = '" +
+                            ""+content+"' AND startDate = '"+startDate+"' AND endDate = '"+endDate+"') LIMIT 1"
+            );
+            statement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            assert conn != null;
+            conn.close(); }
+        return false;
+    }
+
+    // Inserting a new cash payment - working
+    public static boolean
+        addCash(final int jobID, final double cashPaid, final double changeGiven) throws SQLException {
+        Connection conn = Connect();
+        try {
+            assert conn != null;
+            PreparedStatement statement = conn.prepareStatement(
+                    "INSERT INTO cash (jobID, cashPaid, changeGiven) SELECT * FROM (SELECT '"+jobID+"', '"+cashPaid+"', " +
+                            "'"+changeGiven+"') AS tmp WHERE NOT EXISTS (SELECT jobID, cashPaid, changeGiven FROM cash WHERE " +
+                            "jobID = '"+jobID+"' AND cashPaid = '"+cashPaid+"' AND changeGiven = '"+changeGiven+"') LIMIT 1"
+            );
+            statement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            assert conn != null;
+            conn.close(); }
+        return false;
+    }
+
+    // Inserting a new card payment - working
+    public static boolean
+        addCard(final int jobID, final String cardType, final String expiryDate, final int lastFourDigits) throws SQLException {
+        Connection conn = Connect();
+        try {
+            assert conn != null;
+            PreparedStatement statement = conn.prepareStatement(
+                    "INSERT INTO card (jobID, cardType, expiryDate, lastFourDigits) SELECT * FROM (SELECT '"+jobID+"', " +
+                            "'"+cardType+"', '"+expiryDate+"', "+lastFourDigits+") AS tmp WHERE NOT EXISTS (SELECT jobID, " +
+                            "cardType, expiryDate, lastFourDigits FROM card WHERE jobID = '"+jobID+"' AND cardType = " +
+                            "'"+cardType+"' AND expiryDate = '"+expiryDate+"' AND lastFourDigits = "+lastFourDigits+") LIMIT 1"
+            );
+            statement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            assert conn != null;
+            conn.close(); }
+        return false;
+    }
+
+    // Inserting a new payment - working
+    public static boolean
+        addPayment(final int jobID, final double amountDue, final int isPaid, final double discount,
+                   final String paymentType, final int customerID, final int staffID) throws SQLException {
+        Connection conn = Connect();
+        try {
+            assert conn != null;
+            PreparedStatement statement = conn.prepareStatement(
+                    "INSERT INTO payment (jobID, amountDue, isPaid, discount, paymentType, customerID, staffID) SELECT * " +
+                            "FROM (SELECT '"+jobID+"', '"+amountDue+"', '"+isPaid+"', '"+discount+"', '"+paymentType+"', " +
+                            "'"+customerID+"', '"+staffID+"') AS tmp WHERE NOT EXISTS (SELECT jobID, amountDue, isPaid, " +
+                            "discount, paymentType, customerID, staffID FROM payment WHERE jobID = '"+jobID+"' AND " +
+                            "amountDue = '"+amountDue+"' AND isPaid = '"+isPaid+"' AND discount = '"+discount+"' AND " +
+                            "paymentType = '"+paymentType+"' AND customerID = '"+customerID+"' AND staffID = '"+staffID+"') LIMIT 1"
+            );
+            statement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            assert conn != null;
+            conn.close(); }
+        return false;
+    }
+
+    // Inserting a new task - working
+    public static boolean
+        addTask(final int ID, final int jobID, final String description, final String department, final String timeTaken,
+                final double price, final int discountRate, final int staffID) throws SQLException {
+        Connection conn = Connect();
+        try {
+            assert conn != null;
+            PreparedStatement statement = conn.prepareStatement(
+                    "INSERT INTO task (ID, jobID, description, department, timeTaken, price, discountRate, staffID) SELECT * " +
+                            "FROM (SELECT '"+ID+"', '"+jobID+"', '"+description+"', '"+department+"', '"+timeTaken+"', " +
+                            "'"+price+"', '"+discountRate+"', '"+staffID+"') AS tmp WHERE NOT EXISTS (SELECT ID, jobID, " +
+                            "description, department, timeTaken, price, discountRate, staffID FROM task WHERE ID = '"+ID+"' AND " +
+                            "jobID = '"+jobID+"' AND description = '"+description+"' AND department = '"+department+"' AND " +
+                            "timeTaken = '"+timeTaken+"' AND price = '"+price+"' AND discountRate = '"+discountRate+"' AND " +
+                            "staffID = '"+staffID+"') LIMIT 1"
+            );
+            statement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            assert conn != null;
+            conn.close(); }
+        return false;
+    }
+
+    // Inserting a new job - working
+    public static boolean
+        addJob(final int isUrgent, final double price, final LocalDate startDate, final LocalDate endDate,
+               final LocalDate deadline, final String status, final int customerID) throws SQLException {
+        Connection conn = Connect();
+        try {
+            assert conn != null;
+            PreparedStatement statement = conn.prepareStatement(
+                    "INSERT INTO job (isUrgent, price, startDate, endDate, deadline, status, customerID) SELECT * " +
+                            "FROM (SELECT '"+isUrgent+"', '"+price+"', '"+startDate+"', '"+endDate+"', '"+deadline+"', " +
+                            "'"+status+"', '"+customerID+"') AS tmp WHERE NOT EXISTS (SELECT isUrgent, price, startDate, " +
+                            "endDate, deadline, status, customerID FROM job WHERE isUrgent = '"+isUrgent+"' AND " +
+                            "price = '"+price+"' AND startDate = '"+startDate+"' AND endDate = '"+endDate+"' AND " +
+                            "deadline = '"+deadline+"' AND status = '"+status+"' AND customerID = '"+customerID+"') LIMIT 1"
+            );
+            statement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            assert conn != null;
+            conn.close(); }
         return false;
     }
 
@@ -65,7 +300,9 @@ public class DatabaseConnection {
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally { conn.close(); }
+        } finally {
+            assert conn != null;
+            conn.close(); }
         return false;
     }
 
@@ -81,9 +318,11 @@ public class DatabaseConnection {
             );
             statement.executeUpdate();
             return true;
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        } finally { conn.close(); }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            assert conn != null;
+            conn.close(); }
         return false;
     }
 
@@ -102,17 +341,19 @@ public class DatabaseConnection {
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally { conn.close(); }
+        } finally {
+            assert conn != null;
+            conn.close(); }
         return false;
     }
 
     // Converts string into hex value
     public static String md5(String input) throws NoSuchAlgorithmException, UnsupportedEncodingException {
         MessageDigest md5 = MessageDigest.getInstance("MD5");
-        byte[] digest = md5.digest(input.getBytes("UTF-8"));
+        byte[] digest = md5.digest(input.getBytes(StandardCharsets.UTF_8));
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < digest.length; ++i)
-            sb.append(Integer.toHexString((digest[i] & 0xFF) | 0x100).substring(1, 3));
+        for (byte b : digest)
+            sb.append(Integer.toHexString((b & 0xFF) | 0x100), 1, 3);
         return sb.toString();
     }
 
@@ -149,12 +390,8 @@ public class DatabaseConnection {
             String username = "root";
             String password = "cityproject5";
             Class.forName(driver);
-
-            Connection connect = DriverManager.getConnection(url, username, password);
-            System.out.println("Connected");
-            return connect;
-        } catch (Exception e) { System.out.println(e); }
-
+            return DriverManager.getConnection(url, username, password);
+        } catch (Exception e) { e.printStackTrace(); }
         return null;
     }
 }

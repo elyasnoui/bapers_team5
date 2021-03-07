@@ -50,8 +50,8 @@ public class Bapers {
         //customer = new Customer();
         //applicationWindow.add(customer.getPanel());
 
-        UpdateProfile = new UpdateProfile();
-        applicationWindow.add(UpdateProfile.getMainPanel());
+        //UpdateProfile = new UpdateProfile();
+        //applicationWindow.add(UpdateProfile.getMainPanel());
 
         //Job = new Job();
         //applicationWindow.add(Job.getMainPanel());
@@ -65,20 +65,33 @@ public class Bapers {
         applicationWindow.setFocusTraversalKeysEnabled(false);
         applicationWindow.setIconImage(null);
 
-        /* debug
+        /* DEBUG
         try {
             //boolean db_cust = DatabaseConnection.addCustomer("test", "test", "test", "test", "test");
             //boolean db_valuedCust = DatabaseConnection.addValuedCustomer(13, "Fixed Discount", "0%");
             //boolean db_staff = DatabaseConnection.addStaff("test", "test", "test", "test", "test",
             //        "test", 0, "test", "test", "test", "test");
-            boolean db_job = DatabaseConnection.addJob((byte) 0, 1.00, LocalDate.now(), LocalDate.of(2021, 10, 9),
-                    LocalDate.of(2021, 10, 10), "confirmed", 13);
-            System.out.println(db_job);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+            //boolean db_job = DatabaseConnection.addJob(0, 1.00, LocalDate.now(), LocalDate.of(2021, 10, 9),
+            //        LocalDate.of(2021, 10, 10), "confirmed", 13);
+            //boolean db_task = DatabaseConnection.addTask(1, 9, "test1", "test2",
+            //        "test3", 1.00, 0, 12);
+            //boolean db_payment = DatabaseConnection.addPayment(9, 1.00, 1, 0.00,
+            //        "card", 13, 12);
+            //boolean db_card = DatabaseConnection.addCard(9, "test", "test2", 1092);
+            //boolean db_cash = DatabaseConnection.addCash(9, 1.00, 0.00);
+            //boolean db_report = DatabaseConnection.addReport("test", "test2", LocalDate.now(),
+            //        LocalDate.of(2021, 10, 4));
+            //boolean db_performanceReport = DatabaseConnection.addPerformanceReport(4, 1);
+            //boolean db_summaryReport = DatabaseConnection.addSummaryReport(4, 1);
+            //boolean db_jobReport = DatabaseConnection.addJobReport(4, 1);
+            //boolean db_staffPerformanceReport = DatabaseConnection.addStaffPerformanceReport(4, 12, 1, 9);
+            //boolean db_taskSummaryReport = DatabaseConnection.addTaskSummaryReport(4, 1, 9);
+            //boolean db_jobJobReport = DatabaseConnection.addJobJobReport(4, 9, 1, 12);
+            //System.out.println(db_jobJobReport);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
          */
-
     }
 
     public static void main(String[] args) {
