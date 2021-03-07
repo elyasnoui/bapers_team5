@@ -102,6 +102,16 @@ public class DatabaseConnection {
         return executeStatement(statement);
     }
 
+    // Editing an existing jobReport record
+    public static boolean editJobReport(final int reportID, final int numberOfJobs) throws SQLException {
+        Connection conn = Connect();
+        assert conn != null;
+        PreparedStatement statement = conn.prepareStatement(
+                "UPDATE jobReport SET numberOfJobs = '"+numberOfJobs+"' WHERE reportID = "+reportID
+        );
+        return executeStatement(statement);
+    }
+
     // Removing an existing jobReport record
     public static boolean removeJobReport(final int reportID) throws SQLException {
         Connection conn = Connect();
@@ -121,6 +131,16 @@ public class DatabaseConnection {
                 "INSERT INTO jobReport SELECT * FROM (SELECT '"+reportID+"', '"+numberOfJobs+"') AS tmp " +
                         "WHERE NOT EXISTS (SELECT * FROM jobReport WHERE reportID = '"+reportID+"' AND " +
                         "numberOfJobs = '"+numberOfJobs+"') LIMIT 1"
+        );
+        return executeStatement(statement);
+    }
+
+    // Editing an existing summaryReport record
+    public static boolean editSummaryReport(final int reportID, final int numberOfTasks) throws SQLException {
+        Connection conn = Connect();
+        assert conn != null;
+        PreparedStatement statement = conn.prepareStatement(
+                "UPDATE summaryReport SET numberOfTasks = '"+numberOfTasks+"' WHERE reportID = "+reportID
         );
         return executeStatement(statement);
     }
@@ -148,6 +168,16 @@ public class DatabaseConnection {
         return executeStatement(statement);
     }
 
+    // Editing an existing performanceReport record
+    public static boolean editPerformanceReport(final int reportID, final int numberOfStaff) throws SQLException {
+        Connection conn = Connect();
+        assert conn != null;
+        PreparedStatement statement = conn.prepareStatement(
+                "UPDATE performanceReport SET numberOfStaff = '"+numberOfStaff+"' WHERE reportID = "+reportID
+        );
+        return executeStatement(statement);
+    }
+
     // Removing an existing performanceReport record
     public static boolean removePerformanceReport(final int reportID) throws SQLException {
         Connection conn = Connect();
@@ -167,6 +197,19 @@ public class DatabaseConnection {
                 "INSERT INTO performanceReport SELECT * FROM (SELECT '"+reportID+"', '"+numberOfStaff+"') AS tmp " +
                         "WHERE NOT EXISTS (SELECT * FROM performanceReport WHERE reportID = '"+reportID+"' AND " +
                         "numberOfStaff = '"+numberOfStaff+"') LIMIT 1"
+        );
+        return executeStatement(statement);
+    }
+
+    // Editing an existing report record
+    public static boolean
+        editReport(final int ID, final String reportType, final String content, final LocalDate startDate,
+                   final LocalDate endDate) throws SQLException {
+        Connection conn = Connect();
+        assert conn != null;
+        PreparedStatement statement = conn.prepareStatement(
+                "UPDATE report SET reportType = '"+reportType+"', content = '"+content+"', startDate = '"+startDate+"', " +
+                        "endDate = '"+endDate+"' WHERE ID = "+ID
         );
         return executeStatement(statement);
     }
@@ -195,6 +238,17 @@ public class DatabaseConnection {
         return executeStatement(statement);
     }
 
+    // Editing an existing cash record
+    public static boolean
+        editCash(final int jobID, final double cashPaid, final double changeGiven) throws SQLException {
+        Connection conn = Connect();
+        assert conn != null;
+        PreparedStatement statement = conn.prepareStatement(
+                "UPDATE cash SET cashPaid = '"+cashPaid+"', changeGiven = '"+changeGiven+"' WHERE jobID = "+jobID
+        );
+        return executeStatement(statement);
+    }
+
     // Removing an existing cash record
     public static boolean removeCash(final int jobID) throws SQLException {
         Connection conn = Connect();
@@ -214,6 +268,18 @@ public class DatabaseConnection {
                 "INSERT INTO cash (jobID, cashPaid, changeGiven) SELECT * FROM (SELECT '"+jobID+"', '"+cashPaid+"', " +
                         "'"+changeGiven+"') AS tmp WHERE NOT EXISTS (SELECT jobID, cashPaid, changeGiven FROM cash WHERE " +
                         "jobID = '"+jobID+"' AND cashPaid = '"+cashPaid+"' AND changeGiven = '"+changeGiven+"') LIMIT 1"
+        );
+        return executeStatement(statement);
+    }
+
+    // Editing an existing card record
+    public static boolean
+        editCard(final int jobID, final String cardType, final String expiryDate, final int lastFourDigits) throws SQLException {
+        Connection conn = Connect();
+        assert conn != null;
+        PreparedStatement statement = conn.prepareStatement(
+                "UPDATE card SET cardType = '"+cardType+"', expiryDate = '"+expiryDate+"', lastFourDigits = '" +
+                        ""+lastFourDigits+"' WHERE jobID = "+jobID
         );
         return executeStatement(statement);
     }
@@ -242,6 +308,20 @@ public class DatabaseConnection {
         return executeStatement(statement);
     }
 
+    // Editing an existing payment record
+    public static boolean
+        editPayment(final int jobID, final double amountDue, final int isPaid, final double discount,
+                    final String paymentType, final int customerID, final int staffID) throws SQLException {
+        Connection conn = Connect();
+        assert conn != null;
+        PreparedStatement statement = conn.prepareStatement(
+                "UPDATE payment SET amountDue = '"+amountDue+"', isPaid = '"+isPaid+"', discount = '"+discount+"', " +
+                        "paymentType = '"+paymentType+"', customerID = '"+customerID+"', staffID = '"+staffID+"' " +
+                        "WHERE jobID = "+jobID
+        );
+        return executeStatement(statement);
+    }
+
     // Removing an existing payment record
     public static boolean removePayment(final int jobID) throws SQLException {
         Connection conn = Connect();
@@ -265,6 +345,20 @@ public class DatabaseConnection {
                         "discount, paymentType, customerID, staffID FROM payment WHERE jobID = '"+jobID+"' AND " +
                         "amountDue = '"+amountDue+"' AND isPaid = '"+isPaid+"' AND discount = '"+discount+"' AND " +
                         "paymentType = '"+paymentType+"' AND customerID = '"+customerID+"' AND staffID = '"+staffID+"') LIMIT 1"
+        );
+        return executeStatement(statement);
+    }
+
+    // Editing an existing task record
+    public static boolean
+        editTask(final int ID, final int jobID, final String description, final String department, final String timeTaken,
+                 final double price, final int discountRate, final int staffID) throws SQLException {
+        Connection conn = Connect();
+        assert conn != null;
+        PreparedStatement statement = conn.prepareStatement(
+                "UPDATE task SET description = '"+description+"', department = '"+department+"', timeTaken = '" +
+                        ""+timeTaken+"', price = '"+price+"', discountRate = '"+discountRate+"', staffID = '"+staffID+"' " +
+                        "WHERE ID = "+ID+" AND jobID = "+jobID
         );
         return executeStatement(statement);
     }
@@ -297,6 +391,20 @@ public class DatabaseConnection {
         return executeStatement(statement);
     }
 
+    // Editing an existing job record
+    public static boolean
+        editJob(final int ID, final int isUrgent, final double price, final LocalDate startDate, final LocalDate endDate,
+                final LocalDate deadline, final String status, final int customerID) throws SQLException {
+        Connection conn = Connect();
+        assert conn != null;
+        PreparedStatement statement = conn.prepareStatement(
+                "UPDATE job SET isUrgent = '"+isUrgent+"', price = '"+price+"', startDate = '"+startDate+"', " +
+                        "endDate = '"+endDate+"', deadline = '"+deadline+"', status = '"+status+"', customerID = '" +
+                        ""+customerID+"' WHERE ID = "+ID
+        );
+        return executeStatement(statement);
+    }
+
     // Removing an existing job record
     public static boolean removeJob(final int ID) throws SQLException {
         Connection conn = Connect();
@@ -320,6 +428,22 @@ public class DatabaseConnection {
                         "endDate, deadline, status, customerID FROM job WHERE isUrgent = '"+isUrgent+"' AND " +
                         "price = '"+price+"' AND startDate = '"+startDate+"' AND endDate = '"+endDate+"' AND " +
                         "deadline = '"+deadline+"' AND status = '"+status+"' AND customerID = '"+customerID+"') LIMIT 1"
+        );
+        return executeStatement(statement);
+    }
+
+    // Editing an existing staff record
+    public static boolean
+        editStaff(final int ID, final String firstName, final String lastName, final String contactNumber, final String address,
+                  final String email, final String nationalInsurance, final int workHours, final String username,
+                  final String password, final String role, final String privileges) throws SQLException {
+        Connection conn = Connect();
+        assert conn != null;
+        PreparedStatement statement = conn.prepareStatement(
+                "UPDATE staff SET firstName = '"+firstName+"', lastName = '"+lastName+"', contactNumber = '" +
+                        ""+contactNumber+"', address = '"+address+"', email = '"+email+"', nationalInsurance = " +
+                        "'"+nationalInsurance+"', workHours = '"+workHours+"', username = '"+username+"', password = " +
+                        "'"+password+"', role = '"+role+"', privileges = '"+privileges+"' WHERE ID = "+ID
         );
         return executeStatement(statement);
     }
@@ -350,6 +474,18 @@ public class DatabaseConnection {
         return executeStatement(statement);
     }
 
+    // Editing an existing valuedCustomer record
+    public static boolean
+    editValuedCustomer(final int customerID, final String agreedDiscount, final String discountRate) throws SQLException {
+        Connection conn = Connect();
+        assert conn != null;
+        PreparedStatement statement = conn.prepareStatement(
+                "UPDATE valuedCustomer SET agreedDiscount = '"+agreedDiscount+"', discountRate = '"+discountRate+"' " +
+                        "WHERE customerID = "+customerID
+        );
+        return executeStatement(statement);
+    }
+
     // Removing an existing valuedCustomer record
     public static boolean removeValuedCustomer(final int customerID) throws SQLException {
         Connection conn = Connect();
@@ -368,6 +504,19 @@ public class DatabaseConnection {
         PreparedStatement statement = conn.prepareStatement(
                 "INSERT IGNORE INTO valuedCustomer VALUES (" +
                         ""+customerID+", '"+agreedDiscount+"', '"+discountRate+"')"
+        );
+        return executeStatement(statement);
+    }
+
+    // Editing an existing customer record
+    public static boolean
+        editCustomer(final int ID, final String firstName, final String lastName, final String contactNumber, final String address,
+                     final String email) throws SQLException {
+        Connection conn = Connect();
+        assert conn != null;
+        PreparedStatement statement = conn.prepareStatement(
+                "UPDATE customer SET firstName = '"+firstName+"', lastName = '"+lastName+"', contactNumber = '" +
+                        ""+contactNumber+"', address = '"+address+"', email = '"+email+"' WHERE ID = "+ID
         );
         return executeStatement(statement);
     }

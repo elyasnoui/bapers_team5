@@ -41,8 +41,8 @@ public class Bapers {
         so we can have the program default to the login screen.
          */
 
-        //login = new Login();
-        //applicationWindow.add(login.getMainPanel(), BorderLayout.CENTER);
+        login = new Login();
+        applicationWindow.add(login.getMainPanel(), BorderLayout.CENTER);
 
         //staff = new Staff();
         //applicationWindow.add(staff.getMainPanel());
@@ -88,9 +88,12 @@ public class Bapers {
             //boolean db_taskSummaryReport = DatabaseConnection.addTaskSummaryReport(4, 1, 9);
             //boolean db_jobJobReport = DatabaseConnection.addJobJobReport(4, 9, 1, 12);
 
-            boolean db_removeCustomer = DatabaseConnection.removeCustomer(15);
+            //boolean db_removeCustomer = DatabaseConnection.removeCustomer(15);
 
-            System.out.println(db_removeCustomer);
+            boolean db_editCustomer = DatabaseConnection.editCustomer(13, "test_a", "test_a",
+                    "test_a", "test_a", "test_a");
+
+            System.out.println(db_editCustomer);
         } catch (SQLException e) {
             e.printStackTrace();
         }
