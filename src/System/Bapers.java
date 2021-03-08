@@ -2,7 +2,7 @@ package System;
 
 import javax.swing.*;
 import GUI.*;
-import GUI.OfficeManager.*;
+
 
 public class Bapers {
     private ApplicationWindow applicationWindow = new ApplicationWindow("Bapers Team 5");
@@ -46,8 +46,8 @@ public class Bapers {
         //report = new Report();
         //applicationWindow.add(report.getMainPanel());
 
-        //staff = new Staff();
-        //applicationWindow.add(staff.getMainPanel());
+        staff = new Staff();
+        applicationWindow.add(staff.getMainPanel());
 
         //customer = new Customer();
         //applicationWindow.add(customer.getPanel());
@@ -58,8 +58,8 @@ public class Bapers {
         //Job = new Job();
         //applicationWindow.add(Job.getMainPanel());
 
-        task = new Task();
-        applicationWindow.add(task.getMainPanel());
+        //task = new Task();
+        //applicationWindow.add(task.getMainPanel());
 
 
         applicationWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
