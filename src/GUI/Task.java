@@ -1,60 +1,42 @@
-
 package GUI;
 
-import System.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class Staff {
+public class Task {
 
-    private Bapers system;
+
     private JButton CreateButton;
     private JButton editButton;
     private JButton deleteButton;
-    private JTable staffTable;
+    private JTable taskTable;
     private JPanel mainPanel;
-    private JPanel sidePanel;
-    private JPanel contentPanel;
     private JButton createButton;
     private JLabel bannerLabel;
-    private JPanel navigationPanel;
-    private JButton customerButton;
-    private JButton paymentButton;
-    private JButton staffButton;
-    private JButton taskButton;
-    private JButton jobButton;
-    private JButton reportButton;
-    private JPanel buttonPanel;
     private ImageIcon bannerIcon;
 
 
-    private String [] ColumnNames = {
-                "ID",
-                "First Name",
-                "Surname",
-                "Role",
-                "Username",
-                "Password",
-                "Address",
-                "Contact Number",
-                "Email Address"
-        };
+    private String[] ColumnNames = {
+            "ID",
+            "Description",
+            "Department",
+            "Duration (MIN)",
+            "PRICE (£)",
+    };
 
-        private Object [][] data = {
-                {"01","Kathy", "Smith","Office Manager","Kathy01","password","64 road road","+44854548544", "kathy@email.com"}
-        };
+    private Object[][] data = {
+            {"01", "Use of large Copy Camera", "Copy Room", "120", "19.00"}
+    };
 
 
-    public Staff(Bapers system) {
-        this.system = system;
-
+    public Task() {
         bannerIcon = new ImageIcon("data/banners/staff.png");
         bannerLabel.setIcon(bannerIcon);
 
-         createButton.addActionListener(new ActionListener() {
+        createButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 System.out.println("Create Staff");
@@ -88,11 +70,10 @@ public class Staff {
     public void setMainPanel(JPanel mainPanel) {
         this.mainPanel = mainPanel;
     }
-
     private void createTable(){
-        staffTable.setModel(new DefaultTableModel(data,ColumnNames));
-        TableColumnModel columns = staffTable.getColumnModel();
-        columns.getColumn(8).setMinWidth(100);
+        taskTable.setModel(new DefaultTableModel(data,ColumnNames));
+        TableColumnModel columns = taskTable.getColumnModel();
+        columns.getColumn(4).setMinWidth(100);
     }
 
 
