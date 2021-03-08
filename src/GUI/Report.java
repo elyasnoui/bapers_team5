@@ -11,6 +11,7 @@ public class Report {
     private JButton deleteButton;
     private JButton editButton;
     private JButton createButton;
+    private JPanel buttonPanel;
     private ImageIcon bannerIcon;
 
     public Report() {
