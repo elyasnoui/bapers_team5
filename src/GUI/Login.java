@@ -10,6 +10,7 @@ import java.awt.event.FocusEvent;
 import System.*;
 
 public class Login {
+    private Bapers system;
     private JPanel mainPanel;
     private JPanel sidePanel;
     private JPanel contentPanel;
@@ -20,7 +21,9 @@ public class Login {
     private JButton loginButton;
     private ImageIcon bannerIcon;
 
-    public Login() {
+    public Login(Bapers system) {
+        this.system = system;
+
         bannerIcon = new ImageIcon("data/banners/login.png");
         bannerLabel.setIcon(bannerIcon);
 

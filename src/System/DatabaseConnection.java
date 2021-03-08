@@ -25,6 +25,10 @@ public class DatabaseConnection {
         return false;
     }
 
+    public static String getFirstAndLastName() {
+        return "Name";
+    }
+
     // Removing an existing job_jobReport record
     public static boolean
         removeJobJobReport(final int reportID, final int jobID, final int taskID, final int staffID) throws SQLException {

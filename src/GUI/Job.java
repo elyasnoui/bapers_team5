@@ -1,6 +1,7 @@
 
 package GUI;
 
+import System.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
@@ -8,7 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Job {
-
+    private Bapers system;
     private JButton CreateButton;
     private JButton editButton;
     private JButton deleteButton;
@@ -47,7 +48,9 @@ public class Job {
 
 
 
-    public Job() {
+    public Job(Bapers system) {
+        this.system = system;
+
         bannerIcon = new ImageIcon("data/banners/Job.png");
         bannerLabel.setIcon(bannerIcon);
 
