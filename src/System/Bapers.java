@@ -2,10 +2,7 @@ package System;
 
 import javax.swing.*;
 import GUI.*;
-
-import java.awt.*;
-import java.sql.SQLException;
-import java.time.LocalDate;
+import GUI.OfficeManager.*;
 
 public class Bapers {
     private ApplicationWindow applicationWindow = new ApplicationWindow("Bapers Team 5");
@@ -45,14 +42,14 @@ public class Bapers {
         //login = new Login();
         //applicationWindow.add(login.getMainPanel(), BorderLayout.CENTER);
 
-        report = new Report();
-        applicationWindow.add(report.getMainPanel());
+        //report = new Report();
+        //applicationWindow.add(report.getMainPanel());
 
         //staff = new Staff();
         //applicationWindow.add(staff.getMainPanel());
 
-        //customer = new Customer();
-        //applicationWindow.add(customer.getPanel());
+        customer = new Customer();
+        applicationWindow.add(customer.getPanel());
 
         //UpdateProfile = new UpdateProfile();
         //applicationWindow.add(UpdateProfile.getMainPanel());
