@@ -1,5 +1,5 @@
 
-package GUI;
+package GUI.OfficeManager;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
