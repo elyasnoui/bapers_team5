@@ -14,6 +14,7 @@ public class Bapers {
     private Customer customer;
     private UpdateProfile UpdateProfile;
     private Job Job;
+    private Report report;
     public String currentPanel = "Login";  // This is 'Login' by default.
 
     public Bapers() {
@@ -41,8 +42,11 @@ public class Bapers {
         so we can have the program default to the login screen.
          */
 
-        login = new Login();
-        applicationWindow.add(login.getMainPanel(), BorderLayout.CENTER);
+        //login = new Login();
+        //applicationWindow.add(login.getMainPanel(), BorderLayout.CENTER);
+
+        report = new Report();
+        applicationWindow.add(report.getMainPanel());
 
         //staff = new Staff();
         //applicationWindow.add(staff.getMainPanel());
@@ -65,10 +69,11 @@ public class Bapers {
         applicationWindow.setFocusTraversalKeysEnabled(false);
         applicationWindow.setIconImage(null);
 
+        /*
         try {
-            //boolean db_cust = DatabaseConnection.addCustomer("test2", "test2", "test2",
+            //boolean db_customer = DatabaseConnection.addCustomer("test2", "test2", "test2",
             //        "test2", "test2");
-            //boolean db_valuedCust = DatabaseConnection.addValuedCustomer(13, "Fixed Discount", "0%");
+            //boolean db_valuedCustomer = DatabaseConnection.addValuedCustomer(13, "Fixed Discount", "0%");
             //boolean db_staff = DatabaseConnection.addStaff("test", "test", "test", "test", "test",
             //        "test", 0, "test", "test", "test", "test");
             //boolean db_job = DatabaseConnection.addJob(0, 1.00, LocalDate.now(), LocalDate.of(2021, 10, 9),
@@ -97,6 +102,7 @@ public class Bapers {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+         */
     }
 
     public static void main(String[] args) {

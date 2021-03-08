@@ -6,6 +6,7 @@
       <xy x="291" y="9" width="1280" height="720"/>
     </constraints>
     <properties>
+      <autoscrolls value="false"/>
       <minimumSize width="-1" height="-1"/>
       <preferredSize width="-1" height="-1"/>
     </properties>
