@@ -1,5 +1,6 @@
 package GUI;
 
+import System.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
@@ -7,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class UpdateProfile {
+    private Bapers system;
     private JPanel mainPanel;
     private JPanel contentPanel;
     private JPanel sidePanel;
@@ -14,34 +16,17 @@ public class UpdateProfile {
     private JTable UpdateTable;
     private JButton saveButton;
     private JButton editButton;
+    private JPanel buttonPanel;
+    private JButton deleteButton;
+    private JButton createButton;
     private JButton cancelButton;
     private ImageIcon bannerIcon;
 
-    public UpdateProfile() {
+    public UpdateProfile(Bapers system) {
+        this.system = system;
+
         bannerIcon = new ImageIcon("data/banners/updateProfile.png");
         bannerLabel.setIcon(bannerIcon);
-
-        saveButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Save data");
-            }
-        });
-
-        cancelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Cancel request");
-            }
-        });
-
-        editButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Edit");
-            }
-        });
-        createTable();
     }
 
     private String [] ColumnNames = {

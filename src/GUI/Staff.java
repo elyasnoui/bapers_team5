@@ -1,6 +1,7 @@
 
-package GUI.OfficeManager;
+package GUI;
 
+import System.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
@@ -9,6 +10,7 @@ import java.awt.event.ActionListener;
 
 public class Staff {
 
+    private Bapers system;
     private JButton CreateButton;
     private JButton editButton;
     private JButton deleteButton;
@@ -25,7 +27,9 @@ public class Staff {
     private JButton taskButton;
     private JButton jobButton;
     private JButton reportButton;
+    private JPanel buttonPanel;
     private ImageIcon bannerIcon;
+
 
     private String [] ColumnNames = {
                 "ID",
@@ -44,8 +48,9 @@ public class Staff {
         };
 
 
+    public Staff(Bapers system) {
+        this.system = system;
 
-    public Staff() {
         bannerIcon = new ImageIcon("data/banners/staff.png");
         bannerLabel.setIcon(bannerIcon);
 

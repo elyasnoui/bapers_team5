@@ -1,5 +1,6 @@
 package GUI;
 
+import System.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -8,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Customer extends JFrame{
+
+    private Bapers system;
     private JPanel panel;
     private JPanel sidePanel;
     private JButton customerButton;
@@ -36,10 +39,11 @@ public class Customer extends JFrame{
             {"02","Bob", "Marley","07888804444", "5 Bookers, SW11 KWE","Variable", "5,0,3,0,0,0,1"},
             {"03","Game", "Stop","07656186388","74A Snooker, W1 2BA","Flexible","0,1,2"},
             {"04","Doge", "Coin","07563656556","4a Shareholder, NBA 2K","None","None"}
-
     };
 
-    public Customer() {
+    public Customer(Bapers system) {
+        this.system = system;
+
         //add(panel);
         //setTitle("My Title");
         //setSize(1280,720);

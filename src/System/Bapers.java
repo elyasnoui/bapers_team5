@@ -2,19 +2,15 @@ package System;
 
 import javax.swing.*;
 import GUI.*;
-import GUI.OfficeManager.*;
-
-import java.awt.*;
 
 public class Bapers {
     private ApplicationWindow applicationWindow = new ApplicationWindow("Bapers Team 5");
-    private Login login;
-    private Staff staff;
-    private Customer customer;
-    private UpdateProfile UpdateProfile;
-    private Job Job;
-    private Report report;
-    public String currentPanel = "Login";  // This is 'Login' by default.
+    private Login login = new Login(this);
+    private Staff staff = new Staff(this);
+    private Customer customer = new Customer(this);
+    private UpdateProfile UpdateProfile = new UpdateProfile(this);
+    private Job job = new Job(this);
+    private Report report = new Report(this);
 
     public Bapers() {
         /*
@@ -41,22 +37,16 @@ public class Bapers {
         so we can have the program default to the login screen.
          */
 
-        login = new Login();
-        applicationWindow.add(login.getMainPanel(), BorderLayout.CENTER);
+        //applicationWindow.add(login.getMainPanel(), BorderLayout.CENTER);
 
-        //report = new Report();
-        //applicationWindow.add(report.getMainPanel());
+        applicationWindow.add(report.getMainPanel());
 
-        //staff = new Staff();
         //applicationWindow.add(staff.getMainPanel());
 
-        //customer = new Customer();
         //applicationWindow.add(customer.getPanel());
 
-        //UpdateProfile = new UpdateProfile();
         //applicationWindow.add(UpdateProfile.getMainPanel());
 
-        //Job = new Job();
         //applicationWindow.add(Job.getMainPanel());
 
         applicationWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -102,6 +92,38 @@ public class Bapers {
             e.printStackTrace();
         }
          */
+    }
+
+    public void changeScreen(final String destination, final JPanel panel) {
+        applicationWindow.remove(panel);
+        switch (destination) {
+            case "logout":
+                applicationWindow.add(login.getMainPanel());
+                break;
+            case "jobs":
+                applicationWindow.add(job.getMainPanel());
+                break;
+            case "customers":
+                applicationWindow.add(customer.getPanel());
+                break;
+            case "payments":
+                //applicationWindow.add();
+                break;
+            case "staff":
+                applicationWindow.add(staff.getMainPanel());
+                break;
+            case "tasks":
+                //applicationWindow.add()
+                break;
+            case "reports":
+                applicationWindow.add(report.getMainPanel());
+                break;
+            case "database":
+                //applicationWindow.add()
+                break;
+        }
+
+        applicationWindow.setVisible(true);
     }
 
     public static void main(String[] args) {
