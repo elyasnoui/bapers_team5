@@ -4,6 +4,8 @@ import javax.swing.*;
 import GUI.*;
 import GUI.OfficeManager.*;
 
+import java.awt.*;
+
 public class Bapers {
     private ApplicationWindow applicationWindow = new ApplicationWindow("Bapers Team 5");
     private Login login;
@@ -39,8 +41,8 @@ public class Bapers {
         so we can have the program default to the login screen.
          */
 
-        //login = new Login();
-        //applicationWindow.add(login.getMainPanel(), BorderLayout.CENTER);
+        login = new Login();
+        applicationWindow.add(login.getMainPanel(), BorderLayout.CENTER);
 
         //report = new Report();
         //applicationWindow.add(report.getMainPanel());
@@ -48,8 +50,8 @@ public class Bapers {
         //staff = new Staff();
         //applicationWindow.add(staff.getMainPanel());
 
-        customer = new Customer();
-        applicationWindow.add(customer.getPanel());
+        //customer = new Customer();
+        //applicationWindow.add(customer.getPanel());
 
         //UpdateProfile = new UpdateProfile();
         //applicationWindow.add(UpdateProfile.getMainPanel());
