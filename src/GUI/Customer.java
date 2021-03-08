@@ -15,13 +15,21 @@ public class Customer extends JFrame{
     private JPanel sidePanel;
     private JButton customerButton;
     private JPanel contentPanel;
-    private JButton signOutButton;
     private JLabel bannerLabel;
-    private JTable table1;
-    private JButton createButton;
-    private JButton editButton;
+    private JTable customerTable1;
+    private JLabel nameLabel;
+    private JButton logoutButton;
+    private JButton jobsButton;
+    private JButton paymentsButton;
+    private JButton staffButton;
+    private JButton tasksButton;
+    private JButton reportsButton;
+    private JButton databaseButton;
+    private JPanel buttonPanel;
     private JButton deleteButton;
-    private JScrollPane scrollBar;
+    private JButton editButton;
+    private JButton createButton;
+    private JTable customerTable;
     private ImageIcon bannerIcon;
 
     private String [] ColumnNames = {
@@ -83,8 +91,8 @@ public class Customer extends JFrame{
     }
 
     private void createTable(){
-        table1.setModel(new DefaultTableModel(data,ColumnNames));
-        TableColumnModel columns = table1.getColumnModel();
+        customerTable1.setModel(new DefaultTableModel(data,ColumnNames));
+        TableColumnModel columns = customerTable1.getColumnModel();
         columns.getColumn(2).setMinWidth(100);
 
 
