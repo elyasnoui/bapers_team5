@@ -65,7 +65,7 @@ public class Bapers {
         applicationWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         applicationWindow.pack();
         applicationWindow.setVisible(true);
-        applicationWindow.setSize(1280, 720);
+        applicationWindow.setSize(1290, 720);
         applicationWindow.setResizable(false);
         applicationWindow.setFocusable(true);
         applicationWindow.setFocusTraversalKeysEnabled(false);
