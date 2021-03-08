@@ -16,17 +16,19 @@ public class Staff {
     private JButton deleteButton;
     private JTable staffTable;
     private JPanel mainPanel;
-    private JPanel sidePanel;
     private JPanel contentPanel;
     private JButton createButton;
     private JLabel bannerLabel;
-    private JPanel navigationPanel;
+    private JPanel sidePanel;
+    private JLabel nameLabel;
+    private JButton logoutButton;
+    private JButton jobsButton;
     private JButton customerButton;
-    private JButton paymentButton;
+    private JButton paymentsButton;
     private JButton staffButton;
-    private JButton taskButton;
-    private JButton jobButton;
-    private JButton reportButton;
+    private JButton tasksButton;
+    private JButton reportsButton;
+    private JButton databaseButton;
     private JPanel buttonPanel;
     private ImageIcon bannerIcon;
 
@@ -79,6 +81,54 @@ public class Staff {
 
         createTable();
 
+        logoutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        jobsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        customerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        paymentsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        staffButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        tasksButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        reportsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+        databaseButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
     }
 
     public JPanel getMainPanel() {
