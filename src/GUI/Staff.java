@@ -84,19 +84,19 @@ public class Staff {
         logoutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+            system.changeScreen("logout", mainPanel);
             }
         });
         jobsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+            system.changeScreen("jobs", mainPanel);
             }
         });
         customerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+            system.changeScreen("customers", mainPanel);
             }
         });
         paymentsButton.addActionListener(new ActionListener() {
@@ -108,19 +108,19 @@ public class Staff {
         staffButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+            system.changeScreen("staff", mainPanel);
             }
         });
         tasksButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+            system.changeScreen("tasks", mainPanel);
             }
         });
         reportsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+            system.changeScreen("reports", mainPanel);
             }
         });
         databaseButton.addActionListener(new ActionListener() {

@@ -127,7 +127,7 @@
                     <properties>
                       <font name="Halis GR Bold" size="20" style="1"/>
                       <foreground color="-1"/>
-                      <text value="Reports"/>
+                      <text value="Staff"/>
                     </properties>
                   </component>
                 </children>
