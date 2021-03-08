@@ -119,7 +119,7 @@
                     <properties>
                       <font name="Halis GR Bold" size="20" style="1"/>
                       <foreground color="-1"/>
-                      <text value="Reports"/>
+                      <text value="Customers"/>
                     </properties>
                   </component>
                 </children>
@@ -149,7 +149,9 @@
                 <children>
                   <component id="42be" class="javax.swing.JTable" binding="customerTable1">
                     <constraints/>
-                    <properties/>
+                    <properties>
+                      <dragEnabled value="false"/>
+                    </properties>
                   </component>
                 </children>
               </scrollpane>
@@ -268,7 +270,7 @@
               </grid>
             </constraints>
             <properties>
-              <background color="-11774858"/>
+              <background color="-8616273"/>
               <borderPainted value="false"/>
               <contentAreaFilled value="true"/>
               <enabled value="true"/>
@@ -336,7 +338,7 @@
               </grid>
             </constraints>
             <properties>
-              <background color="-8616273"/>
+              <background color="-11774858"/>
               <borderPainted value="false"/>
               <contentAreaFilled value="true"/>
               <enabled value="true"/>

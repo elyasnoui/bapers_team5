@@ -39,9 +39,9 @@ public class Bapers {
 
         //applicationWindow.add(login.getMainPanel(), BorderLayout.CENTER);
 
-        //applicationWindow.add(report.getMainPanel());
+        applicationWindow.add(report.getMainPanel());
 
-        applicationWindow.add(staff.getMainPanel());
+        //applicationWindow.add(staff.getMainPanel());
 
         //applicationWindow.add(customer.getPanel());
 

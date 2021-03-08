@@ -69,11 +69,54 @@ public class Customer extends JFrame{
 /*        usernameField.setBorder(null);
         passwordField.setBorder(null);*/
 
+        jobsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                system.changeScreen("jobs", panel);
+            }
+        });
         customerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Button Clicked");
-                JOptionPane.showMessageDialog(sidePanel, "I am efte");
+                system.changeScreen("customers", panel);
+            }
+        });
+        paymentsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                system.changeScreen("payments", panel);
+            }
+        });
+        staffButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                system.changeScreen("staff", panel);
+            }
+        });
+        tasksButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                system.changeScreen("tasks", panel);
+            }
+        });
+        reportsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                system.changeScreen("reports", panel);
+            }
+        });
+        databaseButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                system.changeScreen("database", panel);
+            }
+        });
+
+
+        logoutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                system.changeScreen("logout", panel);
             }
         });
 
