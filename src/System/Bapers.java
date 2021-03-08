@@ -58,8 +58,8 @@ public class Bapers {
         //Job = new Job();
         //applicationWindow.add(Job.getMainPanel());
 
-        task = new Task();
-        applicationWindow.add(task.getMainPanel());
+        //task = new Task();
+        //applicationWindow.add(task.getMainPanel());
 
 
         applicationWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

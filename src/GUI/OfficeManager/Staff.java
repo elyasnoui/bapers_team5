@@ -25,6 +25,7 @@ public class Staff {
     private JButton taskButton;
     private JButton jobButton;
     private JButton reportButton;
+    private JPanel buttonPanel;
     private ImageIcon bannerIcon;
 
     private String [] ColumnNames = {
