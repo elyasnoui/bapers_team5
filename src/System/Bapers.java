@@ -12,6 +12,7 @@ public class Bapers {
     private UpdateProfile UpdateProfile;
     private Job Job;
     private Report report;
+    private Task task;
     public String currentPanel = "Login";  // This is 'Login' by default.
 
     public Bapers() {
@@ -48,14 +49,18 @@ public class Bapers {
         //staff = new Staff();
         //applicationWindow.add(staff.getMainPanel());
 
-        customer = new Customer();
-        applicationWindow.add(customer.getPanel());
+        //customer = new Customer();
+        //applicationWindow.add(customer.getPanel());
 
         //UpdateProfile = new UpdateProfile();
         //applicationWindow.add(UpdateProfile.getMainPanel());
 
         //Job = new Job();
         //applicationWindow.add(Job.getMainPanel());
+
+        task = new Task();
+        applicationWindow.add(task.getMainPanel());
+
 
         applicationWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         applicationWindow.pack();
