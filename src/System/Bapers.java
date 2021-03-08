@@ -45,14 +45,14 @@ public class Bapers {
         //login = new Login();
         //applicationWindow.add(login.getMainPanel(), BorderLayout.CENTER);
 
-        report = new Report();
-        applicationWindow.add(report.getMainPanel());
+        //report = new Report();
+        //applicationWindow.add(report.getMainPanel());
 
         //staff = new Staff();
         //applicationWindow.add(staff.getMainPanel());
 
-        //customer = new Customer();
-        //applicationWindow.add(customer.getPanel());
+        customer = new Customer();
+        applicationWindow.add(customer.getPanel());
 
         //UpdateProfile = new UpdateProfile();
         //applicationWindow.add(UpdateProfile.getMainPanel());
@@ -63,7 +63,7 @@ public class Bapers {
         applicationWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         applicationWindow.pack();
         applicationWindow.setVisible(true);
-        applicationWindow.setSize(1280, 720);
+        applicationWindow.setSize(1290, 720);
         applicationWindow.setResizable(false);
         applicationWindow.setFocusable(true);
         applicationWindow.setFocusTraversalKeysEnabled(false);
