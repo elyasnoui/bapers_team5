@@ -8,7 +8,7 @@ public class Bapers {
     private Login login = new Login(this);
     private Staff staff = new Staff(this);
     private Customer customer = new Customer(this);
-    private UpdateProfile UpdateProfile = new UpdateProfile(this);
+    private UpdateProfile updateProfile = new UpdateProfile(this);
     private Job job = new Job(this);
     private Report report = new Report(this);
 
@@ -37,7 +37,7 @@ public class Bapers {
         so we can have the program default to the login screen.
          */
 
-        //applicationWindow.add(login.getMainPanel(), BorderLayout.CENTER);
+        applicationWindow.add(login.getMainPanel());
 
         //applicationWindow.add(report.getMainPanel());
 
@@ -45,7 +45,7 @@ public class Bapers {
 
         //applicationWindow.add(customer.getPanel());
 
-        //applicationWindow.add(UpdateProfile.getMainPanel());
+        //applicationWindow.add(updateProfile.getMainPanel());
 
         //applicationWindow.add(Job.getMainPanel());
 
@@ -94,32 +94,63 @@ public class Bapers {
          */
     }
 
+    public void updateUserDetails() {
+        customer.setUsername(ApplicationWindow.username);
+        customer.setRole(ApplicationWindow.role);
+
+        staff.setUsername(ApplicationWindow.username);
+        staff.setRole(ApplicationWindow.role);
+
+        //job.setUsername(ApplicationWindow.username);
+        //job.setRole(ApplicationWindow.role);
+
+        //task.setUsername(ApplicationWindow.username);
+        //task.setRole(ApplicationWindow.role);
+
+        report.setUsername(ApplicationWindow.username);
+        report.setRole(ApplicationWindow.role);
+
+        updateProfile.setUsername(ApplicationWindow.username);
+        updateProfile.setRole(ApplicationWindow.role);
+    }
+
     public void changeScreen(final String destination, final JPanel panel) {
         applicationWindow.remove(panel);
         switch (destination) {
             case "logout":
+                login = new Login(this);
                 applicationWindow.add(login.getMainPanel());
                 break;
             case "jobs":
+                job = new Job(this);
                 applicationWindow.add(job.getMainPanel());
                 break;
             case "customers":
+                customer = new Customer(this);
                 applicationWindow.add(customer.getPanel());
                 break;
             case "payments":
+                //payment = new Payment(this);
                 //applicationWindow.add();
                 break;
             case "staff":
+                staff = new Staff(this);
                 applicationWindow.add(staff.getMainPanel());
                 break;
             case "tasks":
+                //task = new Task(this);
                 //applicationWindow.add()
                 break;
             case "reports":
+                report = new Report(this);
                 applicationWindow.add(report.getMainPanel());
                 break;
             case "database":
+                //database = new Database(this);
                 //applicationWindow.add()
+                break;
+            default:
+                changeScreen("logout", panel);
                 break;
         }
 

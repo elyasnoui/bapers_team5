@@ -1,5 +1,7 @@
 package System;
 
+import GUI.ApplicationWindow;
+
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.sql.*;
@@ -595,7 +597,7 @@ public class DatabaseConnection {
         try {
             assert conn != null;
             PreparedStatement statement = conn.prepareStatement(
-                    "SELECT username FROM staff WHERE username = '"+username+"' AND password = '"+md5(new String(password))+"'",
+                    "SELECT username, role FROM staff WHERE username = '"+username+"' AND password = '"+md5(new String(password))+"'",
                     ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE
             );
@@ -604,8 +606,11 @@ public class DatabaseConnection {
             while (res.next())
                 count++;
             res.previous();
-            if (count == 1)
-                return res.getString("username").equals(username);
+            if (count == 1 && res.getString("username").equals(username)) {
+                ApplicationWindow.username = res.getString("username");
+                ApplicationWindow.role = res.getString("role");
+                return true;
+            }
         } catch (NoSuchAlgorithmException | SQLException | UnsupportedEncodingException e) {
             e.printStackTrace();
         } finally {

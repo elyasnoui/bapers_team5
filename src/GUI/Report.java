@@ -20,7 +20,7 @@ public class Report {
     private JButton createButton;
     private JPanel buttonPanel;
     private JTable table;
-    private JLabel nameLabel;
+    private JLabel usernameLabel;
     private JButton logoutButton;
     private JButton jobsButton;
     private JButton customerButton;
@@ -29,6 +29,7 @@ public class Report {
     private JButton tasksButton;
     private JButton reportsButton;
     private JButton databaseButton;
+    private JLabel roleLabel;
     private ImageIcon bannerIcon;
     private Bapers system;
     private List<String[]> reportData;
@@ -88,9 +89,7 @@ public class Report {
 
         logoutButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                system.changeScreen("logout", mainPanel);
-            }
+            public void actionPerformed(ActionEvent e) { system.changeScreen("logout", mainPanel); }
         });
         jobsButton.addActionListener(new ActionListener() {
             @Override
@@ -144,5 +143,21 @@ public class Report {
 
     public void setMainPanel(JPanel mainPanel) {
         this.mainPanel = mainPanel;
+    }
+
+    public JLabel getUsername() {
+        return usernameLabel;
+    }
+
+    public void setUsername(String username) {
+        this.usernameLabel.setText(username);
+    }
+
+    public JLabel getRole() {
+        return roleLabel;
+    }
+
+    public void setRole(String role) {
+        this.roleLabel.setText(role);
     }
 }

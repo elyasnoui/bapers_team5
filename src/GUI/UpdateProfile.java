@@ -11,14 +11,23 @@ public class UpdateProfile {
     private Bapers system;
     private JPanel mainPanel;
     private JPanel contentPanel;
-    private JPanel sidePanel;
     private JLabel bannerLabel;
     private JTable UpdateTable;
     private JButton saveButton;
-    private JButton editButton;
+    private JPanel sidePanel;
+    private JLabel usernameLabel;
+    private JButton logoutButton;
+    private JButton jobsButton;
+    private JButton customerButton;
+    private JButton paymentsButton;
+    private JButton staffButton;
+    private JButton tasksButton;
+    private JButton reportsButton;
+    private JButton databaseButton;
     private JPanel buttonPanel;
-    private JButton deleteButton;
-    private JButton createButton;
+    private JButton editButton;
+    private JTable profileTable;
+    private JLabel roleLabel;
     private JButton cancelButton;
     private ImageIcon bannerIcon;
 
@@ -27,22 +36,21 @@ public class UpdateProfile {
 
         bannerIcon = new ImageIcon("data/banners/updateProfile.png");
         bannerLabel.setIcon(bannerIcon);
+
+        createTable();
     }
 
     private String [] ColumnNames = {
             "ID",
             "First Name",
-            "Surname",
-            "Role",
-            "Username",
-            "Password",
+            "Last Name",
             "Address",
             "Contact Number",
-            "Email Address"
+            "Email"
     };
 
     private Object [][] info = {
-            {"11","Moses", "Smith","Technician","Moses.01","password","1 PremTable Avenue","+4485454438544", "LeadersOfBPL@email.com"}
+            {"11", "Moses", "Smith", "1 PremTable Avenue", "+4485454438544", "LeadersOfBPL@email.com"}
     };
 
     public JPanel getMainPanel() {
@@ -54,8 +62,24 @@ public class UpdateProfile {
     }
 
     private void createTable(){
-        UpdateTable.setModel(new DefaultTableModel(info,ColumnNames));
-        TableColumnModel columns = UpdateTable.getColumnModel();
-        columns.getColumn(8).setMinWidth(100);
+        profileTable.setModel(new DefaultTableModel(info,ColumnNames));
+        TableColumnModel columns = profileTable.getColumnModel();
+        columns.getColumn(5).setMinWidth(100);
+    }
+
+    public JLabel getUsername() {
+        return usernameLabel;
+    }
+
+    public void setUsername(String username) {
+        this.usernameLabel.setText(username);
+    }
+
+    public JLabel getRole() {
+        return roleLabel;
+    }
+
+    public void setRole(String role) {
+        this.roleLabel.setText(role);
     }
 }

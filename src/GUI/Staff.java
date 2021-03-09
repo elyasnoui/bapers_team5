@@ -20,7 +20,7 @@ public class Staff {
     private JButton createButton;
     private JLabel bannerLabel;
     private JPanel sidePanel;
-    private JLabel nameLabel;
+    private JLabel usernameLabel;
     private JButton logoutButton;
     private JButton jobsButton;
     private JButton customerButton;
@@ -30,6 +30,7 @@ public class Staff {
     private JButton reportsButton;
     private JButton databaseButton;
     private JPanel buttonPanel;
+    private JLabel roleLabel;
     private ImageIcon bannerIcon;
 
 
@@ -145,5 +146,19 @@ public class Staff {
         columns.getColumn(8).setMinWidth(100);
     }
 
+    public JLabel getUsername() {
+        return usernameLabel;
+    }
 
+    public void setUsername(String username) {
+        this.usernameLabel.setText(username);
+    }
+
+    public JLabel getRole() {
+        return roleLabel;
+    }
+
+    public void setRole(String role) {
+        this.roleLabel.setText(role);
+    }
 }

@@ -95,5 +95,21 @@ public class Job {
         columns.setColumnMargin(10);
     }
 
+    /*
+    public JLabel getUsername() {
+        return usernameLabel;
+    }
 
+    public void setUsername(String username) {
+        this.usernameLabel.setText(username);
+    }
+
+    public JLabel getRole() {
+        return roleLabel;
+    }
+
+    public void setRole(String role) {
+        this.roleLabel.setText(role);
+    }
+     */
 }

@@ -3,9 +3,6 @@ package GUI;
 import System.*;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -13,13 +10,13 @@ import java.util.List;
 public class Customer extends JFrame{
 
     private Bapers system;
-    private JPanel panel;
+    private JPanel mainPanel;
     private JPanel sidePanel;
     private JButton customerButton;
     private JPanel contentPanel;
     private JLabel bannerLabel;
     private JTable table;
-    private JLabel nameLabel;
+    private JLabel usernameLabel;
     private JLabel roleLabel;
     private JButton logoutButton;
     private JButton jobsButton;
@@ -69,52 +66,52 @@ public class Customer extends JFrame{
         bannerIcon = new ImageIcon("data/banners/login.png");
         bannerLabel.setIcon(bannerIcon);
 
+        logoutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                system.changeScreen("logout", mainPanel);
+            }
+        });
         jobsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                system.changeScreen("jobs", panel);
+                system.changeScreen("jobs", mainPanel);
             }
         });
         customerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                system.changeScreen("customers", panel);
+                system.changeScreen("customers", mainPanel);
             }
         });
         paymentsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                system.changeScreen("payments", panel);
+                system.changeScreen("payments", mainPanel);
             }
         });
         staffButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                system.changeScreen("staff", panel);
+                system.changeScreen("staff", mainPanel);
             }
         });
         tasksButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                system.changeScreen("tasks", panel);
+                system.changeScreen("tasks", mainPanel);
             }
         });
         reportsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                system.changeScreen("reports", panel);
+                system.changeScreen("reports", mainPanel);
             }
         });
         databaseButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                system.changeScreen("database", panel);
-            }
-        });
-        logoutButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                system.changeScreen("logout", panel);
+                system.changeScreen("database", mainPanel);
             }
         });
 
@@ -122,32 +119,26 @@ public class Customer extends JFrame{
     }
 
     public JPanel getPanel() {
-        return panel;
+        return mainPanel;
     }
 
     public void setPanel(JPanel panel) {
-        this.panel = panel;
+        this.mainPanel = panel;
     }
 
-    /*
-    private void createTable(){
-        table.setModel(new DefaultTableModel(customerData.toArray(new Object[][] {}), tableColumns));
-        TableColumnModel columns = table.getColumnModel();
-        columns.getColumn(2).setMinWidth(100);
-
-        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
-        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        columns.getColumn(0).setCellRenderer(centerRenderer);
-        columns.getColumn(3).setCellRenderer(centerRenderer);
-        columns.getColumn(5).setCellRenderer(centerRenderer);
-        columns.getColumn(6).setCellRenderer(centerRenderer);
-
-        //columns.getColumn(0).setMinWidth(30);
-        columns.getColumn(1).setMinWidth(30);
-        columns.getColumn(2).setMinWidth(30);
-
-        columns.getColumn(0).setPreferredWidth(10);
+    public JLabel getUsername() {
+        return usernameLabel;
     }
 
-     */
+    public void setUsername(String username) {
+        this.usernameLabel.setText(username);
+    }
+
+    public JLabel getRole() {
+        return roleLabel;
+    }
+
+    public void setRole(String role) {
+        this.roleLabel.setText(role);
+    }
 }

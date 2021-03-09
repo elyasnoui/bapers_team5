@@ -7,8 +7,8 @@ import javax.swing.table.TableColumnModel;
 import java.util.List;
 
 public class ApplicationWindow extends JFrame {
-    public String username;
-    public String role;
+    public static String username;
+    public static String role;
 
     public ApplicationWindow(String title) {
         super(title);
