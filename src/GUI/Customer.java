@@ -115,7 +115,7 @@ public class Customer extends JFrame{
             }
         });
 
-        ApplicationWindow.createTable(table, customerData, tableColumns);
+        ApplicationWindow.displayTable(table, customerData, tableColumns);
     }
 
     public JPanel getPanel() {

@@ -134,7 +134,7 @@ public class Report {
             }
         });
 
-        ApplicationWindow.createTable(table, reportData, tableColumns);
+        ApplicationWindow.displayTable(table, reportData, tableColumns);
     }
 
     public JPanel getMainPanel() {

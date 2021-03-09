@@ -11,6 +11,7 @@ public class Bapers {
     private UpdateProfile updateProfile = new UpdateProfile(this);
     private Job job = new Job(this);
     private Report report = new Report(this);
+    private Task task = new Task(this);
 
     public Bapers() {
         /*
@@ -37,7 +38,7 @@ public class Bapers {
         so we can have the program default to the login screen.
          */
 
-        applicationWindow.add(login.getMainPanel());
+        //applicationWindow.add(login.getMainPanel());
 
         //applicationWindow.add(report.getMainPanel());
 
@@ -47,7 +48,7 @@ public class Bapers {
 
         //applicationWindow.add(updateProfile.getMainPanel());
 
-        //applicationWindow.add(Job.getMainPanel());
+        //applicationWindow.add(job.getMainPanel());
 
         applicationWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         applicationWindow.pack();
@@ -153,7 +154,7 @@ public class Bapers {
                 changeScreen("logout", panel);
                 break;
         }
-
+        updateUserDetails();
         applicationWindow.setVisible(true);
     }
 

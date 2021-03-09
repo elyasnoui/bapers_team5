@@ -14,7 +14,7 @@ public class ApplicationWindow extends JFrame {
         super(title);
     }
 
-    public static void createTable(final JTable table, final List<String[]> records, final String[] tableColumns) {
+    public static void displayTable(final JTable table, final List<String[]> records, final String[] tableColumns) {
         table.setModel(new DefaultTableModel(records.toArray(new Object[][] {}), tableColumns));
         TableColumnModel columns = table.getColumnModel();
         columns.getColumn(2).setMinWidth(100);
