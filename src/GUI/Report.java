@@ -3,6 +3,10 @@ package GUI;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import System.*;
 
@@ -15,7 +19,7 @@ public class Report {
     private JButton editButton;
     private JButton createButton;
     private JPanel buttonPanel;
-    private JTable reportTable;
+    private JTable table;
     private JLabel nameLabel;
     private JButton logoutButton;
     private JButton jobsButton;
@@ -27,23 +31,61 @@ public class Report {
     private JButton databaseButton;
     private ImageIcon bannerIcon;
     private Bapers system;
+    private List<String[]> reportData;
+    private List<String[]> performanceReportData;
+    private List<String[]> summaryReportData;
+    private List<String[]> jobsReportData;
+    private final String[] tableColumns = {
+            "ID",
+            "Report Type",
+            "Content",
+            "Date Generated",
+            "Start Date",
+            "End date",
+            "No. Staff",
+            "No. Jobs",
+            "No. Tasks"
+    };
 
     public Report(Bapers system) {
         this.system = system;
 
+        try {
+            reportData = DatabaseConnection.getData("report");
+            performanceReportData = DatabaseConnection.getData("performanceReport");
+            summaryReportData = DatabaseConnection.getData("summaryReport");
+            jobsReportData = DatabaseConnection.getData("jobReport");
+            assert reportData != null && performanceReportData != null && summaryReportData != null && jobsReportData != null;
+            List<String[]> reportTypesData = Stream.concat(performanceReportData.stream(), summaryReportData.stream())
+                    .collect(Collectors.toList());
+            reportTypesData = Stream.concat(reportTypesData.stream(), jobsReportData.stream()).collect(Collectors.toList());
+            String[] temp;
+            for (String[] rts : reportTypesData) {
+                int i = 0;
+                for (String[] rs : reportData) {
+                    if (rts[0].equals(rs[0])) {
+                        switch (rs[1]) {
+                            case "Individual Performance Report":
+                                temp = new String[] { rs[0], rs[1], rs[2], rs[3], rs[4], rs[5], rts[1], "", "" };
+                                break;
+                            case "Job Report":
+                                temp = new String[] { rs[0], rs[1], rs[2], rs[3], rs[4], rs[5], "", rts[1], "" };
+                                break;
+                            case "Summary Report":
+                                temp = new String[] { rs[0], rs[1], rs[2], rs[3], rs[4], rs[5], "", "", rts[1] };
+                                break;
+                            default:
+                                temp = new String[] { rs[0], "Invalid Report" };
+                                break;
+                        } reportData.set(i, temp);
+                    } i++;
+                }
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+
         bannerIcon = new ImageIcon("data/banners/report.png");
         bannerLabel.setIcon(bannerIcon);
 
-        Object [][] data = {
-                {"01","John", "Jones","07558804711","1 Alley Way, N2 1NA","Fixed", "20"},
-                {"02","Bob", "Marley","07888804444", "5 Bookers, SW11 KWE","Variable", "5,0,3,0,0,0,1"},
-                {"03","Game", "Stop","07656186388","74A Snooker, W1 2BA","Flexible","0,1,2"},
-                {"04","Doge", "Coin","07563656556","4a Shareholder, NBA 2K","None","None"}
-        };
-
-        //DefaultTableModel model = new DefaultTableModel()
-
-        //nameLabel.setText(DatabaseConnection.getFirstAndLastName());
         logoutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -92,6 +134,8 @@ public class Report {
                 system.changeScreen("database", mainPanel);
             }
         });
+
+        ApplicationWindow.createTable(table, reportData, tableColumns);
     }
 
     public JPanel getMainPanel() {

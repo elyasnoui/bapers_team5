@@ -1,12 +1,14 @@
 package GUI;
 
 import System.*;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class Customer extends JFrame{
 
@@ -16,8 +18,9 @@ public class Customer extends JFrame{
     private JButton customerButton;
     private JPanel contentPanel;
     private JLabel bannerLabel;
-    private JTable customerTable1;
+    private JTable table;
     private JLabel nameLabel;
+    private JLabel roleLabel;
     private JButton logoutButton;
     private JButton jobsButton;
     private JButton paymentsButton;
@@ -29,45 +32,42 @@ public class Customer extends JFrame{
     private JButton deleteButton;
     private JButton editButton;
     private JButton createButton;
-    private JTable customerTable;
     private ImageIcon bannerIcon;
-
-    private String [] ColumnNames = {
+    private List<String[]> customerData;
+    private List<String[]> valuedCustomerData;
+    private final String[] tableColumns = {
             "ID",
             "First Name",
             "Surname",
             "Contact Number",
             "Address",
+            "Email",
             "Agreed Discount",
             "Discount Rate"
-    };
-
-    private Object [][] data = {
-            {"01","John", "Jones","07558804711","1 Alley Way, N2 1NA","Fixed", "20"},
-            {"02","Bob", "Marley","07888804444", "5 Bookers, SW11 KWE","Variable", "5,0,3,0,0,0,1"},
-            {"03","Game", "Stop","07656186388","74A Snooker, W1 2BA","Flexible","0,1,2"},
-            {"04","Doge", "Coin","07563656556","4a Shareholder, NBA 2K","None","None"}
     };
 
     public Customer(Bapers system) {
         this.system = system;
 
-        //add(panel);
-        //setTitle("My Title");
-        //setSize(1280,720);
-
-/*        submit.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Button Clicked");
-                JOptionPane.showMessageDialog(sidePanel, "I am efte");
+        try {
+            customerData = DatabaseConnection.getData("customer");
+            valuedCustomerData = DatabaseConnection.getData("valuedCustomer");
+            assert customerData != null && valuedCustomerData != null;
+            String[] temp;
+            for (String[] vs : valuedCustomerData) {
+                int i = 0;
+                for (String[] cs : customerData) {
+                    if (vs[0].equals(cs[0])) {
+                        temp = new String[] { cs[0], cs[1], cs[2], cs[3], cs[4], cs[5], vs[1], vs[2] };
+                        customerData.set(i, temp);
+                    }
+                    i++;
+                }
             }
-        });*/
+        } catch (Exception e) { e.printStackTrace(); }
+
         bannerIcon = new ImageIcon("data/banners/login.png");
         bannerLabel.setIcon(bannerIcon);
-
-/*        usernameField.setBorder(null);
-        passwordField.setBorder(null);*/
 
         jobsButton.addActionListener(new ActionListener() {
             @Override
@@ -111,8 +111,6 @@ public class Customer extends JFrame{
                 system.changeScreen("database", panel);
             }
         });
-
-
         logoutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -120,10 +118,8 @@ public class Customer extends JFrame{
             }
         });
 
-        createTable();
+        ApplicationWindow.createTable(table, customerData, tableColumns);
     }
-
-
 
     public JPanel getPanel() {
         return panel;
@@ -133,12 +129,11 @@ public class Customer extends JFrame{
         this.panel = panel;
     }
 
+    /*
     private void createTable(){
-        customerTable1.setModel(new DefaultTableModel(data,ColumnNames));
-        TableColumnModel columns = customerTable1.getColumnModel();
+        table.setModel(new DefaultTableModel(customerData.toArray(new Object[][] {}), tableColumns));
+        TableColumnModel columns = table.getColumnModel();
         columns.getColumn(2).setMinWidth(100);
-
-
 
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
@@ -147,9 +142,12 @@ public class Customer extends JFrame{
         columns.getColumn(5).setCellRenderer(centerRenderer);
         columns.getColumn(6).setCellRenderer(centerRenderer);
 
-        columns.getColumn(0).setMinWidth(30);
+        //columns.getColumn(0).setMinWidth(30);
         columns.getColumn(1).setMinWidth(30);
         columns.getColumn(2).setMinWidth(30);
 
+        columns.getColumn(0).setPreferredWidth(10);
     }
+
+     */
 }

@@ -147,7 +147,7 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="42be" class="javax.swing.JTable" binding="customerTable1">
+                  <component id="42be" class="javax.swing.JTable" binding="table">
                     <constraints/>
                     <properties>
                       <dragEnabled value="false"/>
@@ -217,7 +217,7 @@
                   <text value="Name"/>
                 </properties>
               </component>
-              <component id="7b5fb" class="javax.swing.JLabel">
+              <component id="7b5fb" class="javax.swing.JLabel" binding="roleLabel">
                 <constraints>
                   <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>

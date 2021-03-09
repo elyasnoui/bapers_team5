@@ -6,6 +6,8 @@ import java.sql.*;
 import java.time.LocalDate;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DatabaseConnection {
 
@@ -25,8 +27,25 @@ public class DatabaseConnection {
         return false;
     }
 
-    public static String getFirstAndLastName() {
-        return "Name";
+    public static List<String[]> getData(String tableName) throws Exception {
+        try {
+            Connection conn = Connect();
+            assert conn != null;
+            PreparedStatement statement = conn.prepareStatement("SELECT * FROM "+tableName);
+            ResultSet res = statement.executeQuery();
+            List<String[]> data = new ArrayList<>();
+            int nCol = res.getMetaData().getColumnCount();
+            while (res.next()) {
+                String[] row = new String[nCol];
+                for (int i=1; i<=nCol; i++) {
+                    Object object = res.getObject(i);
+                    row[i-1] = (object == null) ? null:object.toString();
+                }
+                data.add(row);
+            }
+            return data;
+        } catch (Exception e) { e.printStackTrace(); }
+        return null;
     }
 
     // Removing an existing job_jobReport record
@@ -511,6 +530,18 @@ public class DatabaseConnection {
         );
         return executeStatement(statement);
     }
+
+    /*
+    public static Object[][] getCustomerTable() throws SQLException {
+        Connection conn = Connect();
+        assert conn != null;
+        PreparedStatement statement = conn.prepareStatement(
+                "SELECT * FROM customer"
+        );
+        ResultSet res = statement.executeQuery();
+
+    }
+     */
 
     // Editing an existing customer record
     public static boolean
