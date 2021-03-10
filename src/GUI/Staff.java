@@ -7,14 +7,14 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class Staff {
-
     private Bapers system;
     private JButton CreateButton;
     private JButton editButton;
     private JButton deleteButton;
-    private JTable staffTable;
+    private JTable table;
     private JPanel mainPanel;
     private JPanel contentPanel;
     private JButton createButton;
@@ -32,104 +32,83 @@ public class Staff {
     private JPanel buttonPanel;
     private JLabel roleLabel;
     private ImageIcon bannerIcon;
-
-
-    private String [] ColumnNames = {
-                "ID",
-                "First Name",
-                "Surname",
-                "Role",
-                "Username",
-                "Password",
-                "Address",
-                "Contact Number",
-                "Email Address"
-        };
-
-        private Object [][] data = {
-                {"01","Kathy", "Smith","Office Manager","Kathy01","password","64 road road","+44854548544", "kathy@email.com"}
-        };
-
+    private List<String[]> staffData;
+    private final String[] tableColumns = {
+            "ID",
+            "First Name",
+            "Last Name",
+            "Contact Number",
+            "Address",
+            "Email",
+            "NI",
+            "Work Hours",
+            "Username",
+            "Password",
+            "Role",
+            "Privileges"
+    };
 
     public Staff(Bapers system) {
         this.system = system;
 
+        try {
+            staffData = DatabaseConnection.getData("staff");
+            for (String[] ss : staffData)
+                ss[9] = "•••••••";
+        }
+        catch (Exception e) { e.printStackTrace(); }
+
         bannerIcon = new ImageIcon("data/banners/staff.png");
         bannerLabel.setIcon(bannerIcon);
 
-         createButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Create Staff");
-            }
-        });
-
-        deleteButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Delete Staff");
-            }
-        });
-
-        editButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Edit Staff");
-            }
-        });
-
-
-
-        createTable();
-
         logoutButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-            system.changeScreen("logout", mainPanel);
-            }
+            public void actionPerformed(ActionEvent e) { system.changeScreen("logout", mainPanel); }
         });
         jobsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            system.changeScreen("jobs", mainPanel);
+                system.changeScreen("jobs", mainPanel);
             }
         });
         customerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            system.changeScreen("customers", mainPanel);
+                system.changeScreen("customers", mainPanel);
             }
         });
         paymentsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                system.changeScreen("payments", mainPanel);
             }
         });
         staffButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            system.changeScreen("staff", mainPanel);
+                system.changeScreen("staff", mainPanel);
             }
         });
         tasksButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            system.changeScreen("tasks", mainPanel);
+                system.changeScreen("tasks", mainPanel);
             }
         });
         reportsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-            system.changeScreen("reports", mainPanel);
+                system.changeScreen("reports", mainPanel);
             }
         });
         databaseButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                system.changeScreen("database", mainPanel);
             }
         });
+
+        ApplicationWindow.displayTable(table, staffData, tableColumns);
     }
 
     public JPanel getMainPanel() {
@@ -138,12 +117,6 @@ public class Staff {
 
     public void setMainPanel(JPanel mainPanel) {
         this.mainPanel = mainPanel;
-    }
-
-    private void createTable(){
-        staffTable.setModel(new DefaultTableModel(data,ColumnNames));
-        TableColumnModel columns = staffTable.getColumnModel();
-        columns.getColumn(8).setMinWidth(100);
     }
 
     public JLabel getUsername() {

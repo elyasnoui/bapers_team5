@@ -266,7 +266,7 @@
               </grid>
             </constraints>
             <properties>
-              <background color="-11774858"/>
+              <background color="-8616273"/>
               <borderPainted value="false"/>
               <contentAreaFilled value="true"/>
               <enabled value="true"/>
@@ -334,7 +334,7 @@
               </grid>
             </constraints>
             <properties>
-              <background color="-8616273"/>
+              <background color="-11774858"/>
               <borderPainted value="false"/>
               <contentAreaFilled value="true"/>
               <enabled value="true"/>

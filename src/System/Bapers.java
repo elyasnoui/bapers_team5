@@ -5,6 +5,8 @@ import GUI.*;
 
 public class Bapers {
     private ApplicationWindow applicationWindow = new ApplicationWindow("Bapers Team 5");
+
+    // TODO: Take out declaration when it no longer needs testing
     private Login login = new Login(this);
     private Staff staff = new Staff(this);
     private Customer customer = new Customer(this);
@@ -12,6 +14,7 @@ public class Bapers {
     private Job job = new Job(this);
     private Report report = new Report(this);
     private Task task = new Task(this);
+    private Payment payment = new Payment(this);
 
     public Bapers() {
         /*
@@ -38,7 +41,7 @@ public class Bapers {
         so we can have the program default to the login screen.
          */
 
-        //applicationWindow.add(login.getMainPanel());
+        applicationWindow.add(login.getMainPanel());
 
         //applicationWindow.add(report.getMainPanel());
 
@@ -49,6 +52,10 @@ public class Bapers {
         //applicationWindow.add(updateProfile.getMainPanel());
 
         //applicationWindow.add(job.getMainPanel());
+
+        //applicationWindow.add(task.getMainPanel());
+
+        //applicationWindow.add(payment.getMainPanel());
 
         applicationWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         applicationWindow.pack();
@@ -102,11 +109,14 @@ public class Bapers {
         staff.setUsername(ApplicationWindow.username);
         staff.setRole(ApplicationWindow.role);
 
-        //job.setUsername(ApplicationWindow.username);
-        //job.setRole(ApplicationWindow.role);
+        job.setUsername(ApplicationWindow.username);
+        job.setRole(ApplicationWindow.role);
 
-        //task.setUsername(ApplicationWindow.username);
-        //task.setRole(ApplicationWindow.role);
+        task.setUsername(ApplicationWindow.username);
+        task.setRole(ApplicationWindow.role);
+
+        payment.setUsername(ApplicationWindow.username);
+        payment.setRole(ApplicationWindow.role);
 
         report.setUsername(ApplicationWindow.username);
         report.setRole(ApplicationWindow.role);
@@ -131,16 +141,16 @@ public class Bapers {
                 applicationWindow.add(customer.getPanel());
                 break;
             case "payments":
-                //payment = new Payment(this);
-                //applicationWindow.add();
+                payment = new Payment(this);
+                applicationWindow.add(payment.getMainPanel());
                 break;
             case "staff":
                 staff = new Staff(this);
                 applicationWindow.add(staff.getMainPanel());
                 break;
             case "tasks":
-                //task = new Task(this);
-                //applicationWindow.add()
+                task = new Task(this);
+                applicationWindow.add(task.getMainPanel());
                 break;
             case "reports":
                 report = new Report(this);
