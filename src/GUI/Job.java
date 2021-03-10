@@ -1,82 +1,109 @@
-
 package GUI;
 
 import System.*;
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 public class Job {
     private Bapers system;
-    private JButton CreateButton;
-    private JButton editButton;
-    private JButton deleteButton;
-    private JTable jobTable;
-    private JPanel mainPanel;
     private JPanel sidePanel;
-    private JPanel contentPanel;
-    private JButton createButton;
-    private JLabel bannerLabel;
-    private JPanel navigationPanel;
+    private JLabel usernameLabel;
+    private JLabel roleLabel;
+    private JButton logoutButton;
+    private JButton jobsButton;
     private JButton customerButton;
-    private JButton paymentButton;
+    private JButton paymentsButton;
     private JButton staffButton;
-    private JButton taskButton;
-    private JButton jobButton;
-    private JButton reportButton;
+    private JButton tasksButton;
+    private JButton reportsButton;
+    private JButton databaseButton;
+    private JPanel contentPanel;
     private ImageIcon bannerIcon;
-
-    private String [] ColumnNames = {
-            "Job ID",
-            "Customer ID",
-            "Task(s)",
-            "Price (£)",
-            "Urgency",
-            "Duration",
-            "Instructions",
-            "Current Task",
+    private JLabel bannerLabel;
+    private JPanel buttonPanel;
+    private JButton deleteButton;
+    private JButton editButton;
+    private JButton createButton;
+    private JTable table;
+    private JPanel mainPanel;
+    private List<String[]> jobData;
+    private final String[] tableColumns = {
+            "ID",
+            "Is Urgent",
+            "Price",
+            "Start Date",
+            "End Date",
+            "Deadline",
             "Status",
-            "Payment Received",
-            "Start/End Date"
+            "Customer ID"
     };
-
-    private Object [][] data = {
-            {"871","02", "1,4,6","107.30","Urgent","4 Hours, 45 Mins","Quality Check","4", "Pending", "Yes","17/02/21 - 19.02.21"}
-    };
-
-
 
     public Job(Bapers system) {
         this.system = system;
 
-        bannerIcon = new ImageIcon("data/banners/Job.png");
+        try {
+            jobData = DatabaseConnection.getData("job");
+            assert jobData != null;
+            for (String[] js : jobData) {
+                js[1] = js[1].equals("true") ? "Yes" : "No";
+                js[2] = '£' + js[2];
+            }
+        }
+        catch (Exception e) { e.printStackTrace(); }
+
+        bannerIcon = new ImageIcon("data/banners/staff.png");
         bannerLabel.setIcon(bannerIcon);
 
-        createButton.addActionListener(new ActionListener() {
+        logoutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) { system.changeScreen("logout", mainPanel); }
+        });
+        jobsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println("Create Job");
+                system.changeScreen("jobs", mainPanel);
+            }
+        });
+        customerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                system.changeScreen("customers", mainPanel);
+            }
+        });
+        paymentsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                system.changeScreen("payments", mainPanel);
+            }
+        });
+        staffButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                system.changeScreen("staff", mainPanel);
+            }
+        });
+        tasksButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                system.changeScreen("tasks", mainPanel);
+            }
+        });
+        reportsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                system.changeScreen("reports", mainPanel);
+            }
+        });
+        databaseButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                system.changeScreen("database", mainPanel);
             }
         });
 
-        editButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Edit Job");
-            }
-        });
-
-        deleteButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println("Delete Job");
-            }
-        });
-
-        createTable();
-
+        ApplicationWindow.displayTable(table, jobData, tableColumns);
     }
 
     public JPanel getMainPanel() {
@@ -87,15 +114,6 @@ public class Job {
         this.mainPanel = mainPanel;
     }
 
-    private void createTable(){
-        jobTable.setModel(new DefaultTableModel(data,ColumnNames));
-        TableColumnModel columns = jobTable.getColumnModel();
-        columns.getColumn(9).setMinWidth(100);
-        columns.getColumn(10).setMinWidth(100);
-        columns.setColumnMargin(10);
-    }
-
-    /*
     public JLabel getUsername() {
         return usernameLabel;
     }
@@ -111,5 +129,4 @@ public class Job {
     public void setRole(String role) {
         this.roleLabel.setText(role);
     }
-     */
 }
