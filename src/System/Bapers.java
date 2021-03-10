@@ -4,7 +4,7 @@ import javax.swing.*;
 import GUI.*;
 
 public class Bapers {
-    private ApplicationWindow applicationWindow = new ApplicationWindow("Bapers Team 5");
+    private final ApplicationWindow applicationWindow = new ApplicationWindow("Bapers Team 5");
 
     // TODO: Take out declaration when it no longer needs testing
     private Login login = new Login(this);
@@ -15,6 +15,7 @@ public class Bapers {
     private Report report = new Report(this);
     private Task task = new Task(this);
     private Payment payment = new Payment(this);
+    private Database database = new Database(this);
 
     public Bapers() {
         /*
@@ -41,7 +42,7 @@ public class Bapers {
         so we can have the program default to the login screen.
          */
 
-        applicationWindow.add(login.getMainPanel());
+        //applicationWindow.add(login.getMainPanel());
 
         //applicationWindow.add(report.getMainPanel());
 
@@ -56,6 +57,8 @@ public class Bapers {
         //applicationWindow.add(task.getMainPanel());
 
         //applicationWindow.add(payment.getMainPanel());
+
+        applicationWindow.add(database.getMainPanel());
 
         applicationWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         applicationWindow.pack();
@@ -121,6 +124,9 @@ public class Bapers {
         report.setUsername(ApplicationWindow.username);
         report.setRole(ApplicationWindow.role);
 
+        database.setUsername(ApplicationWindow.username);
+        database.setRole(ApplicationWindow.role);
+
         updateProfile.setUsername(ApplicationWindow.username);
         updateProfile.setRole(ApplicationWindow.role);
     }
@@ -157,8 +163,8 @@ public class Bapers {
                 applicationWindow.add(report.getMainPanel());
                 break;
             case "database":
-                //database = new Database(this);
-                //applicationWindow.add()
+                database = new Database(this);
+                applicationWindow.add(database.getMainPanel());
                 break;
             default:
                 changeScreen("logout", panel);
