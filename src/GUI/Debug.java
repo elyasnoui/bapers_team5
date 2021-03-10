@@ -1,26 +1,17 @@
+// This is just for designing GUI panels, will delete later
 
 package GUI;
 
 import System.*;
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
 
-public class Staff {
+public class Debug {
     private Bapers system;
-    private JButton CreateButton;
-    private JButton editButton;
-    private JButton deleteButton;
-    private JTable table;
-    private JPanel mainPanel;
-    private JPanel contentPanel;
-    private JButton createButton;
-    private JLabel bannerLabel;
     private JPanel sidePanel;
     private JLabel usernameLabel;
+    private JLabel roleLabel;
     private JButton logoutButton;
     private JButton jobsButton;
     private JButton customerButton;
@@ -29,37 +20,21 @@ public class Staff {
     private JButton tasksButton;
     private JButton reportsButton;
     private JButton databaseButton;
-    private JPanel buttonPanel;
-    private JLabel roleLabel;
-    private JPanel tablePanel;
+    private JPanel contentPanel;
     private ImageIcon bannerIcon;
-    private List<String[]> staffData;
-    private final String[] tableColumns = {
-            "ID",
-            "First Name",
-            "Last Name",
-            "Contact Number",
-            "Address",
-            "Email",
-            "NI",
-            "Work Hours",
-            "Username",
-            "Password",
-            "Role",
-            "Privileges"
-    };
+    private JLabel bannerLabel;
+    private JPanel createPanel;
+    private JPanel newCustomerPanel;
+    private JPanel mainPanel;
+    private JTextField textField1;
+    private JTextField textField2;
+    private JTextField textField3;
+    private JTextField textField4;
 
-    public Staff(Bapers system) {
+    public Debug(Bapers system) {
         this.system = system;
 
-        try {
-            staffData = DatabaseConnection.getData("staff");
-            for (String[] ss : staffData)
-                ss[9] = "•••••••";
-        }
-        catch (Exception e) { e.printStackTrace(); }
-
-        bannerIcon = new ImageIcon("data/banners/staff.png");
+        bannerIcon = new ImageIcon("data/banners/report.png");
         bannerLabel.setIcon(bannerIcon);
 
         logoutButton.addActionListener(new ActionListener() {
@@ -108,8 +83,6 @@ public class Staff {
                 system.changeScreen("database", mainPanel);
             }
         });
-
-        ApplicationWindow.displayTable(table, staffData, tableColumns);
     }
 
     public JPanel getMainPanel() {
@@ -135,4 +108,5 @@ public class Staff {
     public void setRole(String role) {
         this.roleLabel.setText(role);
     }
+
 }
