@@ -40,7 +40,7 @@ public class Debug {
     private JTextField usernameField;
     private JTextField passwordField;
     private JTextField roleField;
-    private JLabel privilegesField;
+    private JTextField privilegesField;
 
     public Debug(Bapers system) {
         this.system = system;

@@ -3,10 +3,11 @@ package GUI;
 
 import System.*;
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseListener;
 import java.util.List;
 
 public class Staff {
@@ -43,8 +44,9 @@ public class Staff {
     private JTextField usernameField;
     private JTextField passwordField;
     private JTextField roleField;
-    private JLabel privilegesField;
-    private JButton cancelButton;
+    private JButton popupCancelButton;
+    private JTextField privilegesField;
+    private JButton popupCreateButton;
     private ImageIcon bannerIcon;
     private List<String[]> staffData;
     private final String[] tableColumns = {
@@ -130,13 +132,54 @@ public class Staff {
                 createPanel.setVisible(true);
             }
         });
-        cancelButton.addActionListener(new ActionListener() {
+        popupCancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 createPanel.setVisible(false);
                 tablePanel.setVisible(true);
             }
         });
+
+        MouseListener mouseListener = new MouseAdapter()
+        {
+            public void mouseEntered(java.awt.event.MouseEvent evt)
+            {
+                Component c = evt.getComponent();
+
+                if (c.getBackground().equals(new Color(124, 134, 175))) {
+                    c.setBackground(new Color(176, 191, 241));
+                    return;
+                }
+
+                c.setBackground(new Color(124, 134, 175));
+            }
+
+            public void mouseExited(java.awt.event.MouseEvent evt)
+            {
+                Component c = evt.getComponent();
+
+                if (c.getBackground().equals(new Color(176, 191, 241))) {
+                    c.setBackground(new Color(124, 134, 175));
+                    return;
+                }
+
+                c.setBackground(new Color(76, 84, 118));
+            }
+        };
+
+        logoutButton.addMouseListener(mouseListener);
+        jobsButton.addMouseListener(mouseListener);
+        customerButton.addMouseListener(mouseListener);
+        paymentsButton.addMouseListener(mouseListener);
+        staffButton.addMouseListener(mouseListener);
+        tasksButton.addMouseListener(mouseListener);
+        reportsButton.addMouseListener(mouseListener);
+        databaseButton.addMouseListener(mouseListener);
+        createButton.addMouseListener(mouseListener);
+        editButton.addMouseListener(mouseListener);
+        deleteButton.addMouseListener(mouseListener);
+        popupCreateButton.addMouseListener(mouseListener);
+        popupCancelButton.addMouseListener(mouseListener);
     }
 
     public JPanel getMainPanel() {
