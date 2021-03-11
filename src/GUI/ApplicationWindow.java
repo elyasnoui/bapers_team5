@@ -4,6 +4,9 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseListener;
 import java.util.List;
 
 public class ApplicationWindow extends JFrame {
@@ -32,4 +35,37 @@ public class ApplicationWindow extends JFrame {
 
         columns.getColumn(0).setPreferredWidth(10);
     }
+
+    public static String[] checkPrivileges() {
+
+
+        return null;
+    }
+
+    public static MouseListener mouseListener = new MouseAdapter()
+    {
+        public void mouseEntered(java.awt.event.MouseEvent evt)
+        {
+            Component c = evt.getComponent();
+
+            if (c.getBackground().equals(new Color(124, 134, 175))) {
+                c.setBackground(new Color(176, 191, 241));
+                return;
+            }
+
+            c.setBackground(new Color(124, 134, 175));
+        }
+
+        public void mouseExited(java.awt.event.MouseEvent evt)
+        {
+            Component c = evt.getComponent();
+
+            if (c.getBackground().equals(new Color(176, 191, 241))) {
+                c.setBackground(new Color(124, 134, 175));
+                return;
+            }
+
+            c.setBackground(new Color(76, 84, 118));
+        }
+    };
 }

@@ -134,6 +134,18 @@ public class Report {
             }
         });
 
+        logoutButton.addMouseListener(ApplicationWindow.mouseListener);
+        jobsButton.addMouseListener(ApplicationWindow.mouseListener);
+        customerButton.addMouseListener(ApplicationWindow.mouseListener);
+        paymentsButton.addMouseListener(ApplicationWindow.mouseListener);
+        staffButton.addMouseListener(ApplicationWindow.mouseListener);
+        tasksButton.addMouseListener(ApplicationWindow.mouseListener);
+        reportsButton.addMouseListener(ApplicationWindow.mouseListener);
+        databaseButton.addMouseListener(ApplicationWindow.mouseListener);
+        createButton.addMouseListener(ApplicationWindow.mouseListener);
+        editButton.addMouseListener(ApplicationWindow.mouseListener);
+        deleteButton.addMouseListener(ApplicationWindow.mouseListener);
+
         ApplicationWindow.displayTable(table, reportData, tableColumns);
     }
 
