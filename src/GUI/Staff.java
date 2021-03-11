@@ -31,6 +31,20 @@ public class Staff {
     private JButton databaseButton;
     private JPanel buttonPanel;
     private JLabel roleLabel;
+    private JPanel tablePanel;
+    private JPanel createPanel;
+    private JTextField firstNameField;
+    private JTextField lastNameField;
+    private JTextField contactNumberField;
+    private JTextField addressField;
+    private JTextField emailField;
+    private JTextField niField;
+    private JTextField workHoursField;
+    private JTextField usernameField;
+    private JTextField passwordField;
+    private JTextField roleField;
+    private JLabel privilegesField;
+    private JButton cancelButton;
     private ImageIcon bannerIcon;
     private List<String[]> staffData;
     private final String[] tableColumns = {
@@ -109,6 +123,20 @@ public class Staff {
         });
 
         ApplicationWindow.displayTable(table, staffData, tableColumns);
+        createButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                tablePanel.setVisible(false);
+                createPanel.setVisible(true);
+            }
+        });
+        cancelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                createPanel.setVisible(false);
+                tablePanel.setVisible(true);
+            }
+        });
     }
 
     public JPanel getMainPanel() {

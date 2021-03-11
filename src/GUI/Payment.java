@@ -84,7 +84,7 @@ public class Payment {
             e.printStackTrace();
         }
 
-        bannerIcon = new ImageIcon("data/banners/staff.png");
+        bannerIcon = new ImageIcon("data/banners/report.png");
         bannerLabel.setIcon(bannerIcon);
 
         logoutButton.addActionListener(new ActionListener() {

@@ -1,75 +1,56 @@
+// This is just for designing GUI panels, will delete later
+
 package GUI;
 
 import System.*;
-
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseListener;
 
-public class Customer extends JFrame{
-
+public class Debug {
     private Bapers system;
-    private JPanel mainPanel;
     private JPanel sidePanel;
-    private JButton customerButton;
-    private JPanel contentPanel;
-    private JLabel bannerLabel;
-    private JTable table;
     private JLabel usernameLabel;
     private JLabel roleLabel;
     private JButton logoutButton;
     private JButton jobsButton;
+    private JButton customerButton;
     private JButton paymentsButton;
     private JButton staffButton;
     private JButton tasksButton;
     private JButton reportsButton;
     private JButton databaseButton;
-    private JPanel buttonPanel;
-    private JButton deleteButton;
-    private JButton editButton;
-    private JButton createButton;
+    private JPanel contentPanel;
     private ImageIcon bannerIcon;
-    private List<String[]> customerData;
-    private List<String[]> valuedCustomerData;
-    private final String[] tableColumns = {
-            "ID",
-            "First Name",
-            "Surname",
-            "Contact Number",
-            "Address",
-            "Email",
-            "Agreed Discount",
-            "Discount Rate"
-    };
+    private JLabel bannerLabel;
+    private JPanel createPanel;
+    private JPanel mainPanel;
+    private JTextField firstNameField;
+    private JTextField lastNameField;
+    private JTextField contactNumberField;
+    private JTextField addressField;
+    private JButton createButton;
+    private JButton cancelButton;
+    private JTextField emailField;
+    private JTextField niField;
+    private JTextField workHoursField;
+    private JTextField usernameField;
+    private JTextField passwordField;
+    private JTextField roleField;
+    private JLabel privilegesField;
 
-    public Customer(Bapers system) {
+    public Debug(Bapers system) {
         this.system = system;
 
-        try {
-            customerData = DatabaseConnection.getData("customer");
-            valuedCustomerData = DatabaseConnection.getData("valuedCustomer");
-            assert customerData != null && valuedCustomerData != null;
-            String[] temp;
-            for (String[] vs : valuedCustomerData) {
-                int i = 0;
-                for (String[] cs : customerData) {
-                    if (vs[0].equals(cs[0])) {
-                        temp = new String[] { cs[0], cs[1], cs[2], cs[3], cs[4], cs[5], vs[1], vs[2] };
-                        customerData.set(i, temp);
-                    } i++;
-                }
-            }
-        } catch (Exception e) { e.printStackTrace(); }
-
-        bannerIcon = new ImageIcon("data/banners/customer.png");
+        bannerIcon = new ImageIcon("data/banners/report.png");
         bannerLabel.setIcon(bannerIcon);
 
         logoutButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                system.changeScreen("logout", mainPanel);
-            }
+            public void actionPerformed(ActionEvent e) { system.changeScreen("logout", mainPanel); }
         });
         jobsButton.addActionListener(new ActionListener() {
             @Override
@@ -114,15 +95,51 @@ public class Customer extends JFrame{
             }
         });
 
-        ApplicationWindow.displayTable(table, customerData, tableColumns);
+        MouseListener mouseListener = new MouseAdapter()
+        {
+            public void mouseEntered(java.awt.event.MouseEvent evt)
+            {
+                Component c = evt.getComponent();
+
+                if (c.getBackground().equals(new Color(124, 134, 175))) {
+                    c.setBackground(new Color(176, 191, 241));
+                    return;
+                }
+
+                c.setBackground(new Color(124, 134, 175));
+            }
+
+            public void mouseExited(java.awt.event.MouseEvent evt)
+            {
+                Component c = evt.getComponent();
+
+                if (c.getBackground().equals(new Color(176, 191, 241))) {
+                    c.setBackground(new Color(124, 134, 175));
+                    return;
+                }
+
+                c.setBackground(new Color(76, 84, 118));
+            }
+        };
+
+        logoutButton.addMouseListener(mouseListener);
+        jobsButton.addMouseListener(mouseListener);
+        customerButton.addMouseListener(mouseListener);
+        paymentsButton.addMouseListener(mouseListener);
+        staffButton.addMouseListener(mouseListener);
+        tasksButton.addMouseListener(mouseListener);
+        reportsButton.addMouseListener(mouseListener);
+        databaseButton.addMouseListener(mouseListener);
+        createButton.addMouseListener(mouseListener);
+        cancelButton.addMouseListener(mouseListener);
     }
 
-    public JPanel getPanel() {
+    public JPanel getMainPanel() {
         return mainPanel;
     }
 
-    public void setPanel(JPanel panel) {
-        this.mainPanel = panel;
+    public void setMainPanel(JPanel mainPanel) {
+        this.mainPanel = mainPanel;
     }
 
     public JLabel getUsername() {
@@ -140,4 +157,5 @@ public class Customer extends JFrame{
     public void setRole(String role) {
         this.roleLabel.setText(role);
     }
+
 }

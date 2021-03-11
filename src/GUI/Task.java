@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Task {
-
     private JButton CreateButton;
     private JButton editButton;
     private JButton deleteButton;
@@ -62,7 +61,7 @@ public class Task {
         }
         catch (Exception e) { e.printStackTrace(); }
 
-        bannerIcon = new ImageIcon("data/banners/staff.png");
+        bannerIcon = new ImageIcon("data/banners/report.png");
         bannerLabel.setIcon(bannerIcon);
 
         logoutButton.addActionListener(new ActionListener() {

@@ -29,7 +29,7 @@ public class DatabaseConnection {
         return false;
     }
 
-    public static List<String[]> getData(String tableName) throws Exception {
+    public static List<String[]> getData(String tableName) {
         try {
             Connection conn = Connect();
             assert conn != null;
@@ -532,18 +532,6 @@ public class DatabaseConnection {
         );
         return executeStatement(statement);
     }
-
-    /*
-    public static Object[][] getCustomerTable() throws SQLException {
-        Connection conn = Connect();
-        assert conn != null;
-        PreparedStatement statement = conn.prepareStatement(
-                "SELECT * FROM customer"
-        );
-        ResultSet res = statement.executeQuery();
-
-    }
-     */
 
     // Editing an existing customer record
     public static boolean

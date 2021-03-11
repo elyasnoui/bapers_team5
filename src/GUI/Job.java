@@ -53,7 +53,7 @@ public class Job {
         }
         catch (Exception e) { e.printStackTrace(); }
 
-        bannerIcon = new ImageIcon("data/banners/staff.png");
+        bannerIcon = new ImageIcon("data/banners/job.png");
         bannerLabel.setIcon(bannerIcon);
 
         logoutButton.addActionListener(new ActionListener() {
