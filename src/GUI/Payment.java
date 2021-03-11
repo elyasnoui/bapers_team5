@@ -84,7 +84,7 @@ public class Payment {
             e.printStackTrace();
         }
 
-        bannerIcon = new ImageIcon("data/banners/report.png");
+        bannerIcon = new ImageIcon("data/banners/payment.png");
         bannerLabel.setIcon(bannerIcon);
 
         logoutButton.addActionListener(new ActionListener() {
@@ -133,6 +133,18 @@ public class Payment {
                 system.changeScreen("database", mainPanel);
             }
         });
+
+        logoutButton.addMouseListener(ApplicationWindow.mouseListener);
+        jobsButton.addMouseListener(ApplicationWindow.mouseListener);
+        customerButton.addMouseListener(ApplicationWindow.mouseListener);
+        paymentsButton.addMouseListener(ApplicationWindow.mouseListener);
+        staffButton.addMouseListener(ApplicationWindow.mouseListener);
+        tasksButton.addMouseListener(ApplicationWindow.mouseListener);
+        reportsButton.addMouseListener(ApplicationWindow.mouseListener);
+        databaseButton.addMouseListener(ApplicationWindow.mouseListener);
+        createButton.addMouseListener(ApplicationWindow.mouseListener);
+        editButton.addMouseListener(ApplicationWindow.mouseListener);
+        deleteButton.addMouseListener(ApplicationWindow.mouseListener);
 
         ApplicationWindow.displayTable(table, paymentData, tableColumns);
     }

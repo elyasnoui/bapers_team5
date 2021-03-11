@@ -140,46 +140,19 @@ public class Staff {
             }
         });
 
-        MouseListener mouseListener = new MouseAdapter()
-        {
-            public void mouseEntered(java.awt.event.MouseEvent evt)
-            {
-                Component c = evt.getComponent();
-
-                if (c.getBackground().equals(new Color(124, 134, 175))) {
-                    c.setBackground(new Color(176, 191, 241));
-                    return;
-                }
-
-                c.setBackground(new Color(124, 134, 175));
-            }
-
-            public void mouseExited(java.awt.event.MouseEvent evt)
-            {
-                Component c = evt.getComponent();
-
-                if (c.getBackground().equals(new Color(176, 191, 241))) {
-                    c.setBackground(new Color(124, 134, 175));
-                    return;
-                }
-
-                c.setBackground(new Color(76, 84, 118));
-            }
-        };
-
-        logoutButton.addMouseListener(mouseListener);
-        jobsButton.addMouseListener(mouseListener);
-        customerButton.addMouseListener(mouseListener);
-        paymentsButton.addMouseListener(mouseListener);
-        staffButton.addMouseListener(mouseListener);
-        tasksButton.addMouseListener(mouseListener);
-        reportsButton.addMouseListener(mouseListener);
-        databaseButton.addMouseListener(mouseListener);
-        createButton.addMouseListener(mouseListener);
-        editButton.addMouseListener(mouseListener);
-        deleteButton.addMouseListener(mouseListener);
-        popupCreateButton.addMouseListener(mouseListener);
-        popupCancelButton.addMouseListener(mouseListener);
+        logoutButton.addMouseListener(ApplicationWindow.mouseListener);
+        jobsButton.addMouseListener(ApplicationWindow.mouseListener);
+        customerButton.addMouseListener(ApplicationWindow.mouseListener);
+        paymentsButton.addMouseListener(ApplicationWindow.mouseListener);
+        staffButton.addMouseListener(ApplicationWindow.mouseListener);
+        tasksButton.addMouseListener(ApplicationWindow.mouseListener);
+        reportsButton.addMouseListener(ApplicationWindow.mouseListener);
+        databaseButton.addMouseListener(ApplicationWindow.mouseListener);
+        createButton.addMouseListener(ApplicationWindow.mouseListener);
+        editButton.addMouseListener(ApplicationWindow.mouseListener);
+        deleteButton.addMouseListener(ApplicationWindow.mouseListener);
+        popupCreateButton.addMouseListener(ApplicationWindow.mouseListener);
+        popupCancelButton.addMouseListener(ApplicationWindow.mouseListener);
     }
 
     public JPanel getMainPanel() {
