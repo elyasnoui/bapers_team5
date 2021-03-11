@@ -4,8 +4,11 @@ package GUI;
 
 import System.*;
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseListener;
 
 public class Debug {
     private Bapers system;
@@ -24,12 +27,20 @@ public class Debug {
     private ImageIcon bannerIcon;
     private JLabel bannerLabel;
     private JPanel createPanel;
-    private JPanel newCustomerPanel;
     private JPanel mainPanel;
-    private JTextField textField1;
-    private JTextField textField2;
-    private JTextField textField3;
-    private JTextField textField4;
+    private JTextField firstNameField;
+    private JTextField lastNameField;
+    private JTextField contactNumberField;
+    private JTextField addressField;
+    private JButton createButton;
+    private JButton cancelButton;
+    private JTextField emailField;
+    private JTextField niField;
+    private JTextField workHoursField;
+    private JTextField usernameField;
+    private JTextField passwordField;
+    private JTextField roleField;
+    private JLabel privilegesField;
 
     public Debug(Bapers system) {
         this.system = system;
@@ -83,6 +94,44 @@ public class Debug {
                 system.changeScreen("database", mainPanel);
             }
         });
+
+        MouseListener mouseListener = new MouseAdapter()
+        {
+            public void mouseEntered(java.awt.event.MouseEvent evt)
+            {
+                Component c = evt.getComponent();
+
+                if (c.getBackground().equals(new Color(124, 134, 175))) {
+                    c.setBackground(new Color(176, 191, 241));
+                    return;
+                }
+
+                c.setBackground(new Color(124, 134, 175));
+            }
+
+            public void mouseExited(java.awt.event.MouseEvent evt)
+            {
+                Component c = evt.getComponent();
+
+                if (c.getBackground().equals(new Color(176, 191, 241))) {
+                    c.setBackground(new Color(124, 134, 175));
+                    return;
+                }
+
+                c.setBackground(new Color(76, 84, 118));
+            }
+        };
+
+        logoutButton.addMouseListener(mouseListener);
+        jobsButton.addMouseListener(mouseListener);
+        customerButton.addMouseListener(mouseListener);
+        paymentsButton.addMouseListener(mouseListener);
+        staffButton.addMouseListener(mouseListener);
+        tasksButton.addMouseListener(mouseListener);
+        reportsButton.addMouseListener(mouseListener);
+        databaseButton.addMouseListener(mouseListener);
+        createButton.addMouseListener(mouseListener);
+        cancelButton.addMouseListener(mouseListener);
     }
 
     public JPanel getMainPanel() {

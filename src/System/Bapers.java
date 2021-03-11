@@ -48,7 +48,7 @@ public class Bapers {
 
         //applicationWindow.add(report.getMainPanel());
 
-        //applicationWindow.add(staff.getMainPanel());
+        applicationWindow.add(staff.getMainPanel());
 
         //applicationWindow.add(customer.getPanel());
 
@@ -62,7 +62,7 @@ public class Bapers {
 
         //applicationWindow.add(database.getMainPanel());
 
-        applicationWindow.add(debug.getMainPanel());
+        //applicationWindow.add(debug.getMainPanel());
 
         applicationWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         applicationWindow.pack();
