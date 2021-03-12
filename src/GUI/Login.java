@@ -49,7 +49,7 @@ public class Login {
         DatabaseConnection db = null;
         try {
             if (DatabaseConnection.VerifyLogInCredentials(usernameField.getText(), passwordField.getPassword()))
-                system.changeScreen("customers", mainPanel);
+                system.changeScreen("jobs", mainPanel);
             else JOptionPane.showMessageDialog(mainPanel, "Invalid Credentials");
         } catch (Exception exception) {
             exception.printStackTrace();

@@ -2,6 +2,8 @@ package GUI;
 
 import System.*;
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableColumnModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -114,6 +116,8 @@ public class Job {
         createButton.addMouseListener(ApplicationWindow.mouseListener);
         editButton.addMouseListener(ApplicationWindow.mouseListener);
         deleteButton.addMouseListener(ApplicationWindow.mouseListener);
+
+
 
         ApplicationWindow.displayTable(table, jobData, tableColumns);
     }
