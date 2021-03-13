@@ -29,6 +29,17 @@ public class Customer extends JFrame{
     private JButton deleteButton;
     private JButton editButton;
     private JButton createButton;
+    private JPanel createPanel;
+    private JTextField firstNameField;
+    private JTextField lastNameField;
+    private JTextField contactNumberField;
+    private JTextField addressField;
+    private JTextField emailField;
+    private JTextField agreedDiscountField;
+    private JTextField discountRateField;
+    private JButton popupCreateButton;
+    private JButton popupCancelButton;
+    private JPanel tablePanel;
     private ImageIcon bannerIcon;
     private List<String[]> customerData;
     private List<String[]> valuedCustomerData;
@@ -127,6 +138,20 @@ public class Customer extends JFrame{
         deleteButton.addMouseListener(ApplicationWindow.mouseListener);
 
         ApplicationWindow.displayTable(table, customerData, tableColumns);
+        createButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                tablePanel.setVisible(false);
+                createPanel.setVisible(true);
+            }
+        });
+        popupCancelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                createPanel.setVisible(false);
+                tablePanel.setVisible(true);
+            }
+        });
     }
 
     public JPanel getPanel() {
