@@ -30,6 +30,21 @@ public class Payment {
     private JButton createButton;
     private JTable table;
     private JPanel mainPanel;
+    private JPanel createPanel;
+    private JButton popupCancelButton;
+    private JScrollPane tablePanel;
+    private JTextField firstNameField;
+    private JTextField lastNameField;
+    private JTextField contactNumberField;
+    private JTextField addressField;
+    private JTextField emailField;
+    private JTextField niField;
+    private JTextField workHoursField;
+    private JTextField usernameField;
+    private JTextField passwordField;
+    private JTextField roleField;
+    private JTextField privilegesField;
+    private JButton popupCreateButton;
     private List<String[]> paymentData;
     private List<String[]> cardData;
     private List<String[]> cashData;
@@ -147,6 +162,22 @@ public class Payment {
         deleteButton.addMouseListener(ApplicationWindow.mouseListener);
 
         ApplicationWindow.displayTable(table, paymentData, tableColumns);
+        createButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                tablePanel.setVisible(false);
+                buttonPanel.setVisible(false);
+                createPanel.setVisible(true);
+            }
+        });
+        popupCancelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                tablePanel.setVisible(true);
+                buttonPanel.setVisible(true);
+                createPanel.setVisible(false);
+            }
+        });
     }
 
     public JPanel getMainPanel() {

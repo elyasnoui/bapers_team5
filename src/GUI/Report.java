@@ -30,6 +30,18 @@ public class Report {
     private JButton reportsButton;
     private JButton databaseButton;
     private JLabel roleLabel;
+    private JPanel createPanel;
+    private JTextField reportTypeField;
+    private JTextField contentField;
+    private JTextField dateGeneratedField;
+    private JTextField startDateField;
+    private JTextField endDateField;
+    private JTextField noOfStaffField;
+    private JTextField noOfJobsField;
+    private JTextField noOfTasksField;
+    private JButton popupCreateButton;
+    private JButton popupCancelButton;
+    private JScrollPane tablePanel;
     private ImageIcon bannerIcon;
     private Bapers system;
     private List<String[]> reportData;
@@ -147,6 +159,22 @@ public class Report {
         deleteButton.addMouseListener(ApplicationWindow.mouseListener);
 
         ApplicationWindow.displayTable(table, reportData, tableColumns);
+        createButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                tablePanel.setVisible(false);
+                buttonPanel.setVisible(false);
+                createPanel.setVisible(true);
+            }
+        });
+        popupCancelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                tablePanel.setVisible(true);
+                buttonPanel.setVisible(true);
+                createPanel.setVisible(false);
+            }
+        });
     }
 
     public JPanel getMainPanel() {

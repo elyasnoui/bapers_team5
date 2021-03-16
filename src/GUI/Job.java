@@ -30,6 +30,17 @@ public class Job {
     private JButton createButton;
     private JTable table;
     private JPanel mainPanel;
+    private JPanel createPanel;
+    private JButton popupCancelButton;
+    private JScrollPane tablePanel;
+    private JTextField isUrgentField;
+    private JTextField priceField;
+    private JTextField startDateField;
+    private JTextField endDateField;
+    private JTextField deadlineField;
+    private JTextField statusField;
+    private JTextField customerIDField;
+    private JButton popupCreateButton;
     private List<String[]> jobData;
     private final String[] tableColumns = {
             "ID",
@@ -120,6 +131,22 @@ public class Job {
 
 
         ApplicationWindow.displayTable(table, jobData, tableColumns);
+        createButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                tablePanel.setVisible(false);
+                buttonPanel.setVisible(false);
+                createPanel.setVisible(true);
+            }
+        });
+        popupCancelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                createPanel.setVisible(false);
+                buttonPanel.setVisible(true);
+                tablePanel.setVisible(true);
+            }
+        });
     }
 
     public JPanel getMainPanel() {

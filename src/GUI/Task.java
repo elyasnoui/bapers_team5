@@ -32,6 +32,18 @@ public class Task {
     private JPanel contentPanel;
     private JPanel buttonPanel;
     private JTable table;
+    private JPanel createPanel;
+    private JTextField jobIDField;
+    private JTextField descriptionField;
+    private JTextField departmentField;
+    private JTextField dateField;
+    private JTextField timeTakenField;
+    private JTextField priceField;
+    private JTextField discountRateField;
+    private JTextField staffIDField;
+    private JButton popupCreateButton;
+    private JButton popupCancelButton;
+    private JScrollPane tablePanel;
     private ImageIcon bannerIcon;
     private Bapers system;
     private List<String[]> taskData;
@@ -124,6 +136,22 @@ public class Task {
         deleteButton.addMouseListener(ApplicationWindow.mouseListener);
 
         ApplicationWindow.displayTable(table, taskData, tableColumns);
+        createButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                tablePanel.setVisible(false);
+                buttonPanel.setVisible(false);
+                createPanel.setVisible(true);
+            }
+        });
+        popupCancelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                tablePanel.setVisible(true);
+                buttonPanel.setVisible(true);
+                createPanel.setVisible(false);
+            }
+        });
     }
 
     public JPanel getMainPanel() {
