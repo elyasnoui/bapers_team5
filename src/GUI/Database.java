@@ -52,7 +52,7 @@ public class Database {
         }
         catch (Exception e) { e.printStackTrace(); }
 
-        bannerIcon = new ImageIcon("data/banners/report.png");
+        bannerIcon = new ImageIcon("data/banners/database.png");
         bannerLabel.setIcon(bannerIcon);
 
         logoutButton.addActionListener(new ActionListener() {

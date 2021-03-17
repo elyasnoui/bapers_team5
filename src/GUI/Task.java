@@ -73,7 +73,7 @@ public class Task {
         }
         catch (Exception e) { e.printStackTrace(); }
 
-        bannerIcon = new ImageIcon("data/banners/report.png");
+        bannerIcon = new ImageIcon("data/banners/tasks.png");
         bannerLabel.setIcon(bannerIcon);
 
         logoutButton.addActionListener(new ActionListener() {
