@@ -1,6 +1,7 @@
 package System;
 
 import GUI.ApplicationWindow;
+import com.mysql.cj.xdevapi.Result;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
@@ -29,6 +30,24 @@ public class DatabaseConnection {
         return false;
     }
 
+    public static int getNextID(String tableName) {
+        try {
+            Connection conn = Connect();
+            assert conn != null;
+            PreparedStatement statement = conn.prepareStatement("SELECT `AUTO_INCREMENT` " +
+                    "FROM INFORMATION_SCHEMA.TABLES " +
+                    "WHERE TABLE_SCHEMA = 'bapers_db' " +
+                    "AND TABLE_NAME = '"+tableName+"'");
+            ResultSet res = statement.executeQuery();
+            res.next();
+            return Integer.parseInt(res.getString("AUTO_INCREMENT"));
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1;
+        }
+
+    }
+
     public static List<String[]> getData(String tableName) {
         try {
             Connection conn = Connect();
@@ -41,7 +60,7 @@ public class DatabaseConnection {
                 String[] row = new String[nCol];
                 for (int i=1; i<=nCol; i++) {
                     Object object = res.getObject(i);
-                    row[i-1] = (object == null) ? null:object.toString();
+                    row[i-1] = (object == null) ? null : object.toString();
                 }
                 data.add(row);
             }
