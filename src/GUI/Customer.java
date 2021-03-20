@@ -5,6 +5,8 @@ import System.*;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 
 public class Customer extends JFrame{
@@ -150,6 +152,14 @@ public class Customer extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 createPanel.setVisible(false);
                 tablePanel.setVisible(true);
+            }
+        });
+
+
+        table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
             }
         });
     }
