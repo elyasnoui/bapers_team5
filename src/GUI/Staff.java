@@ -45,7 +45,6 @@ public class Staff {
     private JTextField passwordField;
     private JTextField roleField;
     private JButton popupCancelButton;
-    private JTextField privilegesField;
     private JButton popupCreateButton;
     private ImageIcon bannerIcon;
     private List<String[]> staffData;
