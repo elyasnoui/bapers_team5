@@ -24,7 +24,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 public class reportpdf {
 
 
-    private static String FILE = "data/reports\\reportpdf";
+    private static String FILE = "data/reports\\reportpdf.pdf";
     private static Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18,
             Font.BOLD);
     private static Font redFont = new Font(Font.FontFamily.TIMES_ROMAN, 12,
@@ -81,13 +81,13 @@ public class reportpdf {
                 smallBold));
         addEmptyLine(preface, 3);
         preface.add(new Paragraph(
-                "This document describes something which is very important ",
+                "For report printing soon",
                 smallBold));
 
         addEmptyLine(preface, 8);
 
         preface.add(new Paragraph(
-                "This document is a preliminary version and not subject to your license agreement or any other agreement with vogella.com ;-).",
+                "Need to now add report to this",
                 redFont));
 
         document.add(preface);
