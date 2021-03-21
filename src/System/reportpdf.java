@@ -96,8 +96,8 @@ public class reportpdf {
     }
 
     public static void addContent(Document document) throws DocumentException {
-        Anchor anchor = new Anchor("First Chapter", catFont);
-        anchor.setName("First Chapter");
+        Anchor anchor = new Anchor("Individual Performance Report", catFont);
+        anchor.setName("Individual Performance Report");
 
         // Second parameter is the number of the chapter
         Chapter catPart = new Chapter(new Paragraph(anchor), 1);
@@ -142,32 +142,56 @@ public class reportpdf {
 
     private static void createTable(Section subCatPart)
             throws BadElementException {
-        PdfPTable table = new PdfPTable(3);
+        PdfPTable table = new PdfPTable(7);
 
         // t.setBorderColor(BaseColor.GRAY);
         // t.setPadding(4);
         // t.setSpacing(4);
         // t.setBorderWidth(1);
+        //table.isLockedWidth();
 
-        PdfPCell c1 = new PdfPCell(new Phrase("Table Header 1"));
+
+        PdfPCell c1 = new PdfPCell(new Phrase("Name"));
         c1.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(c1);
 
-        c1 = new PdfPCell(new Phrase("Table Header 2"));
+        c1 = new PdfPCell(new Phrase("Task IDs"));
         c1.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(c1);
 
-        c1 = new PdfPCell(new Phrase("Table Header 3"));
+        c1 = new PdfPCell(new Phrase("Department"));
         c1.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(c1);
+
+        c1 = new PdfPCell(new Phrase("Date"));
+        c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(c1);
+
+        c1 = new PdfPCell(new Phrase("Start Time"));
+        c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(c1);
+
+        c1 = new PdfPCell(new Phrase("Time Taken"));
+        c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(c1);
+
+        c1 = new PdfPCell(new Phrase("Total"));
+        c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(c1);
+
+
+
         table.setHeaderRows(1);
 
         table.addCell("1.0");
         table.addCell("1.1");
         table.addCell("1.2");
-        table.addCell("2.1");
-        table.addCell("2.2");
-        table.addCell("2.3");
+        table.addCell("1.3");
+        table.addCell("1.4");
+        table.addCell("1.5");
+        table.addCell("1.6");
+        //table.addCell("1.7");
+        //table.addCell("1.8");
 
         subCatPart.add(table);
 
