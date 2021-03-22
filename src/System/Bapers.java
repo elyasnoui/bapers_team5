@@ -46,11 +46,11 @@ public class Bapers {
 
         //applicationWindow.add(login.getMainPanel());
 
-        //applicationWindow.add(report.getMainPanel());
+        applicationWindow.add(report.getMainPanel());
 
         //applicationWindow.add(staff.getMainPanel());
 
-        applicationWindow.add(customer.getPanel());
+        //applicationWindow.add(customer.getPanel());
 
         //applicationWindow.add(updateProfile.getMainPanel());
 

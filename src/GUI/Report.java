@@ -3,12 +3,16 @@ package GUI;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileOutputStream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import System.reportpdf;
 
 import System.*;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.pdf.PdfWriter;
 
 public class Report {
     private JPanel mainPanel;
@@ -42,6 +46,7 @@ public class Report {
     private JButton popupCreateButton;
     private JButton popupCancelButton;
     private JScrollPane tablePanel;
+    private JButton printButton;
     private ImageIcon bannerIcon;
     private Bapers system;
     private List<String[]> reportData;
@@ -173,6 +178,22 @@ public class Report {
                 tablePanel.setVisible(true);
                 buttonPanel.setVisible(true);
                 createPanel.setVisible(false);
+            }
+        });
+        printButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    Document document = new Document();
+                    PdfWriter.getInstance(document, new FileOutputStream(reportpdf.getFILE()));
+                    document.open();
+                    reportpdf.addMetaData(document);
+                    reportpdf.addTitlePage(document);
+                    reportpdf.addContent(document);
+                    document.close();
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
             }
         });
     }
