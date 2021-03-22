@@ -6,6 +6,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableColumnModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 
 public class Job {
@@ -146,6 +148,17 @@ public class Job {
                 createPanel.setVisible(false);
                 buttonPanel.setVisible(true);
                 tablePanel.setVisible(true);
+            }
+        });
+        popupCreateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+
+                createPanel.setVisible(false);
+                buttonPanel.setVisible(true);
+                tablePanel.setVisible(true);
+
             }
         });
     }
