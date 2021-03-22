@@ -1,5 +1,3 @@
-/*
-
 package System;
 
 import java.io.FileOutputStream;
@@ -213,6 +211,4 @@ public class reportpdf {
         }
     }
 }
-
- */
 
