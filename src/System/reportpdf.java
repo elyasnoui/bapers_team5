@@ -1,5 +1,3 @@
-/*
-
 package System;
 
 import java.io.FileOutputStream;
