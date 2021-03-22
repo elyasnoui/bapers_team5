@@ -2,8 +2,6 @@ package GUI;
 
 import System.*;
 import javax.swing.*;
-import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableColumnModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -36,13 +34,18 @@ public class Job {
     private JButton popupCancelButton;
     private JScrollPane tablePanel;
     private JTextField priceField;
-    private JTextField startDateField;
-    private JTextField endDateField;
-    private JTextField deadlineField;
     private JTextField statusField;
     private JTextField customerIDField;
     private JButton popupCreateButton;
     private JCheckBox isUrgentCheckBox;
+    private JTextField ddField;
+    private JTextField mmField;
+    private JTextField yyyyField;
+    private JPanel startDatePanel;
+    private JPanel endDatePanel;
+    private JPanel deadlinePanel;
+    private ImageIcon checkBoxIcon;
+    private ImageIcon selectedCheckBoxIcon;
     private List<String[]> jobData;
     private final String[] tableColumns = {
             "ID",
@@ -71,6 +74,11 @@ public class Job {
 
         bannerIcon = new ImageIcon("data/banners/job.png");
         bannerLabel.setIcon(bannerIcon);
+
+        checkBoxIcon = new ImageIcon("data/graphics/test.png");
+        selectedCheckBoxIcon = new ImageIcon("data/graphics/test2.png");
+        isUrgentCheckBox.setIcon(checkBoxIcon);
+        isUrgentCheckBox.setSelectedIcon(selectedCheckBoxIcon);
 
         logoutButton.addActionListener(new ActionListener() {
             @Override
@@ -131,8 +139,6 @@ public class Job {
         editButton.addMouseListener(ApplicationWindow.mouseListener);
         deleteButton.addMouseListener(ApplicationWindow.mouseListener);
 
-
-
         ApplicationWindow.displayTable(table, jobData, tableColumns);
         createButton.addActionListener(new ActionListener() {
             @Override
@@ -140,6 +146,15 @@ public class Job {
                 tablePanel.setVisible(false);
                 buttonPanel.setVisible(false);
                 createPanel.setVisible(true);
+
+                // Adding key listeners for date filtering
+                priceField.addKeyListener(ApplicationWindow.inputValidator);
+
+                for (int i=0; i<3; i++) {
+                    startDatePanel.getComponents()[i].addKeyListener(ApplicationWindow.inputValidator);
+                    endDatePanel.getComponents()[i].addKeyListener(ApplicationWindow.inputValidator);
+                    deadlinePanel.getComponents()[i].addKeyListener(ApplicationWindow.inputValidator);
+                }
             }
         });
         popupCancelButton.addActionListener(new ActionListener() {
@@ -148,6 +163,29 @@ public class Job {
                 createPanel.setVisible(false);
                 buttonPanel.setVisible(true);
                 tablePanel.setVisible(true);
+
+                // Removing key listeners when no longer needed
+                priceField.removeKeyListener(ApplicationWindow.inputValidator);
+
+                for (int i=0; i<3; i++) {
+                    startDatePanel.getComponents()[i].removeKeyListener(ApplicationWindow.inputValidator);
+                    endDatePanel.getComponents()[i].removeKeyListener(ApplicationWindow.inputValidator);
+                    deadlinePanel.getComponents()[i].removeKeyListener(ApplicationWindow.inputValidator);
+                }
+            }
+        });
+        popupCreateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                List<String[]> customers = DatabaseConnection.getData("customer");
+                assert customers != null;
+                for (String[] cs : customers) {
+                    if (cs[0].equals(customerIDField.getText())) {
+                        //DatabaseConnection.addJob(isUrgentCheckBox.isSelected(), priceField.getText(), )
+                        return;
+                    }
+                }
+                JOptionPane.showMessageDialog(mainPanel, "Customer ID does not exist.");
             }
         });
         popupCreateButton.addActionListener(new ActionListener() {
