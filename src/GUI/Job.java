@@ -33,7 +33,6 @@ public class Job {
     private JPanel createPanel;
     private JButton popupCancelButton;
     private JScrollPane tablePanel;
-    private JTextField isUrgentField;
     private JTextField priceField;
     private JTextField startDateField;
     private JTextField endDateField;
@@ -41,6 +40,7 @@ public class Job {
     private JTextField statusField;
     private JTextField customerIDField;
     private JButton popupCreateButton;
+    private JCheckBox isUrgentCheckBox;
     private List<String[]> jobData;
     private final String[] tableColumns = {
             "ID",
