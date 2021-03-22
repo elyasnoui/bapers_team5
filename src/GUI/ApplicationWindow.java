@@ -5,6 +5,8 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseListener;
 import java.util.List;
@@ -66,6 +68,50 @@ public class ApplicationWindow extends JFrame {
             }
 
             c.setBackground(new Color(76, 84, 118));
+        }
+    };
+
+    public static KeyListener inputValidator = new KeyListener() {
+        @Override
+        public void keyTyped(KeyEvent e) {}
+
+        @Override
+        public void keyPressed(KeyEvent e) {}
+
+        @Override
+        public void keyReleased(KeyEvent e) {
+            char c = e.getKeyChar();
+            JTextField textField = ((JTextField) e.getComponent());
+
+            switch (textField.getName()) {
+                // If the field belongs to a date field
+                case "dd": case "mm": case "yyyy":
+                    // Checks and removes non-integers
+                    if (((c < '0') || (c > '9')) && (c != KeyEvent.VK_BACK_SPACE))
+                        textField.setText(textField.getText().replaceAll("[^\\d]", ""));
+
+                    // Ensures dd and mm are limited to 2 characters and yyyy to 4
+                    switch (textField.getName()) {
+                        case "dd": case "mm":
+                            if (textField.getText().length() > 2)
+                                textField.setText(textField.getText().substring(0, 2));
+                            break;
+                        case "yyyy":
+                            if (textField.getText().length() > 4)
+                                textField.setText(textField.getText().substring(0, 4));
+                            break;
+                    }
+
+                    break;
+                case "money":
+                    // Checks and removes non-integers
+                    if (((c < '0') || (c > '9')) && (c != KeyEvent.VK_BACK_SPACE))
+                        textField.setText(textField.getText().replaceAll("[^\\d.]", ""));
+
+
+
+                    break;
+            }
         }
     };
 }
