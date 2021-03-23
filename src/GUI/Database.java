@@ -23,11 +23,12 @@ public class Database {
     private ImageIcon bannerIcon;
     private JLabel bannerLabel;
     private JPanel buttonPanel;
-    private JButton deleteButton;
-    private JButton editButton;
-    private JButton createButton;
+    private JButton restoreButton;
+    private JButton backupButton;
+    private JButton filterButton;
     private JTable table;
     private JPanel mainPanel;
+    private JButton configureButton;
     private List<String[]> databaseData;
     private final String[] tableColumns = {
             "ID",
@@ -110,9 +111,9 @@ public class Database {
         tasksButton.addMouseListener(ApplicationWindow.mouseListener);
         reportsButton.addMouseListener(ApplicationWindow.mouseListener);
         databaseButton.addMouseListener(ApplicationWindow.mouseListener);
-        createButton.addMouseListener(ApplicationWindow.mouseListener);
-        editButton.addMouseListener(ApplicationWindow.mouseListener);
-        deleteButton.addMouseListener(ApplicationWindow.mouseListener);
+        filterButton.addMouseListener(ApplicationWindow.mouseListener);
+        backupButton.addMouseListener(ApplicationWindow.mouseListener);
+        restoreButton.addMouseListener(ApplicationWindow.mouseListener);
 
         //ApplicationWindow.displayTable(table, taskData, tableColumns);
     }

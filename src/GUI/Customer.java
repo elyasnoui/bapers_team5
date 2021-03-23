@@ -3,6 +3,8 @@ package GUI;
 import System.*;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -46,8 +48,17 @@ public class Customer extends JFrame{
     private JCheckBox vcCheckBox;
     private JLabel agreedDiscountLabel;
     private JLabel discountRateLabel;
+    private JLabel firstNameEX;
+    private JLabel lastNameEX;
+    private JLabel contactNumEX;
+    private JLabel addressEX;
+    private JLabel emailEX;
+    private JLabel agreedDiscountEX;
+    private JLabel discountRateEX;
     private ImageIcon checkBoxIcon;
     private ImageIcon selectedCheckBoxIcon;
+
+    private boolean error = false;
 
     private List<String[]> customerData;
     private List<String[]> valuedCustomerData;
@@ -166,6 +177,8 @@ public class Customer extends JFrame{
                 agreedDiscountField.setVisible(visibility);
                 discountRateLabel.setVisible(visibility);
                 discountRateField.setVisible(visibility);
+                agreedDiscountEX.setVisible(false);
+                discountRateEX.setVisible(false);
             }
         });
         popupCancelButton.addActionListener(new ActionListener() {
@@ -178,22 +191,103 @@ public class Customer extends JFrame{
         popupCreateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    int ID = DatabaseConnection.getNextID("customer");
 
-                    // If ID test didn't fail
-                    if (ID != -1) {
-                        DatabaseConnection.addCustomer(firstNameField.getText(), lastNameField.getText(), contactNumberField.getText(),
-                                addressField.getText(), emailField.getText());
-                        if (vcCheckBox.isSelected())
-                            DatabaseConnection.addValuedCustomer(ID, agreedDiscountField.getText(), discountRateField.getText());
+                final String name_regex ="^[A-Z][a-z]{3,20}";
+                final String number_regex = "^(\\+44\\s?7\\d{3}|\\(?07\\d{3}\\)?)\\s?\\d{3}\\s?\\d{3}$";
+                final String address_regex = "^(.{1,100})$";
+                final String email_regex = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+                final String agreed_regex = "Variable|Flexible|Fixed";
+                final String variable_regex = /*"([0-9]{1,2}(,[0-9]{1,2})){7}";*/ "^[0-9]{1,2},[0-9]{1,2},[0-9]{1,2},[0-9]{1,2},[0-9]{1,2},[0-9]{1,2},[0-9]{1,2}$";// Need to be made dynamic according to number of tasks
+                final String fixed_regex = "^[0-9]{1,2}";
+                final String flexible_regex = "^[0-9]{1,2},[0-9]{1,2},[0-9]{1,2}$";
+
+                // Hide all '!', before checking for errors
+                firstNameEX.setVisible(false);
+                lastNameEX.setVisible(false);
+                contactNumEX.setVisible(false);
+                addressEX.setVisible(false);
+                emailEX.setVisible(false);
+                agreedDiscountEX.setVisible(false);
+                discountRateEX.setVisible(false);
+
+                // Check All fields against Regex Strings
+                if (!firstNameField.getText().matches(name_regex)){
+                    error = true;
+                    firstNameEX.setVisible(true);
+                }
+                if (!lastNameField.getText().matches(name_regex)) {
+                    error = true;
+                    lastNameEX.setVisible(true);
+                }
+                if (!contactNumberField.getText().matches(number_regex)) {
+                    error = true;
+                    contactNumEX.setVisible(true);
+                }
+                if (!addressField.getText().matches(address_regex)) {
+                    error = true;
+                    addressEX.setVisible(true);
+                }
+                if (!emailField.getText().matches(email_regex)) {
+                    error = true;
+                    emailEX.setVisible(true);
+                }
+                // If Checkbox selected, then run Regex Checks
+                if (vcCheckBox.isSelected()) {
+                    if (!agreedDiscountField.getText().matches(agreed_regex)) {
+                        error = true;
+                        agreedDiscountEX.setVisible(true);
+                    }
+                    if (!discountRateField.getText().matches(variable_regex)) {
+                        error = true;
+                        discountRateEX.setVisible(true);
+                    }
+                }
+
+                // If Agreed Field is either, Variable/Fixed/Flexible then select the Regex accordingly
+                /*if (vcCheckBox.isSelected()){
+                    if (!agreedDiscountField.getText().matches(agreed_regex)) {
+                        error = true;
+                        agreedDiscountEX.setVisible(true);
                     }
 
-                    system.changeScreen("customers", mainPanel);
+                    if(agreedDiscountField.getText().equals("Variable")) {
+                        if (!discountRateField.getText().matches(variable_regex)) {
+                            error = true;
+                            discountRateEX.setVisible(true);
+                        }
+                    }
+                    else if(agreedDiscountField.getText().equals("Fixed")) {
+                        if (!discountRateField.getText().matches(fixed_regex)) {
+                            error = true;
+                            discountRateEX.setVisible(true);
+                        }
+                    }
+                    else if(agreedDiscountField.getText().equals("Flexible")) {
+                        if (!discountRateField.getText().matches(flexible_regex)) {
+                            error = true;
+                            discountRateEX.setVisible(true);
+                        }
+                    }
+                }*/
 
-                } catch (SQLException exception) {
-                    exception.printStackTrace();
-                    JOptionPane.showMessageDialog(mainPanel, "Insertion failed, please try again.");
+                if (!error) {
+                    try {
+                        int ID = DatabaseConnection.getNextID("customer");
+
+                        // If ID test didn't fail
+                        if (ID != -1) {
+                            DatabaseConnection.addCustomer(firstNameField.getText(), lastNameField.getText(), contactNumberField.getText(),
+                                    addressField.getText(), emailField.getText());
+                            if (vcCheckBox.isSelected())
+                                DatabaseConnection.addValuedCustomer(ID, agreedDiscountField.getText(), discountRateField.getText());
+                        }
+
+                        system.changeScreen("customers", mainPanel);
+
+                    } catch (SQLException exception) {
+                        exception.printStackTrace();
+                        JOptionPane.showMessageDialog(mainPanel, "Insertion failed, please try again.");
+                    }
                 }
             }
         });

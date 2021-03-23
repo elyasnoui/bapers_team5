@@ -2,13 +2,9 @@ package GUI;
 
 import System.*;
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class Task {
     private JButton CreateButton;
@@ -177,4 +173,9 @@ public class Task {
     public void setRole(String role) {
         this.roleLabel.setText(role);
     }
+
+    public int getRows(){return table.getRowCount();
+    }
+
+
 }

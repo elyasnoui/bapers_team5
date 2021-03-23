@@ -299,7 +299,7 @@
             <properties/>
             <border type="none"/>
             <children>
-              <grid id="97ba3" binding="buttonPanel" layout-manager="GridLayoutManager" row-count="1" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="97ba3" binding="buttonPanel" layout-manager="GridLayoutManager" row-count="1" column-count="6" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="0" left="0" bottom="0" right="10"/>
                 <constraints>
                   <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false">
@@ -315,7 +315,23 @@
                 </properties>
                 <border type="none"/>
                 <children>
-                  <component id="9708c" class="javax.swing.JButton" binding="deleteButton">
+                  <component id="9708c" class="javax.swing.JButton" binding="restoreButton">
+                    <constraints>
+                      <grid row="0" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="1" use-parent-layout="false">
+                        <minimum-size width="90" height="20"/>
+                        <preferred-size width="90" height="20"/>
+                        <maximum-size width="90" height="20"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <background color="-11774858"/>
+                      <borderPainted value="false"/>
+                      <focusable value="false"/>
+                      <foreground color="-1"/>
+                      <text value="Restore"/>
+                    </properties>
+                  </component>
+                  <component id="9c0c5" class="javax.swing.JButton" binding="backupButton">
                     <constraints>
                       <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="1" use-parent-layout="false">
                         <minimum-size width="90" height="20"/>
@@ -328,10 +344,10 @@
                       <borderPainted value="false"/>
                       <focusable value="false"/>
                       <foreground color="-1"/>
-                      <text value="Delete"/>
+                      <text value="Backup"/>
                     </properties>
                   </component>
-                  <component id="9c0c5" class="javax.swing.JButton" binding="editButton">
+                  <component id="f8c34" class="javax.swing.JButton" binding="filterButton">
                     <constraints>
                       <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="1" use-parent-layout="false">
                         <minimum-size width="90" height="20"/>
@@ -344,23 +360,7 @@
                       <borderPainted value="false"/>
                       <focusable value="false"/>
                       <foreground color="-1"/>
-                      <text value="Edit"/>
-                    </properties>
-                  </component>
-                  <component id="f8c34" class="javax.swing.JButton" binding="createButton">
-                    <constraints>
-                      <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="1" use-parent-layout="false">
-                        <minimum-size width="90" height="20"/>
-                        <preferred-size width="90" height="20"/>
-                        <maximum-size width="90" height="20"/>
-                      </grid>
-                    </constraints>
-                    <properties>
-                      <background color="-11774858"/>
-                      <borderPainted value="false"/>
-                      <focusable value="false"/>
-                      <foreground color="-1"/>
-                      <text value="Create"/>
+                      <text value="Filter"/>
                     </properties>
                   </component>
                   <hspacer id="aa9f5">
@@ -376,6 +376,22 @@
                       <font name="Halis GR Bold" size="20" style="1"/>
                       <foreground color="-1"/>
                       <text value="Database"/>
+                    </properties>
+                  </component>
+                  <component id="2a897" class="javax.swing.JButton" binding="configureButton">
+                    <constraints>
+                      <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="1" use-parent-layout="false">
+                        <minimum-size width="90" height="20"/>
+                        <preferred-size width="90" height="20"/>
+                        <maximum-size width="90" height="20"/>
+                      </grid>
+                    </constraints>
+                    <properties>
+                      <background color="-11774858"/>
+                      <borderPainted value="false"/>
+                      <focusable value="false"/>
+                      <foreground color="-1"/>
+                      <text value="Configure"/>
                     </properties>
                   </component>
                 </children>
