@@ -155,7 +155,7 @@ public class reportpdf {
         c1.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(c1);
 
-        c1 = new PdfPCell(new Phrase("Task IDs"));
+        c1 = new PdfPCell(new Phrase("Id task"));
         c1.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(c1);
 
@@ -190,6 +190,13 @@ public class reportpdf {
         table.addCell("1.4");
         table.addCell("1.5");
         table.addCell("1.6");
+        table.addCell("2.0");
+        table.addCell("2.1");
+        table.addCell("2.2");
+        table.addCell("2.3");
+        table.addCell("2.4");
+        table.addCell("2.5");
+        table.addCell("2.6");
         //table.addCell("1.7");
         //table.addCell("1.8");
 

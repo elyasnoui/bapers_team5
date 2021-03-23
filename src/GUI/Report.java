@@ -8,11 +8,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-//import System.reportpdf;
+import System.reportpdf;
 
 import System.*;
-//import com.itextpdf.text.Document;
-//import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.pdf.PdfWriter;
+
 
 public class Report {
     private JPanel mainPanel;
@@ -180,7 +181,7 @@ public class Report {
                 createPanel.setVisible(false);
             }
         });
-        /*
+
         printButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -198,7 +199,7 @@ public class Report {
             }
         });
 
-         */
+
     }
 
     public JPanel getMainPanel() {
