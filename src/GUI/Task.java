@@ -4,6 +4,7 @@ import System.*;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 import java.util.List;
 
 public class Task {
@@ -40,6 +41,14 @@ public class Task {
     private JButton popupCreateButton;
     private JButton popupCancelButton;
     private JScrollPane tablePanel;
+    private JLabel jobIDEX;
+    private JLabel descriptionEX;
+    private JLabel departmentEX;
+    private JLabel dateEX;
+    private JLabel timeTakenEX;
+    private JLabel priceEX;
+    private JLabel discountRateEX;
+    private JLabel staffIDEX;
     private ImageIcon bannerIcon;
     private Bapers system;
     private List<String[]> taskData;
@@ -54,6 +63,8 @@ public class Task {
             "Discount Rate",
             "Staff ID"
     };
+
+    private boolean error = false;
 
     public Task(Bapers system) {
         this.system = system;
@@ -146,6 +157,62 @@ public class Task {
                 tablePanel.setVisible(true);
                 buttonPanel.setVisible(true);
                 createPanel.setVisible(false);
+            }
+        });
+        popupCreateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                final String jobIDREX ="^[1-9]{1,20}";
+                final String descriptionREX = "^";
+                final String departmentREX = "Copy Room|Development Area|Packing Department|Finish Room";
+                final String email_regex = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+                final String agreed_regex = "Variable|Flexible|Fixed";
+                final String variable_regex = /*"([0-9]{1,2}(,[0-9]{1,2})){7}";*/ "^[0-9]{1,2},[0-9]{1,2},[0-9]{1,2},[0-9]{1,2},[0-9]{1,2},[0-9]{1,2},[0-9]{1,2}$";// Need to be made dynamic according to number of tasks
+                final String fixed_regex = "^[0-9]{1,2}";
+                final String flexible_regex = "^[0-9]{1,2},[0-9]{1,2},[0-9]{1,2}$";
+
+                // Hide all '!', before checking for errors
+                jobIDEX.setVisible(false);
+                descriptionEX.setVisible(false);
+                departmentEX.setVisible(false);
+                dateEX.setVisible(false);
+                timeTakenEX.setVisible(false);
+                priceEX.setVisible(false);
+                discountRateEX.setVisible(false);
+                staffIDEX.setVisible(false);
+
+                // Check All fields against Regex Strings
+                if (!jobIDField.getText().matches(jobIDREX)){
+                    error = true;
+                    jobIDEX.setVisible(true);
+                }
+                if (!descriptionField.getText().matches(jobIDREX)) {
+                    error = true;
+                    descriptionEX.setVisible(true);
+                }
+                if (!departmentField.getText().matches(descriptionREX)) {
+                    error = true;
+                    departmentEX.setVisible(true);
+                }
+                if (!dateField.getText().matches(departmentREX)) {
+                    error = true;
+                    dateEX.setVisible(true);
+                }
+                if (!timeTakenField.getText().matches(email_regex)) {
+                    error = true;
+                    timeTakenEX.setVisible(true);
+                }
+                if (!discountRateField.getText().matches(email_regex)) {
+                    error = true;
+                    discountRateEX.setVisible(true);
+                }
+                if (!staffIDField.getText().matches(email_regex)) {
+                    error = true;
+                    staffIDEX.setVisible(true);
+                }
+
+
             }
         });
     }
