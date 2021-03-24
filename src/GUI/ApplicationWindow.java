@@ -29,7 +29,7 @@ public class ApplicationWindow extends JFrame {
         columns.getColumn(0).setCellRenderer(centerRenderer);
         columns.getColumn(3).setCellRenderer(centerRenderer);
         columns.getColumn(5).setCellRenderer(centerRenderer);
-        columns.getColumn(6).setCellRenderer(centerRenderer);
+        //columns.getColumn(6).setCellRenderer(centerRenderer);
 
         //columns.getColumn(0).setMinWidth(30);
         columns.getColumn(1).setMinWidth(30);
@@ -84,15 +84,16 @@ public class ApplicationWindow extends JFrame {
             JTextField textField = ((JTextField) e.getComponent());
 
             switch (textField.getName()) {
-                // If the field belongs to a date field
-                case "dd": case "mm": case "yyyy":
+                // If the field allows only integers
+                case "dd": case "mm": case "yyyy": case "pound": case "penny":
                     // Checks and removes non-integers
                     if (((c < '0') || (c > '9')) && (c != KeyEvent.VK_BACK_SPACE))
                         textField.setText(textField.getText().replaceAll("[^\\d]", ""));
 
                     // Ensures dd and mm are limited to 2 characters and yyyy to 4
+                    // Also allows for money to be formatted correctly (5,2)
                     switch (textField.getName()) {
-                        case "dd": case "mm":
+                        case "dd": case "mm": case "penny":
                             if (textField.getText().length() > 2)
                                 textField.setText(textField.getText().substring(0, 2));
                             break;
@@ -100,15 +101,11 @@ public class ApplicationWindow extends JFrame {
                             if (textField.getText().length() > 4)
                                 textField.setText(textField.getText().substring(0, 4));
                             break;
+                        case "pound":
+                            if (textField.getText().length() > 5)
+                                textField.setText(textField.getText().substring(0, 5));
+                            break;
                     }
-
-                    break;
-                case "money":
-                    // Checks and removes non-integers
-                    if (((c < '0') || (c > '9')) && (c != KeyEvent.VK_BACK_SPACE))
-                        textField.setText(textField.getText().replaceAll("[^\\d.]", ""));
-
-
 
                     break;
             }

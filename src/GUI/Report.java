@@ -186,20 +186,12 @@ public class Report {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    Document document = new Document();
-                    PdfWriter.getInstance(document, new FileOutputStream(reportpdf.getFILE()));
-                    document.open();
-                    reportpdf.addMetaData(document);
-                    reportpdf.addTitlePage(document);
-                    reportpdf.addContent(document);
-                    document.close();
+                    reportpdf.initialise();
+                    ProcessBuilder processBuilder = new ProcessBuilder("cmd.exe", "/C", "data/reports\\reportpdf.pdf");
                 } catch (Exception exception) {
                     exception.printStackTrace();
-                }
-            }
+                } }
         });
-
-
     }
 
     public JPanel getMainPanel() {

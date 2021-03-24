@@ -30,7 +30,7 @@ public class DatabaseConnection {
         return false;
     }
 
-    public static int getNextID(String tableName) {
+    public static int getNextID(final String tableName) {
         try {
             Connection conn = Connect();
             assert conn != null;
@@ -48,23 +48,47 @@ public class DatabaseConnection {
 
     }
 
-    public static List<String[]> getData(String tableName) {
+    private static List<String[]> returnList(final PreparedStatement statement) throws SQLException {
+        ResultSet res = statement.executeQuery();
+        List<String[]> data = new ArrayList<>();
+        int nCol = res.getMetaData().getColumnCount();
+        while (res.next()) {
+            String[] row = new String[nCol];
+            for (int i=1; i<=nCol; i++) {
+                Object object = res.getObject(i);
+                row[i-1] = (object == null) ? null : object.toString();
+            }
+            data.add(row);
+        }
+        return data;
+    }
+
+    public static List<String[]> searchCustomer(final String firstName, final String lastName) {
+        try {
+            Connection conn = Connect();
+            assert conn != null;
+
+            PreparedStatement statement;
+
+            if (firstName.isEmpty() && lastName.isEmpty()) return null;
+            else if (firstName.isEmpty())
+                statement = conn.prepareStatement("SELECT * FROM customer WHERE lastName LIKE '" + lastName + "%'");
+            else if (lastName.isEmpty())
+                statement = conn.prepareStatement("SELECT * FROM customer WHERE firstName LIKE '"+firstName+"%'");
+            else
+                statement = conn.prepareStatement("SELECT * FROM customer WHERE firstName LIKE '" +
+                    firstName+"%' OR lastName LIKE '"+lastName+"%'");
+            return returnList(statement);
+        } catch (SQLException exception) { exception.printStackTrace(); }
+        return null;
+    }
+
+    public static List<String[]> getData(final String tableName) {
         try {
             Connection conn = Connect();
             assert conn != null;
             PreparedStatement statement = conn.prepareStatement("SELECT * FROM "+tableName);
-            ResultSet res = statement.executeQuery();
-            List<String[]> data = new ArrayList<>();
-            int nCol = res.getMetaData().getColumnCount();
-            while (res.next()) {
-                String[] row = new String[nCol];
-                for (int i=1; i<=nCol; i++) {
-                    Object object = res.getObject(i);
-                    row[i-1] = (object == null) ? null : object.toString();
-                }
-                data.add(row);
-            }
-            return data;
+            return returnList(statement);
         } catch (Exception e) { e.printStackTrace(); }
         return null;
     }

@@ -2,8 +2,14 @@ package GUI;
 
 import System.*;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Job {
@@ -33,18 +39,32 @@ public class Job {
     private JScrollPane tablePanel;
     private JTextField priceField;
     private JTextField statusField;
-    private JTextField customerIDField;
     private JButton popupCreateButton;
     private JCheckBox isUrgentCheckBox;
-    private JTextField ddField;
-    private JTextField mmField;
-    private JTextField yyyyField;
-    private JPanel startDatePanel;
-    private JPanel endDatePanel;
-    private JPanel deadlinePanel;
+    private JComboBox taskComboBox;
+    private JLabel amountLabel;
+    private JLabel tasksAddedLabel;
+    private JScrollPane tasksScrollPane;
+    private JList tasksList;
+    private JButton removeButton;
+    private JButton addButton;
+    private JLabel customerIDLabel;
+    private JLabel customerIDValue;
+    private JPanel customerLookupPanel;
+    private JTextField lastNameField;
+    private JTextField firstNameField;
+    private JScrollPane customerScrollPane;
+    private JTable customerTable;
+    private JButton lookupSelectButton;
+    private JButton lookupCancelButton;
+    private JButton lookupButton;
     private ImageIcon checkBoxIcon;
     private ImageIcon selectedCheckBoxIcon;
     private List<String[]> jobData;
+    private List<Product> productList = new ArrayList<>();
+    private List<String[]> customerData;
+    private static DecimalFormat df2 = new DecimalFormat("0.00");
+    private double totalPrice = 0.00;
     private final String[] tableColumns = {
             "ID",
             "Is Urgent",
@@ -54,11 +74,53 @@ public class Job {
             "Deadline",
             "Status",
             "Customer ID"
-
     };
+    private final String[] tasks = {
+            "Use of large copy camera",
+            "Black and white film processing",
+            "Bag up",
+            "Colour film processing",
+            "Colour Transparency processing",
+            "Use of small copy camera",
+            "Mount Transparencies"
+    };
+    private final String[] customerColumns = {
+            "ID",
+            "First Name",
+            "Surname",
+            "Contact Number",
+            "Address",
+            "Email"
+    };
+    private class Product {
+        private String name;
+        private String duration;
+        private double price;
+
+        private Product(String name, String duration, double price) {
+            this.name = name;
+            this.duration = duration;
+            this.price = price;
+        }
+
+        public String toString() {
+            return name+", "+duration+", £"+df2.format(price);
+        }
+    }
 
     public Job(Bapers system) {
         this.system = system;
+
+        amountLabel.setText('£'+df2.format(totalPrice));
+        taskComboBox.setModel(new DefaultComboBoxModel<>(tasks));
+        taskComboBox.setVisible(true);
+        tasksScrollPane.setBorder(null);
+        tasksScrollPane.getVerticalScrollBar().setBackground(new Color(76,84,118));
+        tasksScrollPane.getVerticalScrollBar().setForeground(new Color(124,134,175));
+
+        firstNameField.setBorder(null);
+        lastNameField.setBorder(null);
+        customerTable.setModel(new DefaultTableModel(null, customerColumns));
 
         try {
             jobData = DatabaseConnection.getData("job");
@@ -78,53 +140,218 @@ public class Job {
         isUrgentCheckBox.setIcon(checkBoxIcon);
         isUrgentCheckBox.setSelectedIcon(selectedCheckBoxIcon);
 
+        addMouseListeners();
+
         logoutButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) { system.changeScreen("logout", mainPanel); }
+            public void actionPerformed(ActionEvent e) {
+                system.changeScreen("logout", mainPanel);
+                removeMouseListeners();
+            }
         });
         jobsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 system.changeScreen("jobs", mainPanel);
+                removeMouseListeners();
             }
         });
         customerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 system.changeScreen("customers", mainPanel);
+                removeMouseListeners();
             }
         });
         paymentsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 system.changeScreen("payments", mainPanel);
+                removeMouseListeners();
             }
         });
         staffButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 system.changeScreen("staff", mainPanel);
+                removeMouseListeners();
             }
         });
         tasksButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 system.changeScreen("tasks", mainPanel);
+                removeMouseListeners();
             }
         });
         reportsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 system.changeScreen("reports", mainPanel);
+                removeMouseListeners();
             }
         });
         databaseButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 system.changeScreen("database", mainPanel);
+                removeMouseListeners();
             }
         });
 
+        ApplicationWindow.displayTable(table, jobData, tableColumns);
+        createButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                tablePanel.setVisible(false);
+                buttonPanel.setVisible(false);
+                createPanel.setVisible(true);
+            }
+        });
+
+        addButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                switch (String.valueOf(taskComboBox.getSelectedItem())) {
+                    case "Use of large copy camera":
+                        productList.add(new Product(String.valueOf(taskComboBox.getSelectedItem()), "120min", 19));
+                        break;
+                    case "Black and white film processing":
+                        productList.add(new Product(String.valueOf(taskComboBox.getSelectedItem()), "60min", 49.5));
+                        break;
+                    case "Bag up":
+                        productList.add(new Product(String.valueOf(taskComboBox.getSelectedItem()), "30min", 6));
+                        break;
+                    case "Colour film processing":
+                        productList.add(new Product(String.valueOf(taskComboBox.getSelectedItem()), "90min", 80));
+                        break;
+                    case "Colour Transparency processing":
+                        productList.add(new Product(String.valueOf(taskComboBox.getSelectedItem()), "180min", 110.3));
+                        break;
+                    case "Use of small copy camera":
+                        productList.add(new Product(String.valueOf(taskComboBox.getSelectedItem()), "75min", 8.3));
+                        break;
+                    case "Mount Transparencies":
+                        productList.add(new Product(String.valueOf(taskComboBox.getSelectedItem()), "45min", 55.5));
+                        break;
+
+                }
+
+                totalPrice += productList.get(productList.size()-1).price;
+
+                List<String> outputList = new ArrayList<>();
+
+                for (Product p : productList)
+                    outputList.add(p.toString());
+
+                tasksList.setListData(outputList.toArray());
+                tasksList.setVisible(true);
+
+                tasksAddedLabel.setVisible(true);
+                tasksScrollPane.setVisible(true);
+                removeButton.setVisible(true);
+
+                amountLabel.setText('£'+df2.format(totalPrice)+" before VAT/Discounts");
+            }
+        });
+        removeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!tasksList.isSelectionEmpty()) {
+                    totalPrice -= productList.get(tasksList.getSelectedIndex()).price;
+
+                    productList.remove(tasksList.getSelectedIndex());
+                    tasksList.setListData(productList.toArray());
+                    tasksList.setVisible(true);
+
+                    amountLabel.setText('£'+df2.format(totalPrice)+" before VAT/Discounts");
+
+                    if (productList.isEmpty()) resetCreatePanel();
+                }
+            }
+        });
+
+        popupCancelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                createPanel.setVisible(false);
+                buttonPanel.setVisible(true);
+                tablePanel.setVisible(true);
+                resetCreatePanel();
+            }
+        });
+
+        lookupButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                createPanel.setVisible(false);
+                customerLookupPanel.setVisible(true);
+            }
+        });
+
+        firstNameField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if (firstNameField.getText().length() >= 3 || lastNameField.getText().length() >= 3) {
+                    customerSearch();
+                } else customerTable.setModel(new DefaultTableModel(null, customerColumns));
+            }
+        });
+        lastNameField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if (lastNameField.getText().length() >= 3 || firstNameField.getText().length() >= 3) {
+                    customerSearch();
+                } else customerTable.setModel(new DefaultTableModel(null, customerColumns));
+            }
+        });
+        lookupSelectButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!customerTable.getSelectionModel().isSelectionEmpty()) {
+                    String ID = customerData.get(customerTable.getSelectedRow())[0];
+                    customerIDValue.setText(ID);
+                    customerLookupPanel.setVisible(false);
+                    createPanel.setVisible(true);
+                }
+            }
+        });
+        lookupCancelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                customerLookupPanel.setVisible(false);
+                createPanel.setVisible(true);
+                resetLookupPanel();
+            }
+        });
+    }
+
+    private void customerSearch() {
+        try {
+            customerData = DatabaseConnection.searchCustomer(firstNameField.getText(), lastNameField.getText());
+            assert customerData != null;
+            ApplicationWindow.displayTable(customerTable, customerData, customerColumns);
+        }
+        catch (Exception e) { e.printStackTrace(); }
+    }
+
+    public void resetLookupPanel() {
+        firstNameField.setText("");
+        lastNameField.setText("");
+        customerTable.setModel(new DefaultTableModel(null, customerColumns));
+    }
+
+    public void resetCreatePanel() {
+        tasksAddedLabel.setVisible(false);
+        tasksScrollPane.setVisible(false);
+        removeButton.setVisible(false);
+        totalPrice = 0;
+        amountLabel.setText('£'+df2.format(totalPrice));
+        productList.clear();
+        customerIDValue.setText("");
+    }
+
+    private void addMouseListeners() {
         logoutButton.addMouseListener(ApplicationWindow.mouseListener);
         jobsButton.addMouseListener(ApplicationWindow.mouseListener);
         customerButton.addMouseListener(ApplicationWindow.mouseListener);
@@ -136,56 +363,28 @@ public class Job {
         createButton.addMouseListener(ApplicationWindow.mouseListener);
         editButton.addMouseListener(ApplicationWindow.mouseListener);
         deleteButton.addMouseListener(ApplicationWindow.mouseListener);
+        addButton.addMouseListener(ApplicationWindow.mouseListener);
+        removeButton.addMouseListener(ApplicationWindow.mouseListener);
+        popupCreateButton.addMouseListener(ApplicationWindow.mouseListener);
+        popupCancelButton.addMouseListener(ApplicationWindow.mouseListener);
+    }
 
-        ApplicationWindow.displayTable(table, jobData, tableColumns);
-        createButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                tablePanel.setVisible(false);
-                buttonPanel.setVisible(false);
-                createPanel.setVisible(true);
-
-                // Adding key listeners for date filtering
-                priceField.addKeyListener(ApplicationWindow.inputValidator);
-
-                for (int i=0; i<3; i++) {
-                    startDatePanel.getComponents()[i].addKeyListener(ApplicationWindow.inputValidator);
-                    endDatePanel.getComponents()[i].addKeyListener(ApplicationWindow.inputValidator);
-                    deadlinePanel.getComponents()[i].addKeyListener(ApplicationWindow.inputValidator);
-                }
-            }
-        });
-        popupCancelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                createPanel.setVisible(false);
-                buttonPanel.setVisible(true);
-                tablePanel.setVisible(true);
-
-                // Removing key listeners when no longer needed
-                priceField.removeKeyListener(ApplicationWindow.inputValidator);
-
-                for (int i=0; i<3; i++) {
-                    startDatePanel.getComponents()[i].removeKeyListener(ApplicationWindow.inputValidator);
-                    endDatePanel.getComponents()[i].removeKeyListener(ApplicationWindow.inputValidator);
-                    deadlinePanel.getComponents()[i].removeKeyListener(ApplicationWindow.inputValidator);
-                }
-            }
-        });
-        popupCreateButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                List<String[]> customers = DatabaseConnection.getData("customer");
-                assert customers != null;
-                for (String[] cs : customers) {
-                    if (cs[0].equals(customerIDField.getText())) {
-                        //DatabaseConnection.addJob(isUrgentCheckBox.isSelected(), priceField.getText(), )
-                        return;
-                    }
-                }
-                JOptionPane.showMessageDialog(mainPanel, "Customer ID does not exist.");
-            }
-        });
+    private void removeMouseListeners() {
+        logoutButton.removeMouseListener(ApplicationWindow.mouseListener);
+        jobsButton.removeMouseListener(ApplicationWindow.mouseListener);
+        customerButton.removeMouseListener(ApplicationWindow.mouseListener);
+        paymentsButton.removeMouseListener(ApplicationWindow.mouseListener);
+        staffButton.removeMouseListener(ApplicationWindow.mouseListener);
+        tasksButton.removeMouseListener(ApplicationWindow.mouseListener);
+        reportsButton.removeMouseListener(ApplicationWindow.mouseListener);
+        databaseButton.removeMouseListener(ApplicationWindow.mouseListener);
+        createButton.removeMouseListener(ApplicationWindow.mouseListener);
+        editButton.removeMouseListener(ApplicationWindow.mouseListener);
+        deleteButton.removeMouseListener(ApplicationWindow.mouseListener);
+        addButton.removeMouseListener(ApplicationWindow.mouseListener);
+        removeButton.removeMouseListener(ApplicationWindow.mouseListener);
+        popupCreateButton.removeMouseListener(ApplicationWindow.mouseListener);
+        popupCancelButton.removeMouseListener(ApplicationWindow.mouseListener);
     }
 
     public JPanel getMainPanel() {

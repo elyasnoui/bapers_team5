@@ -23,7 +23,6 @@ import com.itextpdf.text.pdf.PdfWriter;
 
 public class reportpdf {
 
-
     private static String FILE = "data/reports\\reportpdf.pdf";
     private static Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18,
             Font.BOLD);
@@ -38,22 +37,20 @@ public class reportpdf {
         return FILE;
     }
 
-
-
-    public static void main(String[] args) {
+    public static void initialise() {
+        System.out.println("here");
         try {
             Document document = new Document();
             PdfWriter.getInstance(document, new FileOutputStream(FILE));
             document.open();
             addMetaData(document);
             addTitlePage(document);
-            addContent(document);
+            //addContent(document);
             document.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
 
     // iText allows to add metadata to the PDF which can be viewed in your Adobe
     // Reader
@@ -64,6 +61,10 @@ public class reportpdf {
         document.addKeywords("Java, PDF, iText");
         document.addAuthor("Team 5");
         document.addCreator("Team 5");
+    }
+
+    public void addJobReportContent(Date start, Date end) {
+
     }
 
     public static void addTitlePage(Document document)
