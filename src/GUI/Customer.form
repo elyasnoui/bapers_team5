@@ -423,6 +423,7 @@
                     </constraints>
                     <properties>
                       <text value=" "/>
+                      <visible value="false"/>
                     </properties>
                   </component>
                 </children>

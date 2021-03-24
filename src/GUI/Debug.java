@@ -3,12 +3,13 @@
 package GUI;
 
 import System.*;
+
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
+import java.util.List;
+
 
 public class Debug {
     private Bapers system;
@@ -26,24 +27,32 @@ public class Debug {
     private JPanel contentPanel;
     private ImageIcon bannerIcon;
     private JLabel bannerLabel;
-    private JPanel createPanel;
+    private JPanel customerLookupPanel;
     private JPanel mainPanel;
+    private JButton selectButton;
+    private JButton cancelButton;
     private JTextField firstNameField;
     private JTextField lastNameField;
-    private JTextField contactNumberField;
-    private JTextField addressField;
-    private JButton createButton;
-    private JButton cancelButton;
-    private JTextField emailField;
-    private JTextField niField;
-    private JTextField workHoursField;
-    private JTextField usernameField;
-    private JTextField passwordField;
-    private JTextField roleField;
-    private JTextField privilegesField;
+    private JScrollPane customerScrollPane;
+    private JTable customerTable;
+    private ImageIcon checkBoxIcon;
+    private ImageIcon selectedCheckBoxIcon;
+    private List<String[]> customerData;
+    private final String[] customerColumns = {
+            "ID",
+            "First Name",
+            "Surname",
+            "Contact Number",
+            "Address",
+            "Email"
+    };
 
     public Debug(Bapers system) {
         this.system = system;
+
+        firstNameField.setBorder(null);
+        lastNameField.setBorder(null);
+        customerTable.setModel(new DefaultTableModel(null, customerColumns));
 
         bannerIcon = new ImageIcon("data/banners/report.png");
         bannerLabel.setIcon(bannerIcon);
@@ -130,8 +139,42 @@ public class Debug {
         tasksButton.addMouseListener(mouseListener);
         reportsButton.addMouseListener(mouseListener);
         databaseButton.addMouseListener(mouseListener);
-        createButton.addMouseListener(mouseListener);
+        selectButton.addMouseListener(mouseListener);
         cancelButton.addMouseListener(mouseListener);
+
+        firstNameField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if (firstNameField.getText().length() >= 3 || lastNameField.getText().length() >= 3) {
+                    customerSearch();
+                } else customerTable.setModel(new DefaultTableModel(null, customerColumns));
+            }
+        });
+        lastNameField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if (lastNameField.getText().length() >= 3 || firstNameField.getText().length() >= 3) {
+                    customerSearch();
+                } else customerTable.setModel(new DefaultTableModel(null, customerColumns));
+            }
+        });
+        selectButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!customerTable.getSelectionModel().isSelectionEmpty()) {
+                    String ID = customerData.get(customerTable.getSelectedRow())[0];
+                }
+            }
+        });
+    }
+
+    private void customerSearch() {
+        try {
+            customerData = DatabaseConnection.searchCustomer(firstNameField.getText(), lastNameField.getText());
+            assert customerData != null;
+            ApplicationWindow.displayTable(customerTable, customerData, customerColumns);
+        }
+        catch (Exception e) { e.printStackTrace(); }
     }
 
     public JPanel getMainPanel() {
