@@ -3,7 +3,6 @@ package GUI;
 import System.*;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -11,7 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-public class Database extends Component {
+public class Database  {
     private Bapers system;
     private JPanel sidePanel;
     private JLabel usernameLabel;
@@ -35,8 +34,9 @@ public class Database extends Component {
     private JLabel jLabel1;
     private JTextField searchText;
     private JTextField searchText2;
-    private JButton browse2;
+    private JButton restoreButton;
     private JLabel jLabel2;
+    private JButton browseButton2;
 
     private List<String[]> databaseData;
     private final String[] tableColumns = {
@@ -125,7 +125,8 @@ public class Database extends Component {
         databaseButton.addMouseListener(ApplicationWindow.mouseListener);
         pathButton.addMouseListener(ApplicationWindow.mouseListener);
         backupButton.addMouseListener(ApplicationWindow.mouseListener);
-        //deleteButton.addMouseListener(ApplicationWindow.mouseListener);
+        restoreButton.addMouseListener(ApplicationWindow.mouseListener);
+        browseButton2.addMouseListener(ApplicationWindow.mouseListener);
 
         //ApplicationWindow.displayTable(table, taskData, tableColumns);
 
@@ -171,23 +172,7 @@ public class Database extends Component {
             }
         });
 
-
-        searchText2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JFileChooser fc = new JFileChooser();
-                fc.showOpenDialog(fc.getParent());
-                try{
-                    File f = fc.getSelectedFile();
-                    path  = f.getAbsolutePath();
-                    path = path.replace('\\','/');
-                    searchText2.setText(path);
-                }catch (Exception e1){
-
-                }
-            }
-        });
-        browse2.addActionListener(new ActionListener() {
+        restoreButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
             String user = "root";
@@ -207,6 +192,22 @@ public class Database extends Component {
                 e1.printStackTrace();
                 }
             }
+        });
+        browseButton2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                    JFileChooser fc = new JFileChooser();
+                    fc.showOpenDialog(fc.getParent());
+                    try{
+                        File f = fc.getSelectedFile();
+                        path  = f.getAbsolutePath();
+                        path = path.replace('\\','/');
+                        searchText2.setText(path);
+                    }catch (Exception e1){
+
+                    }
+                }
         });
     }
 

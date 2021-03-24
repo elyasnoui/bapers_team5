@@ -45,7 +45,7 @@ public class reportpdf {
             document.open();
             addMetaData(document);
             addTitlePage(document);
-            //addContent(document);
+            addContent(document);
             document.close();
         } catch (Exception e) {
             e.printStackTrace();
