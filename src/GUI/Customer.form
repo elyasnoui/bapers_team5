@@ -171,7 +171,7 @@
               </grid>
             </constraints>
             <properties>
-              <visible value="true"/>
+              <visible value="false"/>
             </properties>
             <border type="none"/>
             <children>
@@ -277,7 +277,10 @@
                             <maximum-size width="150" height="-1"/>
                           </grid>
                         </constraints>
-                        <properties/>
+                        <properties>
+                          <text value="John"/>
+                          <toolTipText value=""/>
+                        </properties>
                       </component>
                       <component id="adb8c" class="javax.swing.JTextField" binding="lastNameField">
                         <constraints>

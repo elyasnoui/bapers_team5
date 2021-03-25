@@ -7,6 +7,8 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -58,7 +60,7 @@ public class Customer extends JFrame{
     private ImageIcon checkBoxIcon;
     private ImageIcon selectedCheckBoxIcon;
 
-    private boolean error = false;
+    private boolean isError[] = new boolean[7];
 
     private List<String[]> customerData;
     private List<String[]> valuedCustomerData;
@@ -211,36 +213,29 @@ public class Customer extends JFrame{
                 discountRateEX.setVisible(false);
 
                 // Check All fields against Regex Strings
-                if (!firstNameField.getText().matches(name_regex)){
-                    error = true;
-                    firstNameEX.setVisible(true);
-                }
-                if (!lastNameField.getText().matches(name_regex)) {
-                    error = true;
-                    lastNameEX.setVisible(true);
-                }
-                if (!contactNumberField.getText().matches(number_regex)) {
-                    error = true;
-                    contactNumEX.setVisible(true);
-                }
-                if (!addressField.getText().matches(address_regex)) {
-                    error = true;
-                    addressEX.setVisible(true);
-                }
-                if (!emailField.getText().matches(email_regex)) {
-                    error = true;
-                    emailEX.setVisible(true);
-                }
+
+                firstNameEX.setVisible(!firstNameField.getText().matches(name_regex));
+                isError[0] = !firstNameField.getText().matches(name_regex);
+
+                lastNameEX.setVisible(!lastNameField.getText().matches(name_regex));
+                isError[1] = !lastNameField.getText().matches(name_regex);
+
+                contactNumEX.setVisible(!contactNumberField.getText().matches(number_regex));
+                isError[2] = !contactNumberField.getText().matches(number_regex);
+
+                addressEX.setVisible(!addressField.getText().matches(address_regex));
+                isError[3] = !addressField.getText().matches(address_regex);
+
+                emailEX.setVisible(!emailField.getText().matches(email_regex));
+                isError[4] = !emailField.getText().matches(email_regex);
+
                 // If Checkbox selected, then run Regex Checks
                 if (vcCheckBox.isSelected()) {
-                    if (!agreedDiscountField.getText().matches(agreed_regex)) {
-                        error = true;
-                        agreedDiscountEX.setVisible(true);
-                    }
-                    if (!discountRateField.getText().matches(variable_regex)) {
-                        error = true;
-                        discountRateEX.setVisible(true);
-                    }
+                    agreedDiscountEX.setVisible(!agreedDiscountField.getText().matches(agreed_regex));
+                    isError[5] = !agreedDiscountField.getText().matches(agreed_regex);
+
+                    discountRateEX.setVisible(!discountRateField.getText().matches(variable_regex));
+                    isError[6] = !discountRateField.getText().matches(variable_regex);
                 }
 
                 // If Agreed Field is either, Variable/Fixed/Flexible then select the Regex accordingly
@@ -270,7 +265,15 @@ public class Customer extends JFrame{
                     }
                 }*/
 
-                if (!error) {
+                Boolean errorsDetected = false;
+                for (boolean err : isError) {
+                    if (err) {
+                        errorsDetected = true;
+                        break;
+                    }
+                }
+
+                if (!errorsDetected) {
                     try {
                         int ID = DatabaseConnection.getNextID("customer");
 
@@ -287,6 +290,24 @@ public class Customer extends JFrame{
                     } catch (SQLException exception) {
                         exception.printStackTrace();
                         JOptionPane.showMessageDialog(mainPanel, "Insertion failed, please try again.");
+                    }
+                }
+            }
+        });
+        deleteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!table.getSelectionModel().isSelectionEmpty()) {
+                    //String IDs = customerData.get(table.getSelectedRow())[0];
+
+                    for (int id : table.getSelectedRows()) {
+                        try {
+                            int ID = Integer.parseInt(customerData.get(id)[0]);
+                            DatabaseConnection.deleteCustomerFromTables(ID);
+                            DatabaseConnection.removeCustomer(ID);
+                            system.changeScreen("customers", mainPanel);
+                        }
+                        catch (SQLException exception) { exception.printStackTrace(); }
                     }
                 }
             }

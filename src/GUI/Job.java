@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +59,14 @@ public class Job {
     private JButton lookupSelectButton;
     private JButton lookupCancelButton;
     private JButton lookupButton;
+    private JLabel deadlineValue;
+    private JButton firstTierButton;
+    private JButton secondTierButton;
+    private JButton thirdTierButton;
+    private JLabel urgencyLabel;
+    private JPanel urgencyPanel;
+    private JPanel urgencyLabelPanel;
+    private JLabel isUrgentLabel;
     private ImageIcon checkBoxIcon;
     private ImageIcon selectedCheckBoxIcon;
     private List<String[]> jobData;
@@ -128,6 +137,7 @@ public class Job {
             for (String[] js : jobData) {
                 js[1] = js[1].equals("true") ? "Yes" : "No";
                 js[2] = '£' + js[2];
+                js[5] = js[5].substring(0,10)+" "+js[5].substring(11,16);
             }
         }
         catch (Exception e) { e.printStackTrace(); }
@@ -322,6 +332,39 @@ public class Job {
                 customerLookupPanel.setVisible(false);
                 createPanel.setVisible(true);
                 resetLookupPanel();
+            }
+        });
+        deleteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                boolean isDeleteAllowed = true;
+                for (int i : table.getSelectedRows()) {
+                    if (!jobData.get(i)[6].equals("Created")) {
+                        isDeleteAllowed = false;
+                        break;
+                    }
+                }
+
+                if (!table.getSelectionModel().isSelectionEmpty() && isDeleteAllowed) {
+                    for (int id : table.getSelectedRows()) {
+                        try {
+                            int ID = Integer.parseInt(jobData.get(id)[0]);
+                            DatabaseConnection.deleteJobsFromTables(ID);
+                            DatabaseConnection.removeJob(ID);
+                            system.changeScreen("jobs", mainPanel);
+                        } catch (SQLException exception) { exception.printStackTrace(); }
+                    }
+                } else if (!isDeleteAllowed)
+                    JOptionPane.showMessageDialog(mainPanel, "Selected row(s) contain completed jobs.");
+            }
+        });
+        isUrgentCheckBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                urgencyPanel.setVisible(isUrgentCheckBox.isSelected());
+                urgencyLabelPanel.setVisible(isUrgentCheckBox.isSelected());
+
+
             }
         });
     }
