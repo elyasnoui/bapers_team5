@@ -33,8 +33,8 @@ public class Debug {
     private JButton cancelButton;
     private JTextField firstNameField;
     private JTextField lastNameField;
-    private JScrollPane customerScrollPane;
-    private JTable customerTable;
+    private JScrollPane removeScrollPane;
+    private JTable removeTable;
     private ImageIcon checkBoxIcon;
     private ImageIcon selectedCheckBoxIcon;
     private List<String[]> customerData;
@@ -49,10 +49,6 @@ public class Debug {
 
     public Debug(Bapers system) {
         this.system = system;
-
-        firstNameField.setBorder(null);
-        lastNameField.setBorder(null);
-        customerTable.setModel(new DefaultTableModel(null, customerColumns));
 
         bannerIcon = new ImageIcon("data/banners/report.png");
         bannerLabel.setIcon(bannerIcon);
@@ -141,40 +137,6 @@ public class Debug {
         databaseButton.addMouseListener(mouseListener);
         selectButton.addMouseListener(mouseListener);
         cancelButton.addMouseListener(mouseListener);
-
-        firstNameField.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyReleased(KeyEvent e) {
-                if (firstNameField.getText().length() >= 3 || lastNameField.getText().length() >= 3) {
-                    customerSearch();
-                } else customerTable.setModel(new DefaultTableModel(null, customerColumns));
-            }
-        });
-        lastNameField.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyReleased(KeyEvent e) {
-                if (lastNameField.getText().length() >= 3 || firstNameField.getText().length() >= 3) {
-                    customerSearch();
-                } else customerTable.setModel(new DefaultTableModel(null, customerColumns));
-            }
-        });
-        selectButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (!customerTable.getSelectionModel().isSelectionEmpty()) {
-                    String ID = customerData.get(customerTable.getSelectedRow())[0];
-                }
-            }
-        });
-    }
-
-    private void customerSearch() {
-        try {
-            customerData = DatabaseConnection.searchCustomer(firstNameField.getText(), lastNameField.getText());
-            assert customerData != null;
-            ApplicationWindow.displayTable(customerTable, customerData, customerColumns);
-        }
-        catch (Exception e) { e.printStackTrace(); }
     }
 
     public JPanel getMainPanel() {

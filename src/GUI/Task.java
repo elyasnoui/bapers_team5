@@ -52,7 +52,8 @@ public class Task {
             "Time Taken",
             "Price",
             "Discount Rate",
-            "Staff ID"
+            "Staff ID",
+            "Completed"
     };
 
     public Task(Bapers system) {
@@ -65,6 +66,7 @@ public class Task {
                 ts[4] = ts[4].substring(0,10);
                 ts[6] = '£' + ts[6];
                 ts[7] += '%';
+                ts[9] = ts[9].equals("true") ? "Yes" : "No";
             }
         }
         catch (Exception e) { e.printStackTrace(); }

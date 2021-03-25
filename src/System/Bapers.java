@@ -3,6 +3,9 @@ package System;
 import javax.swing.*;
 import GUI.*;
 
+import java.sql.SQLException;
+import java.time.LocalDate;
+
 public class Bapers {
     private final ApplicationWindow applicationWindow = new ApplicationWindow("Bapers Team 5");
 
@@ -72,6 +75,13 @@ public class Bapers {
         applicationWindow.setFocusable(true);
         applicationWindow.setFocusTraversalKeysEnabled(false);
         applicationWindow.setIconImage(null);
+
+        /*try {
+            boolean db_job = DatabaseConnection.addJob(0, 1.00, LocalDate.now(), LocalDate.of(2021, 10, 9),
+                    LocalDate.of(2021, 10, 10), "Created", 29);
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }*/
 
         /*
         try {
