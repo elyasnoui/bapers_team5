@@ -57,13 +57,13 @@ public class Bapers {
 
         //applicationWindow.add(updateProfile.getMainPanel());
 
-        applicationWindow.add(job.getMainPanel());
+        //applicationWindow.add(job.getMainPanel());
 
         //applicationWindow.add(task.getMainPanel());
 
         //applicationWindow.add(payment.getMainPanel());
 
-        //applicationWindow.add(database.getMainPanel());
+        applicationWindow.add(database.getMainPanel());
 
         //applicationWindow.add(debug.getMainPanel());
 

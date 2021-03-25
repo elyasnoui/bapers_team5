@@ -2,11 +2,15 @@ package GUI;
 
 import System.*;
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
-public class Database {
+public class Database  {
     private Bapers system;
     private JPanel sidePanel;
     private JLabel usernameLabel;
@@ -23,12 +27,17 @@ public class Database {
     private ImageIcon bannerIcon;
     private JLabel bannerLabel;
     private JPanel buttonPanel;
-    private JButton restoreButton;
+    private JButton deleteButton;
     private JButton backupButton;
-    private JButton filterButton;
-    private JTable table;
+    private JButton pathButton;
     private JPanel mainPanel;
-    private JButton configureButton;
+    private JLabel jLabel1;
+    private JTextField searchText;
+    private JTextField searchText2;
+    private JButton restoreButton;
+    private JLabel jLabel2;
+    private JButton browseButton2;
+
     private List<String[]> databaseData;
     private final String[] tableColumns = {
             "ID",
@@ -44,6 +53,9 @@ public class Database {
             "Role",
             "Privileges"
     };
+
+    String path =null;
+    String filename;
 
     public Database(Bapers system) {
         this.system = system;
@@ -111,11 +123,92 @@ public class Database {
         tasksButton.addMouseListener(ApplicationWindow.mouseListener);
         reportsButton.addMouseListener(ApplicationWindow.mouseListener);
         databaseButton.addMouseListener(ApplicationWindow.mouseListener);
-        filterButton.addMouseListener(ApplicationWindow.mouseListener);
+        pathButton.addMouseListener(ApplicationWindow.mouseListener);
         backupButton.addMouseListener(ApplicationWindow.mouseListener);
         restoreButton.addMouseListener(ApplicationWindow.mouseListener);
+        browseButton2.addMouseListener(ApplicationWindow.mouseListener);
 
         //ApplicationWindow.displayTable(table, taskData, tableColumns);
+
+
+
+        pathButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser fc = new JFileChooser();
+                fc.showOpenDialog(fc.getParent());
+                String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+
+                try {
+                    File f = fc.getSelectedFile();
+                    path = f.getAbsolutePath();
+                    path = path.replace('\\','/');
+                    filename = path + "_" + date + ".sql";
+                    searchText.setText(filename);
+                }catch (Exception e1){
+                    e1.printStackTrace();
+                }
+
+            }
+        });
+
+        backupButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            Process p;
+            try{
+                Runtime runtime = Runtime.getRuntime();
+                p=runtime.exec("C:/Program Files/TablePlus/cmd/dump_ms_8.0.exe -u root -pcityproject5 --add-drop-database B-bapers_db -r" + path);
+
+                int processComplete = p.waitFor();
+                if(processComplete==0){
+                    jLabel1.setText("Backup Created Successfully");
+                }else {
+                     jLabel1.setText("Can't create backup");
+                }
+            } catch (Exception e1) {
+              e1.printStackTrace();
+            }
+            }
+        });
+
+        restoreButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            String user = "root";
+            String pass = "cityproject5";
+            String[] restoreCmd = new String[] {"C:\\Program Files\\TablePlus\\cmd\\restore_ms_8.0.exe","--user="+user,"--password="+pass,"-e","source "+path};
+
+            Process process;
+            try{
+                process = Runtime.getRuntime().exec(restoreCmd);
+                int procCom = process.waitFor();
+                if(procCom == 0){
+                    jLabel2.setText("Restore successful");
+                } else {
+                    jLabel2.setText("Restore unsuccessful");
+                }
+            }catch (Exception e1){
+                e1.printStackTrace();
+                }
+            }
+        });
+        browseButton2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                    JFileChooser fc = new JFileChooser();
+                    fc.showOpenDialog(fc.getParent());
+                    try{
+                        File f = fc.getSelectedFile();
+                        path  = f.getAbsolutePath();
+                        path = path.replace('\\','/');
+                        searchText2.setText(path);
+                    }catch (Exception e1){
+
+                    }
+                }
+        });
     }
 
     public JPanel getMainPanel() {
@@ -141,4 +234,6 @@ public class Database {
     public void setRole(String role) {
         this.roleLabel.setText(role);
     }
+
+
 }
