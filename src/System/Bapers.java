@@ -48,9 +48,9 @@ public class Bapers {
         so we can have the program default to the login screen.
          */
 
-        //applicationWindow.add(login.getMainPanel());
+        applicationWindow.add(login.getMainPanel());
 
-        applicationWindow.add(report.getMainPanel());
+        //applicationWindow.add(report.getMainPanel());
 
         //applicationWindow.add(staff.getMainPanel());
 
@@ -62,7 +62,7 @@ public class Bapers {
 
         //applicationWindow.add(task.getMainPanel());
 
-        applicationWindow.add(availableTask.getMainPanel());
+        //applicationWindow.add(availableTask.getMainPanel());
 
         //applicationWindow.add(payment.getMainPanel());
 

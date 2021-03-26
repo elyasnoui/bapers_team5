@@ -9,6 +9,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseListener;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class ApplicationWindow extends JFrame {
@@ -36,6 +38,12 @@ public class ApplicationWindow extends JFrame {
         columns.getColumn(2).setMinWidth(30);
 
         columns.getColumn(0).setPreferredWidth(10);
+    }
+
+    public static void currentDateNTime(){
+        Date date = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+        System.out.println(formatter.format(date));
     }
 
     public static String[] checkPrivileges() {

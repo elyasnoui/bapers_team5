@@ -211,6 +211,7 @@ public class Job {
         });
 
         ApplicationWindow.displayTable(table, jobData, tableColumns);
+        ApplicationWindow.currentDateNTime();
         createButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
