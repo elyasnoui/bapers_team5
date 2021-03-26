@@ -159,13 +159,9 @@ public class Staff {
             public void actionPerformed(ActionEvent e) {
                 if (!table.getSelectionModel().isSelectionEmpty()) {
                     for (int id : table.getSelectedRows()) {
-                        try {
-                            int ID = Integer.parseInt(staffData.get(id)[0]);
-                            DatabaseConnection.deleteStaffFromTables(ID);
-                            DatabaseConnection.removeStaff(ID);
-                            system.changeScreen("staff", mainPanel);
-                        }
-                        catch (SQLException exception) { exception.printStackTrace(); }
+                        int ID = Integer.parseInt(staffData.get(id)[0]);
+                        DatabaseConnection.removeStaff(ID);
+                        system.changeScreen("staff", mainPanel);
                     }
                 }
             }

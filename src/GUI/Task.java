@@ -56,6 +56,7 @@ public class Task {
     private boolean error = false;
     private final String[] tableColumns = {
             "ID",
+            "Available Task ID",
             "Job ID",
             "Description",
             "Department",
@@ -75,6 +76,7 @@ public class Task {
             for (String[] ts : taskData) {
                 ts[5] = ts[5].substring(0,10);
                 ts[7] = '£' + ts[7];
+                ts[9] = ts[9].equals("true") ? "Yes" : "No";
             }
         } catch (Exception e) { e.printStackTrace(); }
 

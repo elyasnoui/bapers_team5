@@ -351,12 +351,9 @@ public class Job {
 
                 if (!table.getSelectionModel().isSelectionEmpty() && isDeleteAllowed) {
                     for (int id : table.getSelectedRows()) {
-                        try {
-                            int ID = Integer.parseInt(jobData.get(id)[0]);
-                            DatabaseConnection.deleteJobsFromTables(ID);
-                            DatabaseConnection.removeJob(ID);
-                            system.changeScreen("jobs", mainPanel);
-                        } catch (SQLException exception) { exception.printStackTrace(); }
+                        int ID = Integer.parseInt(jobData.get(id)[0]);
+                        DatabaseConnection.removeJob(ID);
+                        system.changeScreen("jobs", mainPanel);
                     }
                 } else if (!isDeleteAllowed)
                     JOptionPane.showMessageDialog(mainPanel, "Selected row(s) contain completed jobs.");

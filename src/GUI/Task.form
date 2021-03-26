@@ -444,7 +444,7 @@
             </constraints>
             <properties>
               <background color="-11774858"/>
-              <visible value="true"/>
+              <visible value="false"/>
             </properties>
             <border type="none"/>
             <children>
