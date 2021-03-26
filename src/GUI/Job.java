@@ -67,6 +67,7 @@ public class Job {
     private JPanel urgencyPanel;
     private JPanel urgencyLabelPanel;
     private JLabel isUrgentLabel;
+    private JButton lookupCreateButton;
     private ImageIcon checkBoxIcon;
     private ImageIcon selectedCheckBoxIcon;
     private List<String[]> jobData;
@@ -334,6 +335,14 @@ public class Job {
                 resetLookupPanel();
             }
         });
+
+        lookupCreateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -367,6 +376,7 @@ public class Job {
 
             }
         });
+
     }
 
     private void customerSearch() {

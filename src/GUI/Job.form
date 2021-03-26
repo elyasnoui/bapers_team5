@@ -1167,13 +1167,13 @@
                       </grid>
                     </children>
                   </grid>
-                  <grid id="4d4a4" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                  <grid id="4d4a4" layout-manager="GridLayoutManager" row-count="1" column-count="3" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                     <margin top="0" left="0" bottom="10" right="0"/>
                     <constraints>
                       <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="2" indent="0" use-parent-layout="false">
                         <minimum-size width="170" height="-1"/>
-                        <preferred-size width="170" height="-1"/>
-                        <maximum-size width="170" height="-1"/>
+                        <preferred-size width="270" height="-1"/>
+                        <maximum-size width="270" height="-1"/>
                       </grid>
                     </constraints>
                     <properties>
@@ -1183,7 +1183,7 @@
                     <children>
                       <component id="214ee" class="javax.swing.JButton" binding="lookupSelectButton">
                         <constraints>
-                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
                             <minimum-size width="75" height="-1"/>
                             <preferred-size width="75" height="-1"/>
                             <maximum-size width="75" height="-1"/>
@@ -1199,7 +1199,7 @@
                       </component>
                       <component id="66616" class="javax.swing.JButton" binding="lookupCancelButton">
                         <constraints>
-                          <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                          <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
                             <minimum-size width="75" height="-1"/>
                             <preferred-size width="75" height="-1"/>
                             <maximum-size width="75" height="-1"/>
@@ -1212,6 +1212,22 @@
                           <focusable value="false"/>
                           <foreground color="-1"/>
                           <text value="Cancel"/>
+                        </properties>
+                      </component>
+                      <component id="b5d28" class="javax.swing.JButton" binding="lookupCreateButton">
+                        <constraints>
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false">
+                            <minimum-size width="75" height="-1"/>
+                            <preferred-size width="75" height="-1"/>
+                            <maximum-size width="75" height="-1"/>
+                          </grid>
+                        </constraints>
+                        <properties>
+                          <background color="-8616273"/>
+                          <borderPainted value="false"/>
+                          <focusable value="false"/>
+                          <foreground color="-1"/>
+                          <text value="Create"/>
                         </properties>
                       </component>
                     </children>
