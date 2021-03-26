@@ -67,6 +67,7 @@ public class Job {
     private JPanel urgencyPanel;
     private JPanel urgencyLabelPanel;
     private JLabel isUrgentLabel;
+    private JButton lookupCreateButton;
     private ImageIcon checkBoxIcon;
     private ImageIcon selectedCheckBoxIcon;
     private List<String[]> jobData;
@@ -261,6 +262,9 @@ public class Job {
                 tasksScrollPane.setVisible(true);
                 removeButton.setVisible(true);
 
+                isUrgentLabel.setVisible(true);
+                isUrgentCheckBox.setVisible(true);
+
                 amountLabel.setText('£'+df2.format(totalPrice)+" before VAT/Discounts");
             }
         });
@@ -392,6 +396,11 @@ public class Job {
         amountLabel.setText('£'+df2.format(totalPrice));
         productList.clear();
         customerIDValue.setText("");
+
+        isUrgentLabel.setVisible(false);
+        isUrgentCheckBox.setVisible(false);
+        urgencyLabelPanel.setVisible(false);
+        urgencyPanel.setVisible(false);
     }
 
     private void addMouseListeners() {

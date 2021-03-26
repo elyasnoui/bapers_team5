@@ -28,7 +28,7 @@ public class ApplicationWindow extends JFrame {
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
         columns.getColumn(0).setCellRenderer(centerRenderer);
         columns.getColumn(3).setCellRenderer(centerRenderer);
-        columns.getColumn(5).setCellRenderer(centerRenderer);
+        //columns.getColumn(5).setCellRenderer(centerRenderer);
         //columns.getColumn(6).setCellRenderer(centerRenderer);
 
         //columns.getColumn(0).setMinWidth(30);

@@ -49,9 +49,11 @@ public class Task {
     private JLabel priceEX;
     private JLabel discountRateEX;
     private JLabel staffIDEX;
+    private JButton availableTaskButton;
     private ImageIcon bannerIcon;
     private Bapers system;
     private List<String[]> taskData;
+    private boolean error = false;
     private final String[] tableColumns = {
             "ID",
             "Job ID",
@@ -60,12 +62,9 @@ public class Task {
             "Date",
             "Time Taken",
             "Price",
-            "Discount Rate",
             "Staff ID",
             "Completed"
     };
-
-    private boolean error = false;
 
     public Task(Bapers system) {
         this.system = system;
@@ -74,13 +73,10 @@ public class Task {
             taskData = DatabaseConnection.getData("task");
             assert taskData != null;
             for (String[] ts : taskData) {
-                ts[4] = ts[4].substring(0,10);
-                ts[6] = '£' + ts[6];
-                ts[7] += '%';
-                ts[9] = ts[9].equals("true") ? "Yes" : "No";
+                ts[5] = ts[5].substring(0,10);
+                ts[7] = '£' + ts[7];
             }
-        }
-        catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) { e.printStackTrace(); }
 
         bannerIcon = new ImageIcon("data/banners/tasks.png");
         bannerLabel.setIcon(bannerIcon);
@@ -213,8 +209,13 @@ public class Task {
                     error = true;
                     staffIDEX.setVisible(true);
                 }
-
-
+            }
+        });
+        availableTaskButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //removeMouseListeners
+                system.changeScreen("availableTask", mainPanel);
             }
         });
     }
@@ -242,9 +243,4 @@ public class Task {
     public void setRole(String role) {
         this.roleLabel.setText(role);
     }
-
-    public int getRows(){return table.getRowCount();
-    }
-
-
 }

@@ -17,6 +17,7 @@ public class Bapers {
     private Job job = new Job(this);
     private Report report = new Report(this);
     private Task task = new Task(this);
+    private AvailableTask availableTask = new AvailableTask(this);
     private Payment payment = new Payment(this);
     private Database database = new Database(this);
 
@@ -61,9 +62,11 @@ public class Bapers {
 
         //applicationWindow.add(task.getMainPanel());
 
+        applicationWindow.add(availableTask.getMainPanel());
+
         //applicationWindow.add(payment.getMainPanel());
 
-        applicationWindow.add(database.getMainPanel());
+        //applicationWindow.add(database.getMainPanel());
 
         //applicationWindow.add(debug.getMainPanel());
 
@@ -171,6 +174,10 @@ public class Bapers {
             case "tasks":
                 task = new Task(this);
                 applicationWindow.add(task.getMainPanel());
+                break;
+            case "availableTask":
+                availableTask = new AvailableTask(this);
+                applicationWindow.add(availableTask.getMainPanel());
                 break;
             case "reports":
                 report = new Report(this);
