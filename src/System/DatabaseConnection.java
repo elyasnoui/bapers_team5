@@ -6,6 +6,7 @@ import com.mysql.cj.xdevapi.Result;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.sql.*;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -13,6 +14,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseConnection {
+
+    private static DecimalFormat df2 = new DecimalFormat("0.00");
 
     public DatabaseConnection() {}
 
@@ -470,6 +473,42 @@ public class DatabaseConnection {
         return executeStatement(statement);
     }
 
+    // Editing an existing available task record
+    public static boolean
+        editAvailableTask(final int ID, final String description, final String department, final String timeTaken, final double price) throws SQLException {
+        Connection conn = Connect();
+        assert conn != null;
+        PreparedStatement statement = conn.prepareStatement(
+                "UPDATE availableTask SET description = '"+description+"', department = '"+department+"', timeTaken = '" +
+                        ""+timeTaken+"', price = '"+price+"' WHERE ID = "+ID
+        );
+        return executeStatement(statement);
+    }
+
+    // Removing an existing available task record
+    public static boolean removeAvailableTask(final int ID) throws SQLException {
+        Connection conn = Connect();
+        assert conn != null;
+        PreparedStatement statement = conn.prepareStatement(
+                "DELETE FROM availableTask WHERE ID = "+ID
+        );
+        return executeStatement(statement);
+    }
+
+    // Inserting a new available task record
+    public static boolean
+        addAvailableTask(final String description, final String department, final String timeTaken, final double price) throws SQLException {
+        Connection conn = Connect();
+        assert conn != null;
+        PreparedStatement statement = conn.prepareStatement(
+                "INSERT INTO availableTask (description, department, timeTaken, price) SELECT * FROM (SELECT '"+description+"', " +
+                        "'"+department+"', '"+timeTaken+"', '"+price+"') AS tmp WHERE NOT EXISTS (SELECT description, department, " +
+                        "timeTaken, price FROM availableTask WHERE description = '"+description+"' AND department = '"+department+"' " +
+                        "AND timeTaken = '"+timeTaken+"' AND price = '"+price+"') LIMIT 1"
+        );
+        return executeStatement(statement);
+    }
+
     // Editing an existing task record
     public static boolean
         editTask(final int ID, final int jobID, final String description, final String department, final String timeTaken,
@@ -496,15 +535,15 @@ public class DatabaseConnection {
 
     // Inserting a new task record
     public static boolean
-        addTask(final int ID, final int jobID, final String description, final String department, final String timeTaken,
+        addTask(final int availableTaskID, final int jobID, final String description, final String department, final String timeTaken,
                 final double price, final int discountRate, final int staffID, final int isCompleted) throws SQLException {
         Connection conn = Connect();
         assert conn != null;
         PreparedStatement statement = conn.prepareStatement(
-                "INSERT INTO task (ID, jobID, description, department, timeTaken, price, discountRate, staffID, isCompleted) SELECT * " +
-                        "FROM (SELECT '"+ID+"', '"+jobID+"', '"+description+"', '"+department+"', '"+timeTaken+"', " +
-                        "'"+price+"', '"+discountRate+"', '"+staffID+"', '"+isCompleted+"') AS tmp WHERE NOT EXISTS (SELECT ID, jobID, " +
-                        "description, department, timeTaken, price, discountRate, staffID, isCompleted FROM task WHERE ID = '"+ID+"' AND " +
+                "INSERT INTO task (availableTaskID, jobID, description, department, timeTaken, price, discountRate, staffID, isCompleted) SELECT * " +
+                        "FROM (SELECT '"+availableTaskID+"', '"+jobID+"', '"+description+"', '"+department+"', '"+timeTaken+"', " +
+                        "'"+price+"', '"+discountRate+"', '"+staffID+"', '"+isCompleted+"') AS tmp WHERE NOT EXISTS (SELECT availableTaskID, jobID, " +
+                        "description, department, timeTaken, price, discountRate, staffID, isCompleted FROM task WHERE availableTaskID = '"+availableTaskID+"' AND " +
                         "jobID = '"+jobID+"' AND description = '"+description+"' AND department = '"+department+"' AND " +
                         "timeTaken = '"+timeTaken+"' AND price = '"+price+"' AND discountRate = '"+discountRate+"' AND " +
                         "staffID = '"+staffID+"' AND isCompleted = '"+isCompleted+"') LIMIT 1"
