@@ -86,59 +86,6 @@ public class DatabaseConnection {
         return null;
     }
 
-    public static void deleteJobsFromTables(final int ID) {
-        try {
-            Connection conn = Connect();
-            assert conn != null;
-            PreparedStatement statement = conn.prepareStatement("DELETE FROM job_jobReport WHERE jobID = "+ID);
-            statement.executeUpdate();
-            statement = conn.prepareStatement("DELETE FROM staff_performanceReport WHERE jobID = "+ID);
-            statement.executeUpdate();
-            statement = conn.prepareStatement("DELETE FROM task WHERE jobID = "+ID);
-            statement.executeUpdate();
-            statement = conn.prepareStatement("DELETE FROM task_summaryReport WHERE jobID = "+ID);
-            statement.executeUpdate();
-            conn.close();
-        } catch (SQLException exception) { exception.printStackTrace(); }
-    }
-
-    public static void deleteStaffFromTables(final int ID) {
-        try {
-            Connection conn = Connect();
-            assert conn != null;
-            PreparedStatement statement = conn.prepareStatement("UPDATE job_jobReport SET staffID = NULL " +
-                    "WHERE staffID = "+ID);
-            statement.executeUpdate();
-            statement = conn.prepareStatement("UPDATE payment SET staffID = NULL " +
-                    "WHERE staffID = "+ID);
-            statement.executeUpdate();
-            statement = conn.prepareStatement("UPDATE staff_performanceReport SET staffID = NULL " +
-                    "WHERE staffID = "+ID);
-            statement.executeUpdate();
-            statement = conn.prepareStatement("UPDATE task SET staffID = NULL " +
-                    "WHERE staffID = "+ID);
-            statement.executeUpdate();
-            conn.close();
-        } catch (SQLException exception) { exception.printStackTrace(); }
-    }
-
-    public static void deleteCustomerFromTables(final int ID) {
-        try {
-            Connection conn = Connect();
-            assert conn != null;
-            PreparedStatement statement = conn.prepareStatement("DELETE FROM valuedCustomer WHERE " +
-                    "customerID = "+ID);
-            statement.executeUpdate();
-            statement = conn.prepareStatement("UPDATE job SET customerID = NULL " +
-                    "WHERE customerID = "+ID);
-            statement.executeUpdate();
-            statement = conn.prepareStatement("UPDATE payment SET customerID = NULL " +
-                    "WHERE customerID = "+ID);
-            statement.executeUpdate();
-            conn.close();
-        } catch (SQLException exception) { exception.printStackTrace(); }
-    }
-
     public static List<String[]> getData(final String tableName) {
         try {
             Connection conn = Connect();
@@ -486,13 +433,21 @@ public class DatabaseConnection {
     }
 
     // Removing an existing available task record
-    public static boolean removeAvailableTask(final int ID) throws SQLException {
-        Connection conn = Connect();
-        assert conn != null;
-        PreparedStatement statement = conn.prepareStatement(
-                "DELETE FROM availableTask WHERE ID = "+ID
-        );
-        return executeStatement(statement);
+    public static boolean removeAvailableTask(final int ID) {
+        try {
+            Connection conn = Connect();
+            assert conn != null;
+            PreparedStatement statement = conn.prepareStatement("UPDATE task SET availableTaskID = NULL " +
+                    "WHERE availableTaskID = "+ID);
+            statement.executeUpdate();
+            statement = conn.prepareStatement(
+                    "DELETE FROM availableTask WHERE ID = "+ID
+            );
+            return executeStatement(statement);
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            return false;
+        }
     }
 
     // Inserting a new available task record
@@ -566,13 +521,25 @@ public class DatabaseConnection {
     }
 
     // Removing an existing job record
-    public static boolean removeJob(final int ID) throws SQLException {
-        Connection conn = Connect();
-        assert conn != null;
-        PreparedStatement statement = conn.prepareStatement(
-                "DELETE FROM job WHERE ID = "+ID
-        );
-        return executeStatement(statement);
+    public static boolean removeJob(final int ID) {
+        try {
+            Connection conn = Connect();
+            assert conn != null;
+            PreparedStatement statement = conn.prepareStatement("DELETE FROM job_jobReport WHERE jobID = "+ID);
+            statement.executeUpdate();
+            statement = conn.prepareStatement("DELETE FROM staff_performanceReport WHERE jobID = "+ID);
+            statement.executeUpdate();
+            statement = conn.prepareStatement("DELETE FROM task WHERE jobID = "+ID);
+            statement.executeUpdate();
+            statement = conn.prepareStatement("DELETE FROM task_summaryReport WHERE jobID = "+ID);
+            statement.executeUpdate();
+            statement = conn.prepareStatement(
+                    "DELETE FROM job WHERE ID = "+ID
+            ); return executeStatement(statement);
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            return false;
+        }
     }
 
     // Inserting a new job record
@@ -609,13 +576,29 @@ public class DatabaseConnection {
     }
 
     // Removing an existing staff record
-    public static boolean removeStaff(final int ID) throws SQLException {
-        Connection conn = Connect();
-        assert conn != null;
-        PreparedStatement statement = conn.prepareStatement(
-                "DELETE FROM staff WHERE ID = "+ID
-        );
-        return executeStatement(statement);
+    public static boolean removeStaff(final int ID) {
+        try {
+            Connection conn = Connect();
+            assert conn != null;
+            PreparedStatement statement = conn.prepareStatement("UPDATE job_jobReport SET staffID = NULL " +
+                    "WHERE staffID = "+ID);
+            statement.executeUpdate();
+            statement = conn.prepareStatement("UPDATE payment SET staffID = NULL " +
+                    "WHERE staffID = "+ID);
+            statement.executeUpdate();
+            statement = conn.prepareStatement("UPDATE staff_performanceReport SET staffID = NULL " +
+                    "WHERE staffID = "+ID);
+            statement.executeUpdate();
+            statement = conn.prepareStatement("UPDATE task SET staffID = NULL " +
+                    "WHERE staffID = "+ID);
+            statement.executeUpdate();
+            statement = conn.prepareStatement(
+                    "DELETE FROM staff WHERE ID = "+ID
+            ); return executeStatement(statement);
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            return false;
+        }
     }
 
     // Inserting a new staff record
@@ -682,13 +665,26 @@ public class DatabaseConnection {
     }
 
     // Removing an existing customer record
-    public static boolean removeCustomer(final int ID) throws SQLException {
-        Connection conn = Connect();
-        assert conn != null;
-        PreparedStatement statement = conn.prepareStatement(
-                "DELETE FROM customer WHERE ID = "+ID
-        );
-        return executeStatement(statement);
+    public static boolean removeCustomer(final int ID) {
+        try {
+            Connection conn = Connect();
+            assert conn != null;
+            PreparedStatement statement = conn.prepareStatement("DELETE FROM valuedCustomer WHERE " +
+                    "customerID = "+ID);
+            statement.executeUpdate();
+            statement = conn.prepareStatement("UPDATE job SET customerID = NULL " +
+                    "WHERE customerID = "+ID);
+            statement.executeUpdate();
+            statement = conn.prepareStatement("UPDATE payment SET customerID = NULL " +
+                    "WHERE customerID = "+ID);
+            statement.executeUpdate();
+            statement = conn.prepareStatement(
+                    "DELETE FROM customer WHERE ID = "+ID
+            ); return executeStatement(statement);
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            return false;
+        }
     }
 
     // Inserting a new customer record

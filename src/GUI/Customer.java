@@ -301,13 +301,9 @@ public class Customer extends JFrame{
                     //String IDs = customerData.get(table.getSelectedRow())[0];
 
                     for (int id : table.getSelectedRows()) {
-                        try {
-                            int ID = Integer.parseInt(customerData.get(id)[0]);
-                            DatabaseConnection.deleteCustomerFromTables(ID);
-                            DatabaseConnection.removeCustomer(ID);
-                            system.changeScreen("customers", mainPanel);
-                        }
-                        catch (SQLException exception) { exception.printStackTrace(); }
+                        int ID = Integer.parseInt(customerData.get(id)[0]);
+                        DatabaseConnection.removeCustomer(ID);
+                        system.changeScreen("customers", mainPanel);
                     }
                 }
             }
