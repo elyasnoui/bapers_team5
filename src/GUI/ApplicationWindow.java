@@ -1,5 +1,6 @@
 package GUI;
 
+import System.DatabaseConnection;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -9,15 +10,55 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseListener;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public class ApplicationWindow extends JFrame {
     public static String username;
     public static String role;
+    private List<String[]> jobData;
 
     public ApplicationWindow(String title) {
         super(title);
+
+        ScheduledExecutorService exec = Executors.newScheduledThreadPool(1);
+        exec.scheduleAtFixedRate(deadlineChecker, 0, 15, TimeUnit.MINUTES);
     }
+
+    Runnable deadlineChecker = new Runnable() {
+        public void run() {
+            try {
+                jobData = DatabaseConnection.getData("job");
+                assert jobData != null;
+                for (String[] js : jobData) {
+                    switch (js[6]) {
+                        case "Created":
+                            // Job completion alert (office/shift)
+                            LocalDateTime now = LocalDateTime.now();
+                            LocalDateTime deadline = LocalDateTime.of(
+                                    Integer.parseInt(js[5].substring(0,4)),      //year
+                                    Integer.parseInt(js[5].substring(5,7)),      //month
+                                    Integer.parseInt(js[5].substring(8,10)),     //day
+                                    Integer.parseInt(js[5].substring(11,13)),    //hour
+                                    Integer.parseInt(js[5].substring(14,16))     //minute
+                            );
+
+                            //if (deadline.isAfter(now)) System.out.println("Technician Alert");
+
+                            break;
+                        case "Unpaid":
+                            // Payment for job alert (office/shift)
+
+                            break;
+                    }
+                }
+            } catch (Exception e) { e.printStackTrace(); }
+        }
+    };
 
     public static void displayTable(final JTable table, final List<String[]> records, final String[] tableColumns) {
         table.setModel(new DefaultTableModel(records.toArray(new Object[][] {}), tableColumns));
@@ -27,8 +68,8 @@ public class ApplicationWindow extends JFrame {
 
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
-        columns.getColumn(0).setCellRenderer(centerRenderer);
-        columns.getColumn(3).setCellRenderer(centerRenderer);
+        //columns.getColumn(0).setCellRenderer(centerRenderer);
+        //columns.getColumn(3).setCellRenderer(centerRenderer);
         //columns.getColumn(5).setCellRenderer(centerRenderer);
         //columns.getColumn(6).setCellRenderer(centerRenderer);
 

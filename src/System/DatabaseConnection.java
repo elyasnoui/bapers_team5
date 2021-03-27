@@ -10,6 +10,7 @@ import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,16 +67,62 @@ public class DatabaseConnection {
         return data;
     }
 
+    private static String[] returnRow(final PreparedStatement statement) throws SQLException {
+        ResultSet res = statement.executeQuery();
+        int nCol = res.getMetaData().getColumnCount();
+        String[] row = new String[nCol];
+        if (res.next()) {
+            for (int i=1; i<=nCol; i++) {
+                Object object = res.getObject(i);
+                row[i-1] = (object == null) ? null : object.toString();
+            }
+        }
+        return row;
+    }
+
+    public static String getCustomerName(final int ID) throws SQLException {
+        Connection conn = Connect();
+        assert conn != null;
+        PreparedStatement statement = conn.prepareStatement("SELECT firstName, lastName FROM customer WHERE " +
+                "ID ="+ID);
+        ResultSet res = statement.executeQuery();
+        if (res.next())
+            return res.getString("firstName")+", "+res.getString("lastName");
+        else return null;
+    }
+
+    public static List<String[]> getTechnicians() {
+        try {
+            Connection conn = Connect();
+            assert conn != null;
+            PreparedStatement statement = conn.prepareStatement("SELECT firstName, lastName, ID FROM staff " +
+                    "WHERE role = 'Technician'");
+            return returnList(statement);
+        } catch (SQLException exception) { exception.printStackTrace(); }
+        return null;
+    }
+
+    public static List<String[]> searchJobs(final String fromDate, final String toDate) {
+        try {
+            Connection conn = Connect();
+            assert conn != null;
+            PreparedStatement statement = conn.prepareStatement("SELECT ID, startDate, customerID, price FROM job " +
+                    "WHERE (startDate BETWEEN '"+fromDate+"' AND '"+toDate+"') AND (status = 'Created')"
+            );
+            return returnList(statement);
+        } catch (SQLException exception) { exception.printStackTrace(); }
+        return null;
+    }
+
+
     public static List<String[]> searchCustomer(final String firstName, final String lastName) {
         try {
             Connection conn = Connect();
             assert conn != null;
-
             PreparedStatement statement;
-
             if (firstName.isEmpty() && lastName.isEmpty()) return null;
             else if (firstName.isEmpty())
-                statement = conn.prepareStatement("SELECT * FROM customer WHERE lastName LIKE '" + lastName + "%'");
+                statement = conn.prepareStatement("SELECT * FROM customer WHERE lastName LIKE '"+lastName+"%'");
             else if (lastName.isEmpty())
                 statement = conn.prepareStatement("SELECT * FROM customer WHERE firstName LIKE '"+firstName+"%'");
             else
@@ -83,6 +130,16 @@ public class DatabaseConnection {
                     firstName+"%' OR lastName LIKE '"+lastName+"%'");
             return returnList(statement);
         } catch (SQLException exception) { exception.printStackTrace(); }
+        return null;
+    }
+
+    public static String[] getRowBySingleID(final String tableName, final int ID) {
+        try {
+            Connection conn = Connect();
+            assert conn != null;
+            PreparedStatement statement = conn.prepareStatement("SELECT * FROM "+tableName+" WHERE ID = "+ID);
+            return returnRow(statement);
+        } catch (Exception e) { e.printStackTrace(); }
         return null;
     }
 
@@ -466,14 +523,13 @@ public class DatabaseConnection {
 
     // Editing an existing task record
     public static boolean
-        editTask(final int ID, final int jobID, final String description, final String department, final String timeTaken,
-                 final double price, final int discountRate, final int staffID, final int isCompleted) throws SQLException {
+        editTask(final int ID, final int availableTaskID, final int jobID, final String description, final String department,
+                 final String timeTaken, final double price, final int staffID, final int isCompleted) throws SQLException {
         Connection conn = Connect();
         assert conn != null;
         PreparedStatement statement = conn.prepareStatement(
-                "UPDATE task SET description = '"+description+"', department = '"+department+"', timeTaken = '" +
-                        ""+timeTaken+"', price = '"+price+"', discountRate = '"+discountRate+"', staffID = '"+staffID+"', " +
-                        "isCompleted = '"+isCompleted+"' WHERE ID = "+ID+" AND jobID = "+jobID
+                "UPDATE task SET availableTaskID = '"+availableTaskID+"', description = '"+description+"', department = '"+department+"', timeTaken = '" +
+                        ""+timeTaken+"', price = '"+price+"', staffID = '"+staffID+"', isCompleted = '"+isCompleted+"' WHERE ID = "+ID
         );
         return executeStatement(statement);
     }
@@ -491,31 +547,33 @@ public class DatabaseConnection {
     // Inserting a new task record
     public static boolean
         addTask(final int availableTaskID, final int jobID, final String description, final String department, final String timeTaken,
-                final double price, final int discountRate, final int staffID, final int isCompleted) throws SQLException {
+                final double price, final int staffID, final int isCompleted) throws SQLException {
         Connection conn = Connect();
         assert conn != null;
-        PreparedStatement statement = conn.prepareStatement(
-                "INSERT INTO task (availableTaskID, jobID, description, department, timeTaken, price, discountRate, staffID, isCompleted) SELECT * " +
+        /*PreparedStatement statement = conn.prepareStatement(
+                "INSERT INTO task (availableTaskID, jobID, description, department, timeTaken, price, staffID, isCompleted) SELECT * " +
                         "FROM (SELECT '"+availableTaskID+"', '"+jobID+"', '"+description+"', '"+department+"', '"+timeTaken+"', " +
-                        "'"+price+"', '"+discountRate+"', '"+staffID+"', '"+isCompleted+"') AS tmp WHERE NOT EXISTS (SELECT availableTaskID, jobID, " +
-                        "description, department, timeTaken, price, discountRate, staffID, isCompleted FROM task WHERE availableTaskID = '"+availableTaskID+"' AND " +
+                        "'"+price+"', '"+staffID+"', '"+isCompleted+"') AS tmp WHERE NOT EXISTS (SELECT availableTaskID, jobID, " +
+                        "description, department, timeTaken, price, staffID, isCompleted FROM task WHERE availableTaskID = '"+availableTaskID+"' AND " +
                         "jobID = '"+jobID+"' AND description = '"+description+"' AND department = '"+department+"' AND " +
-                        "timeTaken = '"+timeTaken+"' AND price = '"+price+"' AND discountRate = '"+discountRate+"' AND " +
-                        "staffID = '"+staffID+"' AND isCompleted = '"+isCompleted+"') LIMIT 1"
+                        "timeTaken = '"+timeTaken+"' AND price = '"+price+"' AND staffID = '"+staffID+"' AND isCompleted = '"+isCompleted+"') LIMIT 1"
+        );*/
+        PreparedStatement statement = conn.prepareStatement(
+                "INSERT IGNORE INTO task (availableTaskID, jobID, description, department, timeTaken, price, " +
+                        "staffID, isCompleted) VALUES ('"+availableTaskID+"', '"+jobID+"', '"+description+"', '"+department+"', " +
+                        "'"+timeTaken+"', '"+price+"', '"+staffID+"', '"+isCompleted+"')"
         );
         return executeStatement(statement);
     }
 
     // Editing an existing job record
     public static boolean
-        editJob(final int ID, final int isUrgent, final double price, final LocalDate startDate, final LocalDate endDate,
-                final LocalDate deadline, final String status, final int customerID) throws SQLException {
+        editJob(final int ID, final int isUrgent, final double price, final LocalDateTime deadline, final String status) throws SQLException {
         Connection conn = Connect();
         assert conn != null;
         PreparedStatement statement = conn.prepareStatement(
-                "UPDATE job SET isUrgent = '"+isUrgent+"', price = '"+price+"', startDate = '"+startDate+"', " +
-                        "endDate = '"+endDate+"', deadline = '"+deadline+"', status = '"+status+"', customerID = '" +
-                        ""+customerID+"' WHERE ID = "+ID
+                "UPDATE job SET isUrgent = '"+isUrgent+"', price = '"+price+"', deadline = '"+deadline+"', status = " +
+                        "'"+status+"' WHERE ID = "+ID
         );
         return executeStatement(statement);
     }
