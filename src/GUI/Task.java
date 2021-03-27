@@ -434,7 +434,8 @@ public class Task {
             public void actionPerformed(ActionEvent e) {
                 for (String[] ats : availableTaskData)
                     if (ats[1].equals(editTaskComboBox.getSelectedItem())) {
-                        jobPrice = Double.parseDouble(jobRow[2]) + Double.parseDouble(ats[4]);
+                        jobPrice = (Double.parseDouble(jobRow[2]) - Double.parseDouble(taskRow[7].substring(1))) +
+                                Double.parseDouble(ats[4]);
                         editPriceLabel.setText('£'+df2.format(Double.parseDouble(ats[4])));
                         editTotalLabel.setText('£'+df2.format(jobPrice) + " before VAT/Discounts (new job price)");
                         break;
