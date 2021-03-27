@@ -445,7 +445,24 @@ public class Task {
     }
 
     private void deleteRow() {
+        try {
+            String jobID = taskData.get(table.getSelectedRow())[2];
+            if (DatabaseConnection.removeTask(Integer.parseInt(taskData.get(table.getSelectedRow())[0]))) {
+                boolean jobsLeft = false;
 
+                for (String[] ts : taskData)
+                    if (!ts[0].equals(taskData.get(table.getSelectedRow())[0]) && ts[2].equals(jobID)) {
+                        jobsLeft = true;
+                        break;
+                    }
+
+                if (!jobsLeft)
+                    if (!DatabaseConnection.removeJob(Integer.parseInt(jobID)))
+                        JOptionPane.showMessageDialog(mainPanel, "Couldn't delete job");
+
+                system.changeScreen("tasks", mainPanel);
+            } else JOptionPane.showMessageDialog(mainPanel, "Couldn't delete task");
+        } catch (SQLException exception) { exception.printStackTrace(); }
     }
 
     private void resetEditPanel() {
