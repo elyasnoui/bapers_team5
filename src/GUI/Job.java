@@ -140,8 +140,7 @@ public class Job {
                 js[2] = '£' + js[2];
                 js[5] = js[5].substring(0,10)+" "+js[5].substring(11,16);
             }
-        }
-        catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) { e.printStackTrace(); }
 
         bannerIcon = new ImageIcon("data/banners/job.png");
         bannerLabel.setIcon(bannerIcon);
@@ -220,7 +219,6 @@ public class Job {
                 createPanel.setVisible(true);
             }
         });
-
         addButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -246,7 +244,6 @@ public class Job {
                     case "Mount Transparencies":
                         productList.add(new Product(String.valueOf(taskComboBox.getSelectedItem()), "45min", 55.5));
                         break;
-
                 }
 
                 totalPrice += productList.get(productList.size()-1).price;
@@ -373,8 +370,6 @@ public class Job {
             public void actionPerformed(ActionEvent e) {
                 urgencyPanel.setVisible(isUrgentCheckBox.isSelected());
                 urgencyLabelPanel.setVisible(isUrgentCheckBox.isSelected());
-
-
             }
         });
 

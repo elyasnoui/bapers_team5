@@ -87,54 +87,63 @@ public class AvailableTask {
         bannerLabel.setIcon(bannerIcon);
 
         addMouseListeners();
-        resetCreatePanel();
 
         ApplicationWindow.displayTable(table, availableTaskData, tableColumns);
 
         // Side panel listeners
         logoutButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) { system.changeScreen("logout", mainPanel); }
+            public void actionPerformed(ActionEvent e) {
+                removeMouseListeners();
+                system.changeScreen("logout", mainPanel);
+            }
         });
         jobsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                removeMouseListeners();
                 system.changeScreen("jobs", mainPanel);
             }
         });
         customerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                removeMouseListeners();
                 system.changeScreen("customers", mainPanel);
             }
         });
         paymentsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                removeMouseListeners();
                 system.changeScreen("payments", mainPanel);
             }
         });
         staffButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                removeMouseListeners();
                 system.changeScreen("staff", mainPanel);
             }
         });
         tasksButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                removeMouseListeners();
                 system.changeScreen("tasks", mainPanel);
             }
         });
         reportsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                removeMouseListeners();
                 system.changeScreen("reports", mainPanel);
             }
         });
         databaseButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                removeMouseListeners();
                 system.changeScreen("database", mainPanel);
             }
         });
@@ -143,7 +152,7 @@ public class AvailableTask {
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                removeMouseListener();
+                removeMouseListeners();
                 system.changeScreen("tasks", mainPanel);
             }
         });
@@ -228,9 +237,11 @@ public class AvailableTask {
             public void actionPerformed(ActionEvent e) {
                 if (validatePanel(createDescriptionTextField, createTimeRequiredTextField, createPriceTextField)) {
                     String department = (String) createDepartmentComboBox.getItemAt(createDepartmentComboBox.getSelectedIndex());
-                    try { if (DatabaseConnection.addAvailableTask(createDescriptionTextField.getText(), department,
+                    try {
+                        if (DatabaseConnection.addAvailableTask(createDescriptionTextField.getText(), department,
                                 createTimeRequiredTextField.getText(), Double.parseDouble(createPriceTextField.getText())))
                             system.changeScreen("availableTask", mainPanel);
+
                         else JOptionPane.showMessageDialog(mainPanel, "Couldn't add task");
                     } catch (SQLException exception) { exception.printStackTrace(); }
                 }
@@ -379,12 +390,12 @@ public class AvailableTask {
         String timeRequired = availableTaskData.get(id)[3].substring(0, availableTaskData.get(id)[3].length()-4);
         editTimeRequiredTextField.setBorder(null);
         editTimeRequiredTextField.setText(timeRequired);
-        editDescriptionTextField.setToolTipText("");
+        editDescriptionTextField.setToolTipText(null);
 
         String price = availableTaskData.get(id)[4].substring(1);
         editPriceTextField.setBorder(null);
         editPriceTextField.setText(price);
-        editPriceTextField.setToolTipText("");
+        editPriceTextField.setToolTipText(null);
     }
 
     private void addMouseListeners() {
@@ -406,7 +417,7 @@ public class AvailableTask {
         editCancelButton.addMouseListener(ApplicationWindow.mouseListener);
     }
 
-    private void removeMouseListener() {
+    private void removeMouseListeners() {
         logoutButton.removeMouseListener(ApplicationWindow.mouseListener);
         jobsButton.removeMouseListener(ApplicationWindow.mouseListener);
         customerButton.removeMouseListener(ApplicationWindow.mouseListener);

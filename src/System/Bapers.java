@@ -5,6 +5,7 @@ import GUI.*;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.Random;
 
 public class Bapers {
     private final ApplicationWindow applicationWindow = new ApplicationWindow("Bapers Team 5");
@@ -60,7 +61,7 @@ public class Bapers {
 
         //applicationWindow.add(job.getMainPanel());
 
-        //applicationWindow.add(task.getMainPanel());
+        applicationWindow.add(task.getMainPanel());
 
         //applicationWindow.add(availableTask.getMainPanel());
 
