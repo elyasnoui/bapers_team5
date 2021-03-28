@@ -3,16 +3,12 @@ package GUI;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileOutputStream;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import System.reportpdf;
 
 import System.*;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.pdf.PdfWriter;
 
 
 public class Report {
@@ -43,8 +39,8 @@ public class Report {
     private JTextField createNoOfStaffField;
     private JTextField createNoOfJobsField;
     private JTextField createNoOfTasksField;
-    private JButton popupCreateButton;
-    private JButton popupCancelButton;
+    private JButton createConfrimButton;
+    private JButton createCancelButton;
     private JScrollPane tablePanel;
     private JButton printButton;
     private JComboBox createReportTypeComboBox;
@@ -70,6 +66,7 @@ public class Report {
             "No. Tasks"
     };
     private final String[] reportTypes = {
+            "Please select a type",
             "Job Report",
             "Summary Report",
             "Performance Report"
@@ -185,7 +182,7 @@ public class Report {
                 resetCreatePanel();
             }
         });
-        popupCancelButton.addActionListener(new ActionListener() {
+        createCancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 tablePanel.setVisible(true);
@@ -217,6 +214,12 @@ public class Report {
         });
 
          */
+        createReportTypeComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                createConfrimButton.setEnabled(createReportTypeComboBox.getSelectedIndex() != 0);
+            }
+        });
     }
 
     private void resetCreatePanel() {
