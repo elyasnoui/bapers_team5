@@ -3,16 +3,12 @@ package GUI;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileOutputStream;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import System.reportpdf;
 
 import System.*;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.pdf.PdfWriter;
 
 
 public class Report {
@@ -43,8 +39,8 @@ public class Report {
     private JTextField createNoOfStaffField;
     private JTextField createNoOfJobsField;
     private JTextField createNoOfTasksField;
-    private JButton popupCreateButton;
-    private JButton popupCancelButton;
+    private JButton createConfrimButton;
+    private JButton createCancelButton;
     private JScrollPane tablePanel;
     private JButton printButton;
     private JComboBox createReportTypeComboBox;
@@ -70,6 +66,7 @@ public class Report {
             "No. Tasks"
     };
     private final String[] reportTypes = {
+            "Please select a type",
             "Job Report",
             "Summary Report",
             "Performance Report"
@@ -94,26 +91,22 @@ public class Report {
                     if (rts[0].equals(rs[0])) {
                         switch (rs[1]) {
                             case "Individual Performance Report":
-                                temp = new String[]{rs[0], rs[1], rs[2], rs[3].substring(0, 16), rs[4], rs[5], rts[1], "", ""};
+                                temp = new String[] { rs[0], rs[1], rs[2], rs[3].substring(0,16), rs[4], rs[5], rts[1], "", "" };
                                 break;
                             case "Job Report":
-                                temp = new String[]{rs[0], rs[1], rs[2], rs[3].substring(0, 16), rs[4], rs[5], "", rts[1], ""};
+                                temp = new String[] { rs[0], rs[1], rs[2], rs[3].substring(0,16), rs[4], rs[5], "", rts[1], "" };
                                 break;
                             case "Summary Report":
-                                temp = new String[]{rs[0], rs[1], rs[2], rs[3].substring(0, 16), rs[4], rs[5], "", "", rts[1]};
+                                temp = new String[] { rs[0], rs[1], rs[2], rs[3].substring(0,16), rs[4], rs[5], "", "", rts[1] };
                                 break;
                             default:
-                                temp = new String[]{rs[0], "Invalid Report"};
+                                temp = new String[] { rs[0], "Invalid Report" };
                                 break;
-                        }
-                        reportData.set(i, temp);
-                    }
-                    i++;
+                        } reportData.set(i, temp);
+                    } i++;
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e) { e.printStackTrace(); }
 
         bannerIcon = new ImageIcon("data/banners/report.png");
         bannerLabel.setIcon(bannerIcon);
@@ -189,7 +182,7 @@ public class Report {
                 resetCreatePanel();
             }
         });
-        popupCancelButton.addActionListener(new ActionListener() {
+        createCancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 tablePanel.setVisible(true);
@@ -206,14 +199,30 @@ public class Report {
                     ProcessBuilder processBuilder = new ProcessBuilder("cmd.exe", "/C", "data/reports\\reportpdf.pdf");
                 } catch (Exception exception) {
                     exception.printStackTrace();
+                } }
+        });
+
+        /* reportTypeField.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (reportTypeField.getText() == "Summary Performance Report"){
+                    reportpdf.performancereport();
+                } else if (reportTypeField.getText() == "Job Report "){
+
                 }
             }
         });
 
+         */
+        createReportTypeComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                createConfrimButton.setEnabled(createReportTypeComboBox.getSelectedIndex() != 0);
+            }
+        });
     }
 
-
-    private void resetCreatePanel(){
+    private void resetCreatePanel() {
         createReportTypeComboBox.setModel(new DefaultComboBoxModel<>(reportTypes));
 
         createContentField.setBorder(null);
