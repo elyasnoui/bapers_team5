@@ -447,7 +447,7 @@
                 <border type="none"/>
                 <children>
                   <grid id="b94c0" layout-manager="GridLayoutManager" row-count="8" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-                    <margin top="0" left="0" bottom="0" right="0"/>
+                    <margin top="20" left="0" bottom="0" right="0"/>
                     <constraints>
                       <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
                     </constraints>
@@ -643,13 +643,9 @@
                         </properties>
                         <border type="none"/>
                         <children>
-                          <component id="99189" class="javax.swing.JTextField" binding="reportTypeField">
+                          <component id="fda02" class="javax.swing.JComboBox" binding="createReportTypeComboBox">
                             <constraints>
-                              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="0" indent="0" use-parent-layout="false">
-                                <minimum-size width="150" height="-1"/>
-                                <preferred-size width="150" height="-1"/>
-                                <maximum-size width="150" height="-1"/>
-                              </grid>
+                              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
                             </constraints>
                             <properties/>
                           </component>
@@ -665,7 +661,7 @@
                         </properties>
                         <border type="none"/>
                         <children>
-                          <component id="1aaae" class="javax.swing.JTextField" binding="contentField">
+                          <component id="1aaae" class="javax.swing.JTextField" binding="createContentField">
                             <constraints>
                               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="0" indent="0" use-parent-layout="false">
                                 <preferred-size width="150" height="-1"/>
@@ -685,7 +681,7 @@
                         </properties>
                         <border type="none"/>
                         <children>
-                          <component id="cafda" class="javax.swing.JTextField" binding="dateGeneratedField">
+                          <component id="cafda" class="javax.swing.JTextField" binding="createDateGeneratedField">
                             <constraints>
                               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="0" indent="0" use-parent-layout="false">
                                 <preferred-size width="150" height="-1"/>
@@ -705,7 +701,7 @@
                         </properties>
                         <border type="none"/>
                         <children>
-                          <component id="3043e" class="javax.swing.JTextField" binding="startDateField">
+                          <component id="3043e" class="javax.swing.JTextField" binding="createStartDateField">
                             <constraints>
                               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="0" indent="0" use-parent-layout="false">
                                 <preferred-size width="150" height="-1"/>
@@ -725,7 +721,7 @@
                         </properties>
                         <border type="none"/>
                         <children>
-                          <component id="9fb01" class="javax.swing.JTextField" binding="endDateField">
+                          <component id="9fb01" class="javax.swing.JTextField" binding="createEndDateField">
                             <constraints>
                               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="0" indent="0" use-parent-layout="false">
                                 <preferred-size width="150" height="-1"/>
@@ -745,7 +741,7 @@
                         </properties>
                         <border type="none"/>
                         <children>
-                          <component id="2bdaf" class="javax.swing.JTextField" binding="noOfStaffField">
+                          <component id="2bdaf" class="javax.swing.JTextField" binding="createNoOfStaffField">
                             <constraints>
                               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="0" indent="0" use-parent-layout="false">
                                 <preferred-size width="150" height="-1"/>
@@ -765,7 +761,7 @@
                         </properties>
                         <border type="none"/>
                         <children>
-                          <component id="16ad8" class="javax.swing.JTextField" binding="noOfJobsField">
+                          <component id="16ad8" class="javax.swing.JTextField" binding="createNoOfJobsField">
                             <constraints>
                               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="0" indent="0" use-parent-layout="false">
                                 <preferred-size width="150" height="-1"/>
@@ -785,7 +781,7 @@
                         </properties>
                         <border type="none"/>
                         <children>
-                          <component id="22336" class="javax.swing.JTextField" binding="noOfTasksField">
+                          <component id="22336" class="javax.swing.JTextField" binding="createNoOfTasksField">
                             <constraints>
                               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="0" indent="0" use-parent-layout="false">
                                 <preferred-size width="150" height="-1"/>
