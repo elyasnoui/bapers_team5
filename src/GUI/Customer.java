@@ -3,13 +3,8 @@ package GUI;
 import System.*;
 
 import javax.swing.*;
-import javax.swing.border.Border;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.sql.SQLException;
 import java.util.List;
 
 public class Customer extends JFrame{
@@ -35,28 +30,21 @@ public class Customer extends JFrame{
     private JButton editButton;
     private JButton createButton;
     private JPanel createPanel;
-    private JTextField firstNameField;
-    private JTextField lastNameField;
-    private JTextField contactNumberField;
-    private JTextField addressField;
-    private JTextField emailField;
-    private JTextField agreedDiscountField;
-    private JTextField discountRateField;
-    private JButton popupCreateButton;
-    private JButton popupCancelButton;
+    private JTextField createFirstNameField;
+    private JTextField createLastNameField;
+    private JTextField createContactNumberField;
+    private JTextField createAddressField;
+    private JTextField createEmailField;
+    private JTextField createDiscountRateField;
+    private JButton createConfirmButton;
+    private JButton createCancelButton;
     private JPanel tablePanel;
     private ImageIcon bannerIcon;
 
-    private JCheckBox vcCheckBox;
-    private JLabel agreedDiscountLabel;
-    private JLabel discountRateLabel;
-    private JLabel firstNameEX;
-    private JLabel lastNameEX;
-    private JLabel contactNumEX;
-    private JLabel addressEX;
-    private JLabel emailEX;
-    private JLabel agreedDiscountEX;
-    private JLabel discountRateEX;
+    private JCheckBox createVcCheckBox;
+    private JLabel createAgreedDiscountLabel;
+    private JLabel createDiscountRateLabel;
+    private JComboBox createAgreedDiscountComboBox;
     private ImageIcon checkBoxIcon;
     private ImageIcon selectedCheckBoxIcon;
 
@@ -64,6 +52,10 @@ public class Customer extends JFrame{
 
     private List<String[]> customerData;
     private List<String[]> valuedCustomerData;
+
+    private final String nameRegex = "[A-Z]{1}[a-zA-z-]{1,34}";
+    //private final String
+
     private final String[] tableColumns = {
             "ID",
             "First Name",
@@ -73,6 +65,11 @@ public class Customer extends JFrame{
             "Email",
             "Agreed Discount",
             "Discount Rate"
+    };
+    private final String[] discountTypes = {
+            "Fixed Discount",
+            "Flexible Discount",
+            "Variable Discount"
     };
 
     public Customer(Bapers system) {
@@ -99,199 +96,103 @@ public class Customer extends JFrame{
 
         checkBoxIcon = new ImageIcon("data/graphics/test.png");
         selectedCheckBoxIcon = new ImageIcon("data/graphics/test2.png");
-        vcCheckBox.setIcon(checkBoxIcon);
-        vcCheckBox.setSelectedIcon(selectedCheckBoxIcon);
+        createVcCheckBox.setIcon(checkBoxIcon);
+        createVcCheckBox.setSelectedIcon(selectedCheckBoxIcon);
 
         logoutButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 system.changeScreen("logout", mainPanel);
+                removeMouseListeners();
             }
         });
         jobsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 system.changeScreen("jobs", mainPanel);
+                removeMouseListeners();
             }
         });
         customerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 system.changeScreen("customers", mainPanel);
+                removeMouseListeners();
             }
         });
         paymentsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 system.changeScreen("payments", mainPanel);
+                removeMouseListeners();
             }
         });
         staffButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 system.changeScreen("staff", mainPanel);
+                removeMouseListeners();
             }
         });
         tasksButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 system.changeScreen("tasks", mainPanel);
+                removeMouseListeners();
             }
         });
         reportsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 system.changeScreen("reports", mainPanel);
+                removeMouseListeners();
             }
         });
         databaseButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 system.changeScreen("database", mainPanel);
+                removeMouseListeners();
             }
         });
 
-        logoutButton.addMouseListener(ApplicationWindow.mouseListener);
-        jobsButton.addMouseListener(ApplicationWindow.mouseListener);
-        customerButton.addMouseListener(ApplicationWindow.mouseListener);
-        paymentsButton.addMouseListener(ApplicationWindow.mouseListener);
-        staffButton.addMouseListener(ApplicationWindow.mouseListener);
-        tasksButton.addMouseListener(ApplicationWindow.mouseListener);
-        reportsButton.addMouseListener(ApplicationWindow.mouseListener);
-        databaseButton.addMouseListener(ApplicationWindow.mouseListener);
-        createButton.addMouseListener(ApplicationWindow.mouseListener);
-        editButton.addMouseListener(ApplicationWindow.mouseListener);
-        deleteButton.addMouseListener(ApplicationWindow.mouseListener);
+        addMouseListeners();
 
         ApplicationWindow.displayTable(table, customerData, tableColumns);
+
         createButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                buttonPanel.setVisible(false);
                 tablePanel.setVisible(false);
                 createPanel.setVisible(true);
+                resetCreatePanel();
             }
         });
-        vcCheckBox.addActionListener(new ActionListener() {
+        createVcCheckBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                boolean visibility = vcCheckBox.isSelected();
-                agreedDiscountLabel.setVisible(visibility);
-                agreedDiscountField.setVisible(visibility);
-                discountRateLabel.setVisible(visibility);
-                discountRateField.setVisible(visibility);
-                agreedDiscountEX.setVisible(false);
-                discountRateEX.setVisible(false);
+                createAgreedDiscountLabel.setVisible(createVcCheckBox.isSelected());
+                createAgreedDiscountComboBox.setVisible(createVcCheckBox.isSelected());
+
+                if (createVcCheckBox.isSelected() && createAgreedDiscountComboBox.getSelectedIndex() == 0) {
+                    createDiscountRateLabel.setVisible(true);
+                    createDiscountRateField.setVisible(true);
+                }
             }
         });
-        popupCancelButton.addActionListener(new ActionListener() {
+        createCancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 createPanel.setVisible(false);
+                buttonPanel.setVisible(true);
                 tablePanel.setVisible(true);
             }
         });
-        popupCreateButton.addActionListener(new ActionListener() {
+        createConfirmButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                final String name_regex ="^[A-Z][a-z]{3,20}";
-                final String number_regex = "^(\\+44\\s?7\\d{3}|\\(?07\\d{3}\\)?)\\s?\\d{3}\\s?\\d{3}$";
-                final String address_regex = "^(.{1,100})$";
-                final String email_regex = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-                final String agreed_regex = "Variable|Flexible|Fixed";
-                final String variable_regex = /*"([0-9]{1,2}(,[0-9]{1,2})){7}";*/ "^[0-9]{1,2},[0-9]{1,2},[0-9]{1,2},[0-9]{1,2},[0-9]{1,2},[0-9]{1,2},[0-9]{1,2}$";// Need to be made dynamic according to number of tasks
-                final String fixed_regex = "^[0-9]{1,2}";
-                final String flexible_regex = "^[0-9]{1,2},[0-9]{1,2},[0-9]{1,2}$";
-
-                // Hide all '!', before checking for errors
-                firstNameEX.setVisible(false);
-                lastNameEX.setVisible(false);
-                contactNumEX.setVisible(false);
-                addressEX.setVisible(false);
-                emailEX.setVisible(false);
-                agreedDiscountEX.setVisible(false);
-                discountRateEX.setVisible(false);
-
-                // Check All fields against Regex Strings
-
-                firstNameEX.setVisible(!firstNameField.getText().matches(name_regex));
-                isError[0] = !firstNameField.getText().matches(name_regex);
-
-                lastNameEX.setVisible(!lastNameField.getText().matches(name_regex));
-                isError[1] = !lastNameField.getText().matches(name_regex);
-
-                contactNumEX.setVisible(!contactNumberField.getText().matches(number_regex));
-                isError[2] = !contactNumberField.getText().matches(number_regex);
-
-                addressEX.setVisible(!addressField.getText().matches(address_regex));
-                isError[3] = !addressField.getText().matches(address_regex);
-
-                emailEX.setVisible(!emailField.getText().matches(email_regex));
-                isError[4] = !emailField.getText().matches(email_regex);
-
-                // If Checkbox selected, then run Regex Checks
-                if (vcCheckBox.isSelected()) {
-                    agreedDiscountEX.setVisible(!agreedDiscountField.getText().matches(agreed_regex));
-                    isError[5] = !agreedDiscountField.getText().matches(agreed_regex);
-
-                    discountRateEX.setVisible(!discountRateField.getText().matches(variable_regex));
-                    isError[6] = !discountRateField.getText().matches(variable_regex);
-                }
-
-                // If Agreed Field is either, Variable/Fixed/Flexible then select the Regex accordingly
-                /*if (vcCheckBox.isSelected()){
-                    if (!agreedDiscountField.getText().matches(agreed_regex)) {
-                        error = true;
-                        agreedDiscountEX.setVisible(true);
-                    }
-
-                    if(agreedDiscountField.getText().equals("Variable")) {
-                        if (!discountRateField.getText().matches(variable_regex)) {
-                            error = true;
-                            discountRateEX.setVisible(true);
-                        }
-                    }
-                    else if(agreedDiscountField.getText().equals("Fixed")) {
-                        if (!discountRateField.getText().matches(fixed_regex)) {
-                            error = true;
-                            discountRateEX.setVisible(true);
-                        }
-                    }
-                    else if(agreedDiscountField.getText().equals("Flexible")) {
-                        if (!discountRateField.getText().matches(flexible_regex)) {
-                            error = true;
-                            discountRateEX.setVisible(true);
-                        }
-                    }
-                }*/
-
-                Boolean errorsDetected = false;
-                for (boolean err : isError) {
-                    if (err) {
-                        errorsDetected = true;
-                        break;
-                    }
-                }
-
-                if (!errorsDetected) {
-                    try {
-                        int ID = DatabaseConnection.getNextID("customer");
-
-                        // If ID test didn't fail
-                        if (ID != -1) {
-                            DatabaseConnection.addCustomer(firstNameField.getText(), lastNameField.getText(), contactNumberField.getText(),
-                                    addressField.getText(), emailField.getText());
-                            if (vcCheckBox.isSelected())
-                                DatabaseConnection.addValuedCustomer(ID, agreedDiscountField.getText(), discountRateField.getText());
-                        }
-
-                        system.changeScreen("customers", mainPanel);
-
-                    } catch (SQLException exception) {
-                        exception.printStackTrace();
-                        JOptionPane.showMessageDialog(mainPanel, "Insertion failed, please try again.");
-                    }
-                }
             }
         });
         deleteButton.addActionListener(new ActionListener() {
@@ -308,6 +209,53 @@ public class Customer extends JFrame{
                 }
             }
         });
+        createAgreedDiscountComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                createDiscountRateLabel.setVisible(createAgreedDiscountComboBox.getSelectedIndex() == 0);
+                createDiscountRateField.setVisible(createAgreedDiscountComboBox.getSelectedIndex() == 0);
+            }
+        });
+    }
+
+    private void resetCreatePanel() {
+        createAgreedDiscountComboBox.setModel(new DefaultComboBoxModel<>(discountTypes));
+
+        createVcCheckBox.setSelected(false);
+        createFirstNameField.setBorder(null);
+        createLastNameField.setBorder(null);
+        createContactNumberField.setBorder(null);
+        createAddressField.setBorder(null);
+        createEmailField.setBorder(null);
+        createDiscountRateField.setBorder(null);
+    }
+
+    private void addMouseListeners() {
+        logoutButton.addMouseListener(ApplicationWindow.mouseListener);
+        jobsButton.addMouseListener(ApplicationWindow.mouseListener);
+        customerButton.addMouseListener(ApplicationWindow.mouseListener);
+        paymentsButton.addMouseListener(ApplicationWindow.mouseListener);
+        staffButton.addMouseListener(ApplicationWindow.mouseListener);
+        tasksButton.addMouseListener(ApplicationWindow.mouseListener);
+        reportsButton.addMouseListener(ApplicationWindow.mouseListener);
+        databaseButton.addMouseListener(ApplicationWindow.mouseListener);
+        createButton.addMouseListener(ApplicationWindow.mouseListener);
+        editButton.addMouseListener(ApplicationWindow.mouseListener);
+        deleteButton.addMouseListener(ApplicationWindow.mouseListener);
+    }
+
+    private void removeMouseListeners() {
+        logoutButton.removeMouseListener(ApplicationWindow.mouseListener);
+        jobsButton.removeMouseListener(ApplicationWindow.mouseListener);
+        customerButton.removeMouseListener(ApplicationWindow.mouseListener);
+        paymentsButton.removeMouseListener(ApplicationWindow.mouseListener);
+        staffButton.removeMouseListener(ApplicationWindow.mouseListener);
+        tasksButton.removeMouseListener(ApplicationWindow.mouseListener);
+        reportsButton.removeMouseListener(ApplicationWindow.mouseListener);
+        databaseButton.removeMouseListener(ApplicationWindow.mouseListener);
+        createButton.removeMouseListener(ApplicationWindow.mouseListener);
+        editButton.removeMouseListener(ApplicationWindow.mouseListener);
+        deleteButton.removeMouseListener(ApplicationWindow.mouseListener);
     }
 
     public JPanel getPanel() {

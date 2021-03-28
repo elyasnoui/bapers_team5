@@ -158,7 +158,7 @@ public class Database  {
             Process p;
             try{
                 Runtime runtime = Runtime.getRuntime();
-                p=runtime.exec("C:/Program Files/TablePlus/cmd/dump_ms_8.0.exe -u root -pcityproject5 --add-drop-database B-bapers_db -r" + path);
+                p=runtime.exec("C:\\Program Files\\MySQL\\MySQL Server 8.0\\bin\\mysqldump.exe -P3306 -h 34.105.223.156 -u root -pcityproject5 bapers_db -r" + filename);
 
                 int processComplete = p.waitFor();
                 if(processComplete==0){
@@ -177,7 +177,7 @@ public class Database  {
             public void actionPerformed(ActionEvent e) {
             String user = "root";
             String pass = "cityproject5";
-            String[] restoreCmd = new String[] {"C:\\Program Files\\TablePlus\\cmd\\restore_ms_8.0.exe","--user="+user,"--password="+pass,"-e","source "+path};
+            String[] restoreCmd = new String[] {"C:\\Program Files\\MySQL\\MySQL Server 8.0\\bin\\mysqldump.exe","--user="+user,"--password="+pass,"-e","source "+filename};
 
             Process process;
             try{

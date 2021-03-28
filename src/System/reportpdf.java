@@ -3,6 +3,7 @@ package System;
 import java.io.FileOutputStream;
 import java.util.Date;
 
+import GUI.Report;
 import com.itextpdf.text.Anchor;
 import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.BaseColor;
@@ -33,11 +34,39 @@ public class reportpdf {
     private static Font smallBold = new Font(Font.FontFamily.TIMES_ROMAN, 12,
             Font.BOLD);
 
+
     public static String getFILE() {
         return FILE;
     }
 
-    public static void initialise() {
+
+    public static void jobReport(){
+        try{
+            Document document = new Document();
+            PdfWriter.getInstance(document, new FileOutputStream(FILE));
+            document.open();
+            addMetaData(document);
+            addTitlePage(document);
+            document.close();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public static void summaryReport(){
+        try{
+            Document document = new Document();
+            PdfWriter.getInstance(document, new FileOutputStream(FILE));
+            document.open();
+            addMetaData(document);
+            addTitlePage(document);
+            document.close();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public static void performancereport() {
         System.out.println("here");
         try {
             Document document = new Document();
@@ -45,7 +74,7 @@ public class reportpdf {
             document.open();
             addMetaData(document);
             addTitlePage(document);
-            addContent(document);
+            addperformanceContent(document);
             document.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -56,9 +85,10 @@ public class reportpdf {
     // Reader
     // under File -> Properties
     public static void addMetaData(Document document) {
-        document.addTitle("First PDF");
-        document.addSubject("Using iText");
-        document.addKeywords("Java, PDF, iText");
+
+        document.addTitle("Report");
+        document.addSubject("Printable Report");
+        document.addKeywords("Report, PDF, iText");
         document.addAuthor("Team 5");
         document.addCreator("Team 5");
     }
@@ -96,7 +126,7 @@ public class reportpdf {
         document.newPage();
     }
 
-    public static void addContent(Document document) throws DocumentException {
+    public static void addperformanceContent(Document document) throws DocumentException {
         Anchor anchor = new Anchor("Individual Performance Report", catFont);
         anchor.setName("Individual Performance Report");
 

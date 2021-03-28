@@ -3,16 +3,12 @@ package GUI;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileOutputStream;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import System.reportpdf;
 
 import System.*;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.pdf.PdfWriter;
 
 
 public class Report {
@@ -36,20 +32,24 @@ public class Report {
     private JButton databaseButton;
     private JLabel roleLabel;
     private JPanel createPanel;
-    private JTextField reportTypeField;
-    private JTextField contentField;
-    private JTextField dateGeneratedField;
-    private JTextField startDateField;
-    private JTextField endDateField;
-    private JTextField noOfStaffField;
-    private JTextField noOfJobsField;
-    private JTextField noOfTasksField;
-    private JButton popupCreateButton;
-    private JButton popupCancelButton;
+    private JTextField createContentField;
+    private JTextField createDateGeneratedField;
+    private JTextField createStartDateField;
+    private JTextField createEndDateField;
+    private JTextField createNoOfStaffField;
+    private JTextField createNoOfJobsField;
+    private JTextField createNoOfTasksField;
+    private JButton createConfrimButton;
+    private JButton createCancelButton;
     private JScrollPane tablePanel;
     private JButton printButton;
+    private JComboBox createReportTypeComboBox;
     private ImageIcon bannerIcon;
     private Bapers system;
+
+
+
+    public String reportType;
     private List<String[]> reportData;
     private List<String[]> performanceReportData;
     private List<String[]> summaryReportData;
@@ -64,6 +64,12 @@ public class Report {
             "No. Staff",
             "No. Jobs",
             "No. Tasks"
+    };
+    private final String[] reportTypes = {
+            "Please select a type",
+            "Job Report",
+            "Summary Report",
+            "Performance Report"
     };
 
     public Report(Bapers system) {
@@ -107,73 +113,76 @@ public class Report {
 
         logoutButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) { system.changeScreen("logout", mainPanel); }
+            public void actionPerformed(ActionEvent e) {
+                system.changeScreen("logout", mainPanel);
+                removeMouseListeners();
+            }
         });
         jobsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 system.changeScreen("jobs", mainPanel);
+                removeMouseListeners();
             }
         });
         customerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 system.changeScreen("customers", mainPanel);
+                removeMouseListeners();
             }
         });
         paymentsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 system.changeScreen("payments", mainPanel);
+                removeMouseListeners();
             }
         });
         staffButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 system.changeScreen("staff", mainPanel);
+                removeMouseListeners();
             }
         });
         tasksButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 system.changeScreen("tasks", mainPanel);
+                removeMouseListeners();
             }
         });
         reportsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 system.changeScreen("reports", mainPanel);
+                removeMouseListeners();
             }
         });
         databaseButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 system.changeScreen("database", mainPanel);
+                removeMouseListeners();
             }
         });
 
-        logoutButton.addMouseListener(ApplicationWindow.mouseListener);
-        jobsButton.addMouseListener(ApplicationWindow.mouseListener);
-        customerButton.addMouseListener(ApplicationWindow.mouseListener);
-        paymentsButton.addMouseListener(ApplicationWindow.mouseListener);
-        staffButton.addMouseListener(ApplicationWindow.mouseListener);
-        tasksButton.addMouseListener(ApplicationWindow.mouseListener);
-        reportsButton.addMouseListener(ApplicationWindow.mouseListener);
-        databaseButton.addMouseListener(ApplicationWindow.mouseListener);
-        createButton.addMouseListener(ApplicationWindow.mouseListener);
-        editButton.addMouseListener(ApplicationWindow.mouseListener);
-        deleteButton.addMouseListener(ApplicationWindow.mouseListener);
+        addMouseListeners();
 
         ApplicationWindow.displayTable(table, reportData, tableColumns);
+
         createButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 tablePanel.setVisible(false);
                 buttonPanel.setVisible(false);
                 createPanel.setVisible(true);
+
+                resetCreatePanel();
             }
         });
-        popupCancelButton.addActionListener(new ActionListener() {
+        createCancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 tablePanel.setVisible(true);
@@ -186,12 +195,71 @@ public class Report {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    reportpdf.initialise();
+                    reportpdf.performancereport();
                     ProcessBuilder processBuilder = new ProcessBuilder("cmd.exe", "/C", "data/reports\\reportpdf.pdf");
                 } catch (Exception exception) {
                     exception.printStackTrace();
                 } }
         });
+
+        /* reportTypeField.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (reportTypeField.getText() == "Summary Performance Report"){
+                    reportpdf.performancereport();
+                } else if (reportTypeField.getText() == "Job Report "){
+
+                }
+            }
+        });
+
+         */
+        createReportTypeComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                createConfrimButton.setEnabled(createReportTypeComboBox.getSelectedIndex() != 0);
+            }
+        });
+    }
+
+    private void resetCreatePanel() {
+        createReportTypeComboBox.setModel(new DefaultComboBoxModel<>(reportTypes));
+
+        createContentField.setBorder(null);
+        createDateGeneratedField.setBorder(null);
+        createStartDateField.setBorder(null);
+        createEndDateField.setBorder(null);
+        createNoOfJobsField.setBorder(null);
+        createNoOfStaffField.setBorder(null);
+        createNoOfTasksField.setBorder(null);
+    }
+
+    private void addMouseListeners() {
+        logoutButton.addMouseListener(ApplicationWindow.mouseListener);
+        jobsButton.addMouseListener(ApplicationWindow.mouseListener);
+        customerButton.addMouseListener(ApplicationWindow.mouseListener);
+        paymentsButton.addMouseListener(ApplicationWindow.mouseListener);
+        staffButton.addMouseListener(ApplicationWindow.mouseListener);
+        tasksButton.addMouseListener(ApplicationWindow.mouseListener);
+        reportsButton.addMouseListener(ApplicationWindow.mouseListener);
+        databaseButton.addMouseListener(ApplicationWindow.mouseListener);
+        createButton.addMouseListener(ApplicationWindow.mouseListener);
+        editButton.addMouseListener(ApplicationWindow.mouseListener);
+        deleteButton.addMouseListener(ApplicationWindow.mouseListener);
+    }
+
+    private void removeMouseListeners() {
+        logoutButton.removeMouseListener(ApplicationWindow.mouseListener);
+        jobsButton.removeMouseListener(ApplicationWindow.mouseListener);
+        customerButton.removeMouseListener(ApplicationWindow.mouseListener);
+        paymentsButton.removeMouseListener(ApplicationWindow.mouseListener);
+        staffButton.removeMouseListener(ApplicationWindow.mouseListener);
+        tasksButton.removeMouseListener(ApplicationWindow.mouseListener);
+        reportsButton.removeMouseListener(ApplicationWindow.mouseListener);
+        databaseButton.removeMouseListener(ApplicationWindow.mouseListener);
+        createButton.removeMouseListener(ApplicationWindow.mouseListener);
+        editButton.removeMouseListener(ApplicationWindow.mouseListener);
+        deleteButton.removeMouseListener(ApplicationWindow.mouseListener);
     }
 
     public JPanel getMainPanel() {
