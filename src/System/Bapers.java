@@ -51,7 +51,7 @@ public class Bapers {
 
         //applicationWindow.add(login.getMainPanel());
 
-        //applicationWindow.add(report.getMainPanel());
+        applicationWindow.add(report.getMainPanel());
 
         //applicationWindow.add(staff.getMainPanel());
 
@@ -61,7 +61,7 @@ public class Bapers {
 
         //applicationWindow.add(job.getMainPanel());
 
-        applicationWindow.add(task.getMainPanel());
+        //applicationWindow.add(task.getMainPanel());
 
         //applicationWindow.add(availableTask.getMainPanel());
 
