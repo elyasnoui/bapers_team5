@@ -50,6 +50,10 @@ public class Report {
     private JButton printButton;
     private ImageIcon bannerIcon;
     private Bapers system;
+
+
+
+    public String reportType;
     private List<String[]> reportData;
     private List<String[]> performanceReportData;
     private List<String[]> summaryReportData;
@@ -186,12 +190,25 @@ public class Report {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    reportpdf.initialise();
+                    reportpdf.performancereport();
                     ProcessBuilder processBuilder = new ProcessBuilder("cmd.exe", "/C", "data/reports\\reportpdf.pdf");
                 } catch (Exception exception) {
                     exception.printStackTrace();
                 } }
         });
+
+        /* reportTypeField.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (reportTypeField.getText() == "Summary Performance Report"){
+                    reportpdf.performancereport();
+                } else if (reportTypeField.getText() == "Job Report "){
+
+                }
+            }
+        });
+
+         */
     }
 
     public JPanel getMainPanel() {
