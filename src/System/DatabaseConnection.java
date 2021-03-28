@@ -535,11 +535,11 @@ public class DatabaseConnection {
     }
 
     // Removing an existing task record
-    public static boolean removeTask(final int ID, final int jobID) throws SQLException {
+    public static boolean removeTask(final int ID) throws SQLException {
         Connection conn = Connect();
         assert conn != null;
         PreparedStatement statement = conn.prepareStatement(
-                "DELETE FROM task WHERE ID = "+ID+" AND jobID = "+jobID
+                "DELETE FROM task WHERE ID = "+ID
         );
         return executeStatement(statement);
     }
