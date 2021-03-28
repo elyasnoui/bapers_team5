@@ -187,23 +187,30 @@ public class Task {
         createButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                tablePanel.setVisible(false);
-                buttonPanel.setVisible(false);
-                jobLookupPanel.setVisible(true);
+                if (editPanel.isVisible()) editPanel.setVisible(false);
+                else { tablePanel.setVisible(false);
+                    buttonPanel.setVisible(false); }
 
+                createPanel.setVisible(true);
                 resetLookupPanel();
             }
         });
         editButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (taskData.get(table.getSelectedRow())[9].equals("No")) {
-                    tablePanel.setVisible(false);
-                    buttonPanel.setVisible(false);
-                    editPanel.setVisible(true);
-
-                    resetEditPanel();
-                } else JOptionPane.showMessageDialog(mainPanel, "Task is already completed.");
+                if (editPanel.isVisible()) editPanel.setVisible(false);
+                else {
+                    if (taskData.get(table.getSelectedRow())[9].equals("No")) {
+                        tablePanel.setVisible(false);
+                        buttonPanel.setVisible(false);
+                        editPanel.setVisible(true);
+                        resetEditPanel();
+                    } else {
+                        buttonPanel.setVisible(true);
+                        tablePanel.setVisible(true);
+                        JOptionPane.showMessageDialog(mainPanel, "Task is already completed.");
+                    }
+                }
             }
         });
         deleteButton.addActionListener(new ActionListener() {

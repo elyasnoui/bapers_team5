@@ -49,7 +49,6 @@ public class DatabaseConnection {
             e.printStackTrace();
             return -1;
         }
-
     }
 
     private static List<String[]> returnList(final PreparedStatement statement) throws SQLException {
