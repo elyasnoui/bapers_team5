@@ -94,22 +94,26 @@ public class Report {
                     if (rts[0].equals(rs[0])) {
                         switch (rs[1]) {
                             case "Individual Performance Report":
-                                temp = new String[] { rs[0], rs[1], rs[2], rs[3].substring(0,16), rs[4], rs[5], rts[1], "", "" };
+                                temp = new String[]{rs[0], rs[1], rs[2], rs[3].substring(0, 16), rs[4], rs[5], rts[1], "", ""};
                                 break;
                             case "Job Report":
-                                temp = new String[] { rs[0], rs[1], rs[2], rs[3].substring(0,16), rs[4], rs[5], "", rts[1], "" };
+                                temp = new String[]{rs[0], rs[1], rs[2], rs[3].substring(0, 16), rs[4], rs[5], "", rts[1], ""};
                                 break;
                             case "Summary Report":
-                                temp = new String[] { rs[0], rs[1], rs[2], rs[3].substring(0,16), rs[4], rs[5], "", "", rts[1] };
+                                temp = new String[]{rs[0], rs[1], rs[2], rs[3].substring(0, 16), rs[4], rs[5], "", "", rts[1]};
                                 break;
                             default:
-                                temp = new String[] { rs[0], "Invalid Report" };
+                                temp = new String[]{rs[0], "Invalid Report"};
                                 break;
-                        } reportData.set(i, temp);
-                    } i++;
+                        }
+                        reportData.set(i, temp);
+                    }
+                    i++;
                 }
             }
-        } catch (Exception e) { e.printStackTrace(); }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         bannerIcon = new ImageIcon("data/banners/report.png");
         bannerLabel.setIcon(bannerIcon);
@@ -202,24 +206,14 @@ public class Report {
                     ProcessBuilder processBuilder = new ProcessBuilder("cmd.exe", "/C", "data/reports\\reportpdf.pdf");
                 } catch (Exception exception) {
                     exception.printStackTrace();
-                } }
-        });
-
-        /* reportTypeField.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (reportTypeField.getText() == "Summary Performance Report"){
-                    reportpdf.performancereport();
-                } else if (reportTypeField.getText() == "Job Report "){
-
                 }
             }
         });
 
-         */
     }
 
-    private void resetCreatePanel() {
+
+    private void resetCreatePanel(){
         createReportTypeComboBox.setModel(new DefaultComboBoxModel<>(reportTypes));
 
         createContentField.setBorder(null);
