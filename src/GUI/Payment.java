@@ -84,8 +84,8 @@ public class Payment {
     };
 
     public Payment(Bapers system) {
-        this.system = system;
 
+        this.system = system;
         customerTable.setModel(new DefaultTableModel(null, customerColumns));
 
         try {
