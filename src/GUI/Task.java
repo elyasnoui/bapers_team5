@@ -227,19 +227,19 @@ public class Task {
             @Override
             public void mouseReleased(MouseEvent e) {
                 if (table.getSelectionModel().getSelectedItemsCount() == 1) {
-                    editButton.addMouseListener(ApplicationWindow.mouseListener);
+                    editButton.addMouseListener(ApplicationWindow.highlightListener);
                     editButton.setToolTipText(null);
-                    deleteButton.addMouseListener(ApplicationWindow.mouseListener);
+                    deleteButton.addMouseListener(ApplicationWindow.highlightListener);
                     deleteButton.setToolTipText(null);
                 } else if (table.getSelectionModel().getSelectedItemsCount() > 1) {
-                    editButton.removeMouseListener(ApplicationWindow.mouseListener);
+                    editButton.removeMouseListener(ApplicationWindow.highlightListener);
                     editButton.setToolTipText("Please select only 1 record");
-                    deleteButton.removeMouseListener(ApplicationWindow.mouseListener);
+                    deleteButton.removeMouseListener(ApplicationWindow.highlightListener);
                     deleteButton.setToolTipText("Please select only 1 record");
                 } else {
-                    editButton.removeMouseListener(ApplicationWindow.mouseListener);
+                    editButton.removeMouseListener(ApplicationWindow.highlightListener);
                     editButton.setToolTipText("Please select a record");
-                    deleteButton.removeMouseListener(ApplicationWindow.mouseListener);
+                    deleteButton.removeMouseListener(ApplicationWindow.highlightListener);
                     deleteButton.setToolTipText("Please select a record");
                 }
 
@@ -522,31 +522,31 @@ public class Task {
     }
 
     private void addMouseListeners() {
-        logoutButton.addMouseListener(ApplicationWindow.mouseListener);
-        jobsButton.addMouseListener(ApplicationWindow.mouseListener);
-        customerButton.addMouseListener(ApplicationWindow.mouseListener);
-        paymentsButton.addMouseListener(ApplicationWindow.mouseListener);
-        staffButton.addMouseListener(ApplicationWindow.mouseListener);
-        tasksButton.addMouseListener(ApplicationWindow.mouseListener);
-        reportsButton.addMouseListener(ApplicationWindow.mouseListener);
-        databaseButton.addMouseListener(ApplicationWindow.mouseListener);
-        availableTaskButton.addMouseListener(ApplicationWindow.mouseListener);
-        createButton.addMouseListener(ApplicationWindow.mouseListener);
+        logoutButton.addMouseListener(ApplicationWindow.highlightListener);
+        jobsButton.addMouseListener(ApplicationWindow.highlightListener);
+        customerButton.addMouseListener(ApplicationWindow.highlightListener);
+        paymentsButton.addMouseListener(ApplicationWindow.highlightListener);
+        staffButton.addMouseListener(ApplicationWindow.highlightListener);
+        tasksButton.addMouseListener(ApplicationWindow.highlightListener);
+        reportsButton.addMouseListener(ApplicationWindow.highlightListener);
+        databaseButton.addMouseListener(ApplicationWindow.highlightListener);
+        availableTaskButton.addMouseListener(ApplicationWindow.highlightListener);
+        createButton.addMouseListener(ApplicationWindow.highlightListener);
     }
 
     private void removeMouseListeners() {
-        logoutButton.removeMouseListener(ApplicationWindow.mouseListener);
-        jobsButton.removeMouseListener(ApplicationWindow.mouseListener);
-        customerButton.removeMouseListener(ApplicationWindow.mouseListener);
-        paymentsButton.removeMouseListener(ApplicationWindow.mouseListener);
-        staffButton.removeMouseListener(ApplicationWindow.mouseListener);
-        tasksButton.removeMouseListener(ApplicationWindow.mouseListener);
-        reportsButton.removeMouseListener(ApplicationWindow.mouseListener);
-        databaseButton.removeMouseListener(ApplicationWindow.mouseListener);
-        availableTaskButton.removeMouseListener(ApplicationWindow.mouseListener);
-        createButton.removeMouseListener(ApplicationWindow.mouseListener);
-        editButton.removeMouseListener(ApplicationWindow.mouseListener);
-        deleteButton.removeMouseListener(ApplicationWindow.mouseListener);
+        logoutButton.removeMouseListener(ApplicationWindow.highlightListener);
+        jobsButton.removeMouseListener(ApplicationWindow.highlightListener);
+        customerButton.removeMouseListener(ApplicationWindow.highlightListener);
+        paymentsButton.removeMouseListener(ApplicationWindow.highlightListener);
+        staffButton.removeMouseListener(ApplicationWindow.highlightListener);
+        tasksButton.removeMouseListener(ApplicationWindow.highlightListener);
+        reportsButton.removeMouseListener(ApplicationWindow.highlightListener);
+        databaseButton.removeMouseListener(ApplicationWindow.highlightListener);
+        availableTaskButton.removeMouseListener(ApplicationWindow.highlightListener);
+        createButton.removeMouseListener(ApplicationWindow.highlightListener);
+        editButton.removeMouseListener(ApplicationWindow.highlightListener);
+        deleteButton.removeMouseListener(ApplicationWindow.highlightListener);
     }
 
     public JPanel getMainPanel() {

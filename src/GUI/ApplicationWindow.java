@@ -2,14 +2,13 @@ package GUI;
 
 import System.DatabaseConnection;
 import javax.swing.*;
+import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,6 +20,15 @@ public class ApplicationWindow extends JFrame {
     public static String username;
     public static String role;
     private List<String[]> jobData;
+
+    public static final String nameRegex = "[A-Z]{1}[a-zA-z-]{1,34}";
+    public static final String contactNumberRegex = "[0][1-9][0-9]{9}";
+    public static final String addressLineRegex = "[A-Za-z0-9 ]{1,35}?";
+    public static final String cityRegex = "[A-Za-z ]{1,20}?";
+    public static final String postcodeRegex = "(([A-Z][0-9]{1,2})|(([A-Z][A-HJ-Y][0-9]{1,2})|(([A-Z][0-9][A-Z])|([A-Z][A-HJ-Y][0-9]?[A-Z])))) [0-9][A-Z]{2}";
+    public static final String emailRegex = "([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,4})";
+    public static final String discountRegex = "[1-9][0-9]?$|^100";
+    public static final LineBorder borderError = new LineBorder(Color.RED, 1);
 
     public ApplicationWindow(String title) {
         super(title);
@@ -64,7 +72,7 @@ public class ApplicationWindow extends JFrame {
         table.setModel(new DefaultTableModel(records.toArray(new Object[][] {}), tableColumns));
         table.setDefaultEditor(Object.class, null);
         TableColumnModel columns = table.getColumnModel();
-        columns.getColumn(2).setMinWidth(100);
+        //columns.getColumn(2).setMinWidth(100);
 
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
@@ -74,10 +82,10 @@ public class ApplicationWindow extends JFrame {
         //columns.getColumn(6).setCellRenderer(centerRenderer);
 
         //columns.getColumn(0).setMinWidth(30);
-        columns.getColumn(1).setMinWidth(30);
-        columns.getColumn(2).setMinWidth(30);
+        //columns.getColumn(1).setMinWidth(30);
+        //columns.getColumn(2).setMinWidth(30);
 
-        columns.getColumn(0).setPreferredWidth(10);
+        //columns.getColumn(0).setPreferredWidth(10);
     }
 
     public static String[] checkPrivileges() {
@@ -86,7 +94,7 @@ public class ApplicationWindow extends JFrame {
         return null;
     }
 
-    public static MouseListener mouseListener = new MouseAdapter()
+    public static MouseListener highlightListener = new MouseAdapter()
     {
         public void mouseEntered(java.awt.event.MouseEvent evt)
         {
@@ -113,43 +121,58 @@ public class ApplicationWindow extends JFrame {
         }
     };
 
-    public static KeyListener inputValidator = new KeyListener() {
-        @Override
-        public void keyTyped(KeyEvent e) {}
-
-        @Override
-        public void keyPressed(KeyEvent e) {}
-
+    public static KeyAdapter regexListener = new KeyAdapter() {
         @Override
         public void keyReleased(KeyEvent e) {
-            char c = e.getKeyChar();
-            JTextField textField = ((JTextField) e.getComponent());
-
-            switch (textField.getName()) {
-                // If the field allows only integers
-                case "dd": case "mm": case "yyyy": case "pound": case "penny":
-                    // Checks and removes non-integers
-                    if (((c < '0') || (c > '9')) && (c != KeyEvent.VK_BACK_SPACE))
-                        textField.setText(textField.getText().replaceAll("[^\\d]", ""));
-
-                    // Ensures dd and mm are limited to 2 characters and yyyy to 4
-                    // Also allows for money to be formatted correctly (5,2)
-                    switch (textField.getName()) {
-                        case "dd": case "mm": case "penny":
-                            if (textField.getText().length() > 2)
-                                textField.setText(textField.getText().substring(0, 2));
-                            break;
-                        case "yyyy":
-                            if (textField.getText().length() > 4)
-                                textField.setText(textField.getText().substring(0, 4));
-                            break;
-                        case "pound":
-                            if (textField.getText().length() > 5)
-                                textField.setText(textField.getText().substring(0, 5));
-                            break;
-                    }
-
-                    break;
+            if (e.getComponent() instanceof JTextField) {
+                boolean valid = false;
+                switch (e.getComponent().getName()) {
+                    case "name":
+                        if (((JTextField) e.getComponent()).getText().matches(nameRegex)) {
+                            ((JTextField) e.getComponent()).setToolTipText("Please enter a valid name, e.g. 'John'");
+                            valid = true;
+                        } else valid = false;
+                        break;
+                    case "contactNumber":
+                        if (((JTextField) e.getComponent()).getText().matches(contactNumberRegex)) {
+                            ((JTextField) e.getComponent()).setToolTipText("Please enter a valid UK number (11 digits)");
+                            valid = true;
+                        } else valid = false;
+                        break;
+                    case "addressLine": case "addressLineOpt":
+                        if (((JTextField) e.getComponent()).getText().matches(addressLineRegex)) {
+                            ((JTextField) e.getComponent()).setToolTipText("Please enter only letters and numbers");
+                            valid = true;
+                        } else valid = false;
+                        break;
+                    case "city":
+                        if (((JTextField) e.getComponent()).getText().matches(cityRegex)) {
+                            ((JTextField) e.getComponent()).setToolTipText("Please enter only letters");
+                            valid = true;
+                        } else valid = false;
+                        break;
+                    case "postcode":
+                        if (((JTextField) e.getComponent()).getText().matches(postcodeRegex)) {
+                            ((JTextField) e.getComponent()).setToolTipText("Please enter a valid UK postcode");
+                            valid = true;
+                        } else valid = false;
+                        break;
+                    case "email":
+                        if (((JTextField) e.getComponent()).getText().matches(emailRegex)) {
+                            ((JTextField) e.getComponent()).setToolTipText("Please enter in email format");
+                            valid = true;
+                        } else valid = false;
+                        break;
+                    case "discount":
+                        if (((JTextField) e.getComponent()).getText().matches(discountRegex)) {
+                            ((JTextField) e.getComponent()).setToolTipText("Please enter only digits (0,100)");
+                            valid = true;
+                        } else valid = false;
+                        break;
+                } if (valid || (e.getComponent().getName().equals("addressLineOpt") && ((JTextField) e.getComponent()).getText().isEmpty())) {
+                    ((JTextField) e.getComponent()).setBorder(null);
+                    ((JTextField) e.getComponent()).setToolTipText(null);
+                } else ((JTextField) e.getComponent()).setBorder(borderError);
             }
         }
     };
