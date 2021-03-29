@@ -42,7 +42,7 @@ public class Login {
             }
         });
 
-        loginButton.addMouseListener(ApplicationWindow.mouseListener);
+        loginButton.addMouseListener(ApplicationWindow.highlightListener);
     }
 
     public void signIn() {

@@ -140,19 +140,19 @@ public class Staff {
             }
         });
 
-        logoutButton.addMouseListener(ApplicationWindow.mouseListener);
-        jobsButton.addMouseListener(ApplicationWindow.mouseListener);
-        customerButton.addMouseListener(ApplicationWindow.mouseListener);
-        paymentsButton.addMouseListener(ApplicationWindow.mouseListener);
-        staffButton.addMouseListener(ApplicationWindow.mouseListener);
-        tasksButton.addMouseListener(ApplicationWindow.mouseListener);
-        reportsButton.addMouseListener(ApplicationWindow.mouseListener);
-        databaseButton.addMouseListener(ApplicationWindow.mouseListener);
-        createButton.addMouseListener(ApplicationWindow.mouseListener);
-        editButton.addMouseListener(ApplicationWindow.mouseListener);
-        deleteButton.addMouseListener(ApplicationWindow.mouseListener);
-        popupCreateButton.addMouseListener(ApplicationWindow.mouseListener);
-        popupCancelButton.addMouseListener(ApplicationWindow.mouseListener);
+        logoutButton.addMouseListener(ApplicationWindow.highlightListener);
+        jobsButton.addMouseListener(ApplicationWindow.highlightListener);
+        customerButton.addMouseListener(ApplicationWindow.highlightListener);
+        paymentsButton.addMouseListener(ApplicationWindow.highlightListener);
+        staffButton.addMouseListener(ApplicationWindow.highlightListener);
+        tasksButton.addMouseListener(ApplicationWindow.highlightListener);
+        reportsButton.addMouseListener(ApplicationWindow.highlightListener);
+        databaseButton.addMouseListener(ApplicationWindow.highlightListener);
+        createButton.addMouseListener(ApplicationWindow.highlightListener);
+        editButton.addMouseListener(ApplicationWindow.highlightListener);
+        deleteButton.addMouseListener(ApplicationWindow.highlightListener);
+        popupCreateButton.addMouseListener(ApplicationWindow.highlightListener);
+        popupCancelButton.addMouseListener(ApplicationWindow.highlightListener);
 
         deleteButton.addActionListener(new ActionListener() {
             @Override

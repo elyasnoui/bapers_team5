@@ -115,18 +115,18 @@ public class Database  {
             }
         });
 
-        logoutButton.addMouseListener(ApplicationWindow.mouseListener);
-        jobsButton.addMouseListener(ApplicationWindow.mouseListener);
-        customerButton.addMouseListener(ApplicationWindow.mouseListener);
-        paymentsButton.addMouseListener(ApplicationWindow.mouseListener);
-        staffButton.addMouseListener(ApplicationWindow.mouseListener);
-        tasksButton.addMouseListener(ApplicationWindow.mouseListener);
-        reportsButton.addMouseListener(ApplicationWindow.mouseListener);
-        databaseButton.addMouseListener(ApplicationWindow.mouseListener);
-        pathButton.addMouseListener(ApplicationWindow.mouseListener);
-        backupButton.addMouseListener(ApplicationWindow.mouseListener);
-        restoreButton.addMouseListener(ApplicationWindow.mouseListener);
-        browseButton2.addMouseListener(ApplicationWindow.mouseListener);
+        logoutButton.addMouseListener(ApplicationWindow.highlightListener);
+        jobsButton.addMouseListener(ApplicationWindow.highlightListener);
+        customerButton.addMouseListener(ApplicationWindow.highlightListener);
+        paymentsButton.addMouseListener(ApplicationWindow.highlightListener);
+        staffButton.addMouseListener(ApplicationWindow.highlightListener);
+        tasksButton.addMouseListener(ApplicationWindow.highlightListener);
+        reportsButton.addMouseListener(ApplicationWindow.highlightListener);
+        databaseButton.addMouseListener(ApplicationWindow.highlightListener);
+        pathButton.addMouseListener(ApplicationWindow.highlightListener);
+        backupButton.addMouseListener(ApplicationWindow.highlightListener);
+        restoreButton.addMouseListener(ApplicationWindow.highlightListener);
+        browseButton2.addMouseListener(ApplicationWindow.highlightListener);
 
         //ApplicationWindow.displayTable(table, taskData, tableColumns);
 

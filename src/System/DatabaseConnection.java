@@ -90,6 +90,16 @@ public class DatabaseConnection {
         else return null;
     }
 
+    public static List<String[]> getAvailableTasks() {
+        try {
+            Connection conn = Connect();
+            assert conn != null;
+            PreparedStatement statement = conn.prepareStatement("SELECT description FROM availableTask");
+            return returnList(statement);
+        } catch (SQLException exception) { exception.printStackTrace(); }
+        return null;
+    }
+
     public static List<String[]> getTechnicians() {
         try {
             Connection conn = Connect();
