@@ -2,6 +2,7 @@ package GUI;
 
 import System.*;
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -33,18 +34,28 @@ public class Payment {
     private JPanel createPanel;
     private JButton popupCancelButton;
     private JScrollPane tablePanel;
-    private JTextField firstNameField;
-    private JTextField lastNameField;
-    private JTextField contactNumberField;
-    private JTextField addressField;
-    private JTextField emailField;
-    private JTextField niField;
-    private JTextField workHoursField;
-    private JTextField usernameField;
-    private JTextField passwordField;
-    private JTextField roleField;
-    private JTextField privilegesField;
+    private JLabel tasksAddedLabel;
+    private JLabel customerIDLabel;
+    private JLabel customerIDValue;
+    private JPanel urgencyLabelPanel;
+    private JLabel deadlineValue;
+    private JPanel urgencyPanel;
+    private JButton firstTierButton;
+    private JButton secondTierButton;
+    private JButton thirdTierButton;
+    private JLabel isUrgentLabel;
     private JButton popupCreateButton;
+    private JButton removeButton;
+    private JButton lookupButton;
+    private JPanel customerLookupPanel;
+    private JTextField lastNameField;
+    private JTextField firstNameField;
+    private JScrollPane customerScrollPane;
+    private JTable customerTable;
+    private JButton lookupSelectButton;
+    private JButton lookupCancelButton;
+    private JButton lookupCreateButton;
+    private JLabel amountLabel;
     private List<String[]> paymentData;
     private List<String[]> cardData;
     private List<String[]> cashData;
@@ -63,9 +74,19 @@ public class Payment {
             "Cash Paid",
             "Change Given"
     };
+    private final String[] customerColumns = {
+            "ID",
+            "First Name",
+            "Surname",
+            "Contact Number",
+            "Address",
+            "Email"
+    };
 
     public Payment(Bapers system) {
         this.system = system;
+
+        customerTable.setModel(new DefaultTableModel(null, customerColumns));
 
         try {
             paymentData = DatabaseConnection.getData("payment");
@@ -176,6 +197,13 @@ public class Payment {
                 tablePanel.setVisible(true);
                 buttonPanel.setVisible(true);
                 createPanel.setVisible(false);
+            }
+        });
+        lookupButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                createPanel.setVisible(false);
+                customerLookupPanel.setVisible(true);
             }
         });
     }
