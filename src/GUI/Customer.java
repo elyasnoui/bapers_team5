@@ -3,8 +3,9 @@ package GUI;
 import System.*;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.Arrays;
 import java.util.List;
 
 public class Customer extends JFrame{
@@ -33,7 +34,7 @@ public class Customer extends JFrame{
     private JTextField createFirstNameField;
     private JTextField createLastNameField;
     private JTextField createContactNumberField;
-    private JTextField createAddressField;
+    private JTextField createAddressFirstField;
     private JTextField createEmailField;
     private JTextField createDiscountRateField;
     private JButton createConfirmButton;
@@ -45,6 +46,12 @@ public class Customer extends JFrame{
     private JLabel createAgreedDiscountLabel;
     private JLabel createDiscountRateLabel;
     private JComboBox createAgreedDiscountComboBox;
+    private JTextField createPostcodeField;
+    private JTextField createAddressSecondField;
+    private JTextField createCityField;
+    private JPanel variableDiscountPanel;
+    private JTable variableDiscountTable;
+    private JScrollPane variableScrollPane;
     private ImageIcon checkBoxIcon;
     private ImageIcon selectedCheckBoxIcon;
 
@@ -52,9 +59,8 @@ public class Customer extends JFrame{
 
     private List<String[]> customerData;
     private List<String[]> valuedCustomerData;
-
-    private final String nameRegex = "[A-Z]{1}[a-zA-z-]{1,34}";
-    //private final String
+    private List<String[]> variableDiscountData;
+    private List<String[]> discounts;
 
     private final String[] tableColumns = {
             "ID",
@@ -70,6 +76,10 @@ public class Customer extends JFrame{
             "Fixed Discount",
             "Flexible Discount",
             "Variable Discount"
+    };
+    private final String[] variableDiscountColumns = {
+            "Task",
+            "Discount"
     };
 
     public Customer(Bapers system) {
@@ -174,11 +184,12 @@ public class Customer extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 createAgreedDiscountLabel.setVisible(createVcCheckBox.isSelected());
                 createAgreedDiscountComboBox.setVisible(createVcCheckBox.isSelected());
-
-                if (createVcCheckBox.isSelected() && createAgreedDiscountComboBox.getSelectedIndex() == 0) {
-                    createDiscountRateLabel.setVisible(true);
-                    createDiscountRateField.setVisible(true);
-                }
+                createDiscountRateLabel.setVisible(
+                        createVcCheckBox.isSelected() && createAgreedDiscountComboBox.getSelectedIndex() == 0
+                );
+                createDiscountRateField.setVisible(
+                        createVcCheckBox.isSelected() && createAgreedDiscountComboBox.getSelectedIndex() == 0
+                );
             }
         });
         createCancelButton.addActionListener(new ActionListener() {
@@ -187,6 +198,8 @@ public class Customer extends JFrame{
                 createPanel.setVisible(false);
                 buttonPanel.setVisible(true);
                 tablePanel.setVisible(true);
+
+                removeCreateListeners();
             }
         });
         createConfirmButton.addActionListener(new ActionListener() {
@@ -214,8 +227,113 @@ public class Customer extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 createDiscountRateLabel.setVisible(createAgreedDiscountComboBox.getSelectedIndex() == 0);
                 createDiscountRateField.setVisible(createAgreedDiscountComboBox.getSelectedIndex() == 0);
+
+                if (createAgreedDiscountComboBox.getSelectedIndex() == 2) {
+                    createPanel.setVisible(false);
+                    variableDiscountPanel.setVisible(true);
+                    resetVariableDiscountPanel();
+                }
             }
         });
+    }
+
+    private void resetVariableDiscountPanel() {
+        variableDiscountData = DatabaseConnection.getAvailableTasks();
+        assert variableDiscountData != null;
+        int i = 0;
+        for (String[] d : variableDiscountData) {
+            String[] temp = { d[0], null };
+            variableDiscountData.set(i, temp);
+            i++;
+        }
+
+        ApplicationWindow.displayTable(variableDiscountTable, variableDiscountData, variableDiscountColumns);
+        variableDiscountTable.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(new JTextField()));
+
+        /*for (int row = 0; row < variableDiscountTable.getRowCount(); row++) {
+            variableDiscountTable.getColumnModel().getColumn(1).getCellEditor().getTableCellEditorComponent()
+        }*/
+    }
+
+    private boolean validatePanel
+            (JCheckBox vcCheckBox, JTextField firstNameField, JTextField lastNameField, JTextField contactNumberField,
+             JTextField addressFirstField, JTextField addressSecondField, JTextField cityField, JTextField postcodeField,
+             JTextField emailField, JComboBox agreedDiscountComboBox, JTextField discountRateField) {
+
+        if (!firstNameField.getText().matches(ApplicationWindow.nameRegex)) {
+            firstNameField.setBorder(ApplicationWindow.borderError);
+            firstNameField.setToolTipText("Please enter a valid name, e.g. 'John'");
+        } else {
+            firstNameField.setBorder(null);
+            firstNameField.setToolTipText(null);
+        }
+
+        if (!lastNameField.getText().matches(ApplicationWindow.nameRegex)) {
+            lastNameField.setBorder(ApplicationWindow.borderError);
+            lastNameField.setToolTipText("Please enter a valid name, e.g. 'John'");
+        } else {
+            lastNameField.setBorder(null);
+            lastNameField.setToolTipText(null);
+        }
+
+        if (!contactNumberField.getText().matches(ApplicationWindow.contactNumberRegex)) {
+            contactNumberField.setBorder(ApplicationWindow.borderError);
+            contactNumberField.setToolTipText("Please enter a valid UK number (11 digits)");
+        } else {
+            contactNumberField.setBorder(null);
+            contactNumberField.setToolTipText(null);
+        }
+
+        if (!addressFirstField.getText().matches(ApplicationWindow.addressLineRegex)) {
+            addressFirstField.setBorder(ApplicationWindow.borderError);
+            addressFirstField.setToolTipText("Please enter only letters and numbers");
+        } else {
+            addressFirstField.setBorder(null);
+            addressFirstField.setToolTipText(null);
+        }
+
+        if (!addressSecondField.getText().isEmpty() && !addressSecondField.getText().matches(ApplicationWindow.addressLineRegex)) {
+            addressSecondField.setBorder(ApplicationWindow.borderError);
+            addressSecondField.setToolTipText("Please enter only letters and numbers");
+        } else {
+            addressSecondField.setBorder(null);
+            addressSecondField.setToolTipText(null);
+        }
+
+        if (!cityField.getText().matches(ApplicationWindow.cityRegex)) {
+            cityField.setBorder(ApplicationWindow.borderError);
+            cityField.setToolTipText("Please enter only letters");
+        } else {
+            cityField.setBorder(null);
+            cityField.setToolTipText(null);
+        }
+
+        if (!postcodeField.getText().matches(ApplicationWindow.postcodeRegex)) {
+            postcodeField.setBorder(ApplicationWindow.borderError);
+            postcodeField.setToolTipText("Please enter a valid UK postcode");
+        } else {
+            postcodeField.setBorder(null);
+            postcodeField.setToolTipText(null);
+        }
+
+        if (!emailField.getText().matches(ApplicationWindow.emailRegex)) {
+            emailField.setBorder(ApplicationWindow.borderError);
+            emailField.setToolTipText("Please enter in email format");
+        } else {
+            emailField.setBorder(null);
+            emailField.setToolTipText(null);
+        }
+
+        if ((vcCheckBox.isSelected() && agreedDiscountComboBox.getSelectedIndex() == 0)
+                && !discountRateField.getText().matches(ApplicationWindow.discountRegex)) {
+            discountRateField.setBorder(ApplicationWindow.borderError);
+            discountRateField.setToolTipText("Please enter only digits (0,100)");
+        } else {
+            discountRateField.setBorder(null);
+            discountRateField.setToolTipText(null);
+        }
+
+        return false;
     }
 
     private void resetCreatePanel() {
@@ -225,37 +343,66 @@ public class Customer extends JFrame{
         createFirstNameField.setBorder(null);
         createLastNameField.setBorder(null);
         createContactNumberField.setBorder(null);
-        createAddressField.setBorder(null);
+        createAddressFirstField.setBorder(null);
+        createAddressSecondField.setBorder(null);
+        createCityField.setBorder(null);
+        createPostcodeField.setBorder(null);
         createEmailField.setBorder(null);
         createDiscountRateField.setBorder(null);
+
+        addCreateListeners();
+    }
+
+    private void addCreateListeners() {
+        createFirstNameField.addKeyListener(ApplicationWindow.regexListener);
+        createLastNameField.addKeyListener(ApplicationWindow.regexListener);
+        createContactNumberField.addKeyListener(ApplicationWindow.regexListener);
+        createAddressFirstField.addKeyListener(ApplicationWindow.regexListener);
+        createEmailField.addKeyListener(ApplicationWindow.regexListener);
+        createDiscountRateField.addKeyListener(ApplicationWindow.regexListener);
+        createPostcodeField.addKeyListener(ApplicationWindow.regexListener);
+        createAddressSecondField.addKeyListener(ApplicationWindow.regexListener);
+        createCityField.addKeyListener(ApplicationWindow.regexListener);
+    }
+
+    private void removeCreateListeners() {
+        createFirstNameField.removeKeyListener(ApplicationWindow.regexListener);
+        createLastNameField.removeKeyListener(ApplicationWindow.regexListener);
+        createContactNumberField.removeKeyListener(ApplicationWindow.regexListener);
+        createAddressFirstField.removeKeyListener(ApplicationWindow.regexListener);
+        createEmailField.removeKeyListener(ApplicationWindow.regexListener);
+        createDiscountRateField.removeKeyListener(ApplicationWindow.regexListener);
+        createPostcodeField.removeKeyListener(ApplicationWindow.regexListener);
+        createAddressSecondField.removeKeyListener(ApplicationWindow.regexListener);
+        createCityField.removeKeyListener(ApplicationWindow.regexListener);
     }
 
     private void addMouseListeners() {
-        logoutButton.addMouseListener(ApplicationWindow.mouseListener);
-        jobsButton.addMouseListener(ApplicationWindow.mouseListener);
-        customerButton.addMouseListener(ApplicationWindow.mouseListener);
-        paymentsButton.addMouseListener(ApplicationWindow.mouseListener);
-        staffButton.addMouseListener(ApplicationWindow.mouseListener);
-        tasksButton.addMouseListener(ApplicationWindow.mouseListener);
-        reportsButton.addMouseListener(ApplicationWindow.mouseListener);
-        databaseButton.addMouseListener(ApplicationWindow.mouseListener);
-        createButton.addMouseListener(ApplicationWindow.mouseListener);
-        editButton.addMouseListener(ApplicationWindow.mouseListener);
-        deleteButton.addMouseListener(ApplicationWindow.mouseListener);
+        logoutButton.addMouseListener(ApplicationWindow.highlightListener);
+        jobsButton.addMouseListener(ApplicationWindow.highlightListener);
+        customerButton.addMouseListener(ApplicationWindow.highlightListener);
+        paymentsButton.addMouseListener(ApplicationWindow.highlightListener);
+        staffButton.addMouseListener(ApplicationWindow.highlightListener);
+        tasksButton.addMouseListener(ApplicationWindow.highlightListener);
+        reportsButton.addMouseListener(ApplicationWindow.highlightListener);
+        databaseButton.addMouseListener(ApplicationWindow.highlightListener);
+        createButton.addMouseListener(ApplicationWindow.highlightListener);
+        editButton.addMouseListener(ApplicationWindow.highlightListener);
+        deleteButton.addMouseListener(ApplicationWindow.highlightListener);
     }
 
     private void removeMouseListeners() {
-        logoutButton.removeMouseListener(ApplicationWindow.mouseListener);
-        jobsButton.removeMouseListener(ApplicationWindow.mouseListener);
-        customerButton.removeMouseListener(ApplicationWindow.mouseListener);
-        paymentsButton.removeMouseListener(ApplicationWindow.mouseListener);
-        staffButton.removeMouseListener(ApplicationWindow.mouseListener);
-        tasksButton.removeMouseListener(ApplicationWindow.mouseListener);
-        reportsButton.removeMouseListener(ApplicationWindow.mouseListener);
-        databaseButton.removeMouseListener(ApplicationWindow.mouseListener);
-        createButton.removeMouseListener(ApplicationWindow.mouseListener);
-        editButton.removeMouseListener(ApplicationWindow.mouseListener);
-        deleteButton.removeMouseListener(ApplicationWindow.mouseListener);
+        logoutButton.removeMouseListener(ApplicationWindow.highlightListener);
+        jobsButton.removeMouseListener(ApplicationWindow.highlightListener);
+        customerButton.removeMouseListener(ApplicationWindow.highlightListener);
+        paymentsButton.removeMouseListener(ApplicationWindow.highlightListener);
+        staffButton.removeMouseListener(ApplicationWindow.highlightListener);
+        tasksButton.removeMouseListener(ApplicationWindow.highlightListener);
+        reportsButton.removeMouseListener(ApplicationWindow.highlightListener);
+        databaseButton.removeMouseListener(ApplicationWindow.highlightListener);
+        createButton.removeMouseListener(ApplicationWindow.highlightListener);
+        editButton.removeMouseListener(ApplicationWindow.highlightListener);
+        deleteButton.removeMouseListener(ApplicationWindow.highlightListener);
     }
 
     public JPanel getPanel() {
