@@ -3,6 +3,8 @@ package GUI;
 import System.*;
 
 import javax.swing.*;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Arrays;
@@ -52,8 +54,15 @@ public class Customer extends JFrame{
     private JPanel variableDiscountPanel;
     private JTable variableDiscountTable;
     private JScrollPane variableScrollPane;
+    private JButton variableAssignButton;
+    private JButton variableCancelButton;
+    private JButton createVariableChangeButton;
+    private JLabel createVariableDiscountsLabel;
     private ImageIcon checkBoxIcon;
     private ImageIcon selectedCheckBoxIcon;
+    private boolean createPanelActive = false;
+    private boolean editPanelActive = false;
+    private boolean variableDiscountsSelected = false;
 
     private boolean isError[] = new boolean[7];
 
@@ -228,11 +237,80 @@ public class Customer extends JFrame{
                 createDiscountRateLabel.setVisible(createAgreedDiscountComboBox.getSelectedIndex() == 0);
                 createDiscountRateField.setVisible(createAgreedDiscountComboBox.getSelectedIndex() == 0);
 
-                if (createAgreedDiscountComboBox.getSelectedIndex() == 2) {
+                if (!variableDiscountsSelected && createAgreedDiscountComboBox.getSelectedIndex() == 2) {
                     createPanel.setVisible(false);
                     variableDiscountPanel.setVisible(true);
                     resetVariableDiscountPanel();
                 }
+                createVariableDiscountsLabel.setVisible(
+                        variableDiscountsSelected && createAgreedDiscountComboBox.getSelectedIndex() == 2
+                );
+                createVariableChangeButton.setVisible(
+                        variableDiscountsSelected && createAgreedDiscountComboBox.getSelectedIndex() == 2
+                );
+            }
+        });
+        variableAssignButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                boolean errorDetected = false;
+                for (int row = 0; row<variableDiscountTable.getRowCount(); row++) {
+                    if (variableDiscountTable.getModel().getValueAt(row, 1) != null) {
+                        String value = variableDiscountTable.getModel().getValueAt(row, 1).toString();
+                        if (!value.matches(ApplicationWindow.discountRegex)) {
+                            JOptionPane.showMessageDialog(mainPanel, "Please enter only valid digits (0-100)");
+                            errorDetected = true;
+                            break;
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(mainPanel, "Please enter only valid digits (0-100)");
+                        errorDetected = true;
+                        break;
+                    }
+                }
+
+                if (!errorDetected) {
+                    variableDiscountsSelected = true;
+                    for (int row = 0; row<variableDiscountTable.getRowCount(); row++) {
+                        String value = variableDiscountTable.getModel().getValueAt(row, 1).toString();
+                        String[] temp = { variableDiscountData.get(row)[0], value };
+                        variableDiscountData.set(row, temp);
+                    }
+
+                    variableDiscountPanel.setVisible(false);
+                    if (createPanelActive) {
+                        createPanel.setVisible(true);
+                        createVariableDiscountsLabel.setVisible(true);
+                        createVariableChangeButton.setVisible(true);
+                    }
+                    /*else if (editPanelActive) {
+                        editPanel.setVisible(true);
+                    }*/
+                }
+            }
+        });
+        createVariableChangeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                createPanel.setVisible(false);
+                variableDiscountPanel.setVisible(true);
+            }
+        });
+        variableCancelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!variableDiscountsSelected) {
+                    if (createPanelActive)
+                        createAgreedDiscountComboBox.setSelectedIndex(0);
+                    /*else if (editPanelActive)
+                        editAgreedDiscountComboBox.setSelectedIndex(0);*/
+                }
+
+                variableDiscountPanel.setVisible(false);
+                if (createPanelActive)
+                    createPanel.setVisible(true);
+                /*else if (editPanelActive)
+                    editPanel.setVisible(true);*/
             }
         });
     }
@@ -249,10 +327,6 @@ public class Customer extends JFrame{
 
         ApplicationWindow.displayTable(variableDiscountTable, variableDiscountData, variableDiscountColumns);
         variableDiscountTable.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(new JTextField()));
-
-        /*for (int row = 0; row < variableDiscountTable.getRowCount(); row++) {
-            variableDiscountTable.getColumnModel().getColumn(1).getCellEditor().getTableCellEditorComponent()
-        }*/
     }
 
     private boolean validatePanel
@@ -349,6 +423,10 @@ public class Customer extends JFrame{
         createPostcodeField.setBorder(null);
         createEmailField.setBorder(null);
         createDiscountRateField.setBorder(null);
+        createAgreedDiscountComboBox.setSelectedIndex(0);
+        createVariableDiscountsLabel.setVisible(false);
+        createVariableChangeButton.setVisible(false);
+        variableDiscountsSelected = false;
 
         addCreateListeners();
     }
@@ -363,6 +441,7 @@ public class Customer extends JFrame{
         createPostcodeField.addKeyListener(ApplicationWindow.regexListener);
         createAddressSecondField.addKeyListener(ApplicationWindow.regexListener);
         createCityField.addKeyListener(ApplicationWindow.regexListener);
+        createPanelActive = true;
     }
 
     private void removeCreateListeners() {
@@ -375,6 +454,7 @@ public class Customer extends JFrame{
         createPostcodeField.removeKeyListener(ApplicationWindow.regexListener);
         createAddressSecondField.removeKeyListener(ApplicationWindow.regexListener);
         createCityField.removeKeyListener(ApplicationWindow.regexListener);
+        createPanelActive = false;
     }
 
     private void addMouseListeners() {
