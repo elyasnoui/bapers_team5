@@ -50,6 +50,8 @@ public class Report {
 
 
     public String reportType;
+    private List<String[]> jobData;
+    private List<String[]> taskData;
     private List<String[]> reportData;
     private List<String[]> performanceReportData;
     private List<String[]> summaryReportData;
@@ -195,8 +197,9 @@ public class Report {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    reportpdf.performanceReport();
+                    //reportpdf.performanceReport();
                     ProcessBuilder processBuilder = new ProcessBuilder("cmd.exe", "/C", "data/reports\\reportpdf.pdf");
+
                 } catch (Exception exception) {
                     exception.printStackTrace();
                 } }
