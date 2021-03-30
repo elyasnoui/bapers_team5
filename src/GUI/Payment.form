@@ -518,7 +518,7 @@
                         </properties>
                         <border type="none"/>
                         <children>
-                          <component id="2ce80" class="javax.swing.JLabel" binding="amountLabel">
+                          <component id="2ce80" class="javax.swing.JLabel" binding="jobIDLabel">
                             <constraints>
                               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
                                 <preferred-size width="249" height="19"/>
@@ -542,7 +542,7 @@
                         </properties>
                         <border type="none"/>
                         <children>
-                          <component id="ec5f7" class="javax.swing.JLabel">
+                          <component id="ec5f7" class="javax.swing.JLabel" binding="lastNameLabel">
                             <constraints>
                               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
                                 <preferred-size width="249" height="19"/>
@@ -590,7 +590,7 @@
                         </properties>
                         <border type="none"/>
                         <children>
-                          <component id="1dc97" class="javax.swing.JLabel">
+                          <component id="1dc97" class="javax.swing.JLabel" binding="firstNameLabel">
                             <constraints>
                               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
                                 <preferred-size width="249" height="19"/>
@@ -841,7 +841,7 @@
                         </properties>
                         <border type="none"/>
                         <children>
-                          <component id="e4ed4" class="javax.swing.JLabel">
+                          <component id="e4ed4" class="javax.swing.JLabel" binding="amountDueLabel">
                             <constraints>
                               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
                                 <preferred-size width="249" height="19"/>
@@ -913,7 +913,7 @@
                         </properties>
                         <border type="none"/>
                         <children>
-                          <component id="5b2dc" class="javax.swing.JLabel">
+                          <component id="5b2dc" class="javax.swing.JLabel" binding="discountLabel">
                             <constraints>
                               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
                                 <preferred-size width="249" height="19"/>
@@ -937,7 +937,7 @@
                         </properties>
                         <border type="none"/>
                         <children>
-                          <component id="f84da" class="javax.swing.JLabel">
+                          <component id="f84da" class="javax.swing.JLabel" binding="amountMinusLabel">
                             <constraints>
                               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false">
                                 <preferred-size width="249" height="19"/>
@@ -1104,7 +1104,7 @@
               </grid>
             </constraints>
             <properties>
-              <visible value="false"/>
+              <visible value="true"/>
             </properties>
             <border type="none"/>
             <children>

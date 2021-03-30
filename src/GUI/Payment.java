@@ -56,7 +56,12 @@ public class Payment {
     private JTable customerTable;
     private JButton lookupSelectButton;
     private JButton lookupCancelButton;
-    private JLabel amountLabel;
+    private JLabel jobIDLabel;
+    private JLabel firstNameLabel;
+    private JLabel lastNameLabel;
+    private JLabel amountDueLabel;
+    private JLabel discountLabel;
+    private JLabel amountMinusLabel;
     private List<String[]> paymentData;
     private List<String[]> paymentData1;
     private List<String[]> cardData;
@@ -77,6 +82,8 @@ public class Payment {
             "Change Given"
     };
     private final String[] customerColumns = {
+            "firstName",
+            "lastName",
             "jobID",
             "amountDue",
             "isPaid",
@@ -240,8 +247,14 @@ public class Payment {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (!customerTable.getSelectionModel().isSelectionEmpty()) {
-                    String ID = paymentData.get(customerTable.getSelectedRow())[0];
-                    customerIDValue.setText(ID);
+                    String firstName = paymentData.get(customerTable.getSelectedRow())[0];
+                    String lastName = paymentData.get(customerTable.getSelectedRow())[1];
+                    String jobID = paymentData.get(customerTable.getSelectedRow())[2];
+                    String amountDue = paymentData.get(customerTable.getSelectedRow())[2];
+                    firstNameLabel.setText(firstName);
+                    lastNameLabel.setText(lastName);
+                    jobIDLabel.setText(jobID);
+                    amountDueLabel.setText(amountDue);
                     customerLookupPanel.setVisible(false);
                     createPanel.setVisible(true);
                 }
