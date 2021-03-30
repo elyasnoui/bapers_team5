@@ -115,7 +115,7 @@ public class reportpdf {
                 "For report printing soon",
                 smallBold));
 
-        addEmptyLine(preface, 8);
+        addEmptyLine(preface, 3);
 
         preface.add(new Paragraph(
                 "Need to now add report to this",
@@ -123,7 +123,7 @@ public class reportpdf {
 
         document.add(preface);
         // Start a new page
-        document.newPage();
+        //document.newPage();
     }
 
     public static void addperformanceContent(Document document) throws DocumentException {
