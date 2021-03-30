@@ -329,6 +329,7 @@
                     <properties>
                       <background color="-11774858"/>
                       <borderPainted value="false"/>
+                      <enabled value="false"/>
                       <focusable value="false"/>
                       <foreground color="-1"/>
                       <text value="Delete"/>
@@ -345,6 +346,7 @@
                     <properties>
                       <background color="-11774858"/>
                       <borderPainted value="false"/>
+                      <enabled value="false"/>
                       <focusable value="false"/>
                       <foreground color="-1"/>
                       <text value="Edit"/>
@@ -392,6 +394,7 @@
                     <properties>
                       <background color="-11774858"/>
                       <borderPainted value="false"/>
+                      <enabled value="false"/>
                       <focusable value="false"/>
                       <foreground color="-1"/>
                       <text value="Print"/>
@@ -430,7 +433,7 @@
               </grid>
             </constraints>
             <properties>
-              <visible value="true"/>
+              <visible value="false"/>
             </properties>
             <border type="none"/>
             <children>
@@ -866,7 +869,7 @@
                     <properties>
                       <font name="Halis GR Bold" size="20" style="1"/>
                       <foreground color="-1"/>
-                      <text value="Create Staff"/>
+                      <text value="Create Report"/>
                     </properties>
                   </component>
                 </children>

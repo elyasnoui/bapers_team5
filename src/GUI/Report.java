@@ -3,6 +3,12 @@ package GUI;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -47,7 +53,8 @@ public class Report {
     private ImageIcon bannerIcon;
     private Bapers system;
 
-
+    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+    SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
 
     public String reportType;
     private List<String[]> jobData;
@@ -92,7 +99,7 @@ public class Report {
                 for (String[] rs : reportData) {
                     if (rts[0].equals(rs[0])) {
                         switch (rs[1]) {
-                            case "Individual Performance Report":
+                            case "Performance Report":
                                 temp = new String[] { rs[0], rs[1], rs[2], rs[3].substring(0,16), rs[4], rs[5], rts[1], "", "" };
                                 break;
                             case "Job Report":
@@ -174,6 +181,39 @@ public class Report {
 
         ApplicationWindow.displayTable(table, reportData, tableColumns);
 
+        // Table listener
+        table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if (table.getSelectionModel().getSelectedItemsCount() == 1) {
+                    editButton.addMouseListener(ApplicationWindow.highlightListener);
+                    editButton.setToolTipText(null);
+                    deleteButton.addMouseListener(ApplicationWindow.highlightListener);
+                    deleteButton.setToolTipText(null);
+                    printButton.addMouseListener(ApplicationWindow.highlightListener);
+                    printButton.setToolTipText(null);
+                } else if (table.getSelectionModel().getSelectedItemsCount() > 1) {
+                    editButton.removeMouseListener(ApplicationWindow.highlightListener);
+                    editButton.setToolTipText("Please select only 1 record");
+                    deleteButton.removeMouseListener(ApplicationWindow.highlightListener);
+                    deleteButton.setToolTipText("Please select only 1 record");
+                    printButton.removeMouseListener(ApplicationWindow.highlightListener);
+                    printButton.setToolTipText("Please select only 1 record");
+                } else {
+                    editButton.removeMouseListener(ApplicationWindow.highlightListener);
+                    editButton.setToolTipText("Please select a record");
+                    deleteButton.removeMouseListener(ApplicationWindow.highlightListener);
+                    deleteButton.setToolTipText("Please select a record");
+                    printButton.removeMouseListener(ApplicationWindow.highlightListener);
+                    printButton.setToolTipText("Please select a record");
+                }
+
+                editButton.setEnabled(table.getSelectionModel().getSelectedItemsCount() == 1);
+                deleteButton.setEnabled(table.getSelectionModel().getSelectedItemsCount() == 1);
+                printButton.setEnabled(table.getSelectionModel().getSelectedItemsCount() == 1);
+            }
+        });
+
         createButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -196,13 +236,57 @@ public class Report {
         printButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
+
+                int id = Integer.parseInt(String.valueOf(table.getModel().getValueAt(table.getSelectedRow(), 0)));
+                String[] rowData = DatabaseConnection.getRowBySingleID("report", id);
+                assert rowData != null;
+                switch (rowData[1]) {
+                    case "Performance Report":
+                        jobData = DatabaseConnection.getJobFromDates(rowData[4], rowData[5]);
+                        assert jobData != null;
+                        List<String[]> taskData = new ArrayList<>();
+                        List<String[]> temp;
+                        for (String[] jd : jobData) {
+                            temp = DatabaseConnection.getTaskFromJobID(Integer.parseInt(jd[0]));
+                            assert temp != null;
+                            for (String[] t : temp) {
+                                taskData.add(t);
+                            }
+                        }
+
+                        List<String[]> performanceReportData = new ArrayList<>();
+                        for (String[] t : taskData) {
+                            String name = DatabaseConnection.getStaffName(Integer.parseInt(t[8]));
+                            String ID = t[0];
+                            String department = t[4];
+                            String date = t[5].substring(0,10);
+                            String startTime = t[5].substring(11,16);
+                            String timeTaken = t[6];
+                            String[] row = { name, ID, department, date, startTime, timeTaken };
+                            performanceReportData.add(row);
+                        }
+
+
+                        break;
+                    case "Summary Report":
+
+
+                        break;
+                    case "Job Report":
+
+
+                        break;
+                }
+
+
+                /*try {
                     //reportpdf.performanceReport();
                     ProcessBuilder processBuilder = new ProcessBuilder("cmd.exe", "/C", "data/reports\\reportpdf.pdf");
 
                 } catch (Exception exception) {
                     exception.printStackTrace();
-                } }
+                } */
+            }
         });
 
 

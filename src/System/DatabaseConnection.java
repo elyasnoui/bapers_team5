@@ -122,7 +122,7 @@ public class DatabaseConnection {
                     "WHERE ID = " +ID);
             ResultSet res = statement.executeQuery();
             if (res.next()){
-                return res.getString("firstName")+ ", " + res.getString("lastName");
+                return res.getString("firstName")+ " " + res.getString("lastName");
             }
         } catch (SQLException exception) { exception.printStackTrace(); }
         return null;
@@ -140,18 +140,38 @@ public class DatabaseConnection {
         return null;
     }
 
-    public static List<String[]> searchReport(final String fromDate, final String toDate, final String reportType){
+    public static List<String[]> getTaskFromJobID(int jobID) {
         try {
             Connection conn = Connect();
             assert conn != null;
-            PreparedStatement statement = conn.prepareStatement("SELECT firstName, surname FROM staff AND date FROM task"
-                    + "WHERE (task.date BETWEEN '" + fromDate + "' AND '" + toDate + "')"
-            );
+            PreparedStatement statement = conn.prepareStatement("SELECT * FROM task " +
+                    "WHERE jobID = '"+jobID+"'");
             return returnList(statement);
-        } catch (SQLException exception){exception.printStackTrace();}
+        } catch (SQLException exception) { exception.printStackTrace(); }
         return null;
-
     }
+
+    public static List<String[]> getJobFromDates(final String fromDate, final String toDate) {
+        try {
+            Connection conn = Connect();
+            assert conn != null;
+            /*PreparedStatement statement = conn.prepareStatement("SELECT * FROM job WHERE startDate > "+fromDate+" " +
+                    "AND endDate < "+toDate);*/
+            PreparedStatement statement = conn.prepareStatement("SELECT *" +
+                    "FROM job " +
+                    "WHERE (" +
+                    "startDate >= '"+fromDate+"'" +
+                    "AND endDate <= '"+toDate+"'" +
+                    ")" +
+                    "OR (" +
+                    "startDate >= '"+fromDate+"'" +
+                    "AND endDate <= '"+toDate+"'" +
+                    ")");
+            return returnList(statement);
+        } catch (SQLException exception) { exception.printStackTrace(); }
+        return null;
+    }
+
     public static List<String[]> searchJobs(final String fromDate, final String toDate) {
         try {
             Connection conn = Connect();
