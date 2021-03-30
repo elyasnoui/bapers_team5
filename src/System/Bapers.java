@@ -5,6 +5,7 @@ import GUI.*;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Random;
 
 public class Bapers {
@@ -14,7 +15,6 @@ public class Bapers {
     private Login login = new Login(this);
     private Staff staff = new Staff(this);
     private Customer customer = new Customer(this);
-    private UpdateProfile updateProfile = new UpdateProfile(this);
     private Job job = new Job(this);
     private Report report = new Report(this);
     private Task task = new Task(this);
@@ -57,7 +57,6 @@ public class Bapers {
 
         applicationWindow.add(customer.getPanel());
 
-        //applicationWindow.add(updateProfile.getMainPanel());
 
         //applicationWindow.add(job.getMainPanel());
 
@@ -144,9 +143,6 @@ public class Bapers {
 
         database.setUsername(ApplicationWindow.username);
         database.setRole(ApplicationWindow.role);
-
-        updateProfile.setUsername(ApplicationWindow.username);
-        updateProfile.setRole(ApplicationWindow.role);
     }
 
     public void changeScreen(final String destination, final JPanel panel) {

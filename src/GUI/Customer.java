@@ -12,8 +12,10 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class Customer extends JFrame{
 
@@ -63,6 +65,26 @@ public class Customer extends JFrame{
     private JButton variableCancelButton;
     private JButton createVariableChangeButton;
     private JLabel createVariableDiscountsLabel;
+    private JPanel editPanel;
+    private JButton editConfirmButton;
+    private JButton editCancelButton;
+    private JCheckBox editVcCheckBox;
+    private JTextField editFirstNameField;
+    private JTextField editLastNameField;
+    private JTextField editContactNumberField;
+    private JTextField editAddressFirstField;
+    private JTextField editAddressSecondField;
+    private JTextField editCityField;
+    private JTextField editPostcodeField;
+    private JTextField editEmailField;
+    private JComboBox editAgreedDiscountComboBox;
+    private JTextField editDiscountRateField;
+    private JButton editVariableChangeButton;
+    private JLabel editAgreedDiscountLabel;
+    private JLabel editDiscountRateLabel;
+    private JLabel editVariableDiscountsLabel;
+    private JTextField createCompanyField;
+    private JTextField editCompanyField;
     private ImageIcon checkBoxIcon;
     private ImageIcon selectedCheckBoxIcon;
     private boolean createPanelActive = false;
@@ -78,6 +100,7 @@ public class Customer extends JFrame{
 
     private final String[] tableColumns = {
             "ID",
+            "Company Name",
             "First Name",
             "Surname",
             "Contact Number",
@@ -108,7 +131,7 @@ public class Customer extends JFrame{
                 int i = 0;
                 for (String[] cs : customerData) {
                     if (vs[0].equals(cs[0])) {
-                        temp = new String[] { cs[0], cs[1], cs[2], cs[3], cs[4], cs[5], vs[1], vs[2] };
+                        temp = new String[] { cs[0], cs[1], cs[2], cs[3], cs[4], cs[5], cs[6], vs[1], vs[2] };
                         customerData.set(i, temp);
                     } i++;
                 }
@@ -122,6 +145,8 @@ public class Customer extends JFrame{
         selectedCheckBoxIcon = new ImageIcon("data/graphics/test2.png");
         createVcCheckBox.setIcon(checkBoxIcon);
         createVcCheckBox.setSelectedIcon(selectedCheckBoxIcon);
+        editVcCheckBox.setIcon(checkBoxIcon);
+        editVcCheckBox.setSelectedIcon(selectedCheckBoxIcon);
 
         logoutButton.addActionListener(new ActionListener() {
             @Override
@@ -184,6 +209,32 @@ public class Customer extends JFrame{
 
         ApplicationWindow.displayTable(table, customerData, tableColumns);
 
+        // Table listener
+        table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if (table.getSelectionModel().getSelectedItemsCount() == 1) {
+                    editButton.addMouseListener(ApplicationWindow.highlightListener);
+                    editButton.setToolTipText(null);
+                    deleteButton.addMouseListener(ApplicationWindow.highlightListener);
+                    deleteButton.setToolTipText(null);
+                } else if (table.getSelectionModel().getSelectedItemsCount() > 1) {
+                    editButton.removeMouseListener(ApplicationWindow.highlightListener);
+                    editButton.setToolTipText("Please select only 1 record");
+                    deleteButton.removeMouseListener(ApplicationWindow.highlightListener);
+                    deleteButton.setToolTipText("Please select only 1 record");
+                } else {
+                    editButton.removeMouseListener(ApplicationWindow.highlightListener);
+                    editButton.setToolTipText("Please select a record");
+                    deleteButton.removeMouseListener(ApplicationWindow.highlightListener);
+                    deleteButton.setToolTipText("Please select a record");
+                }
+
+                editButton.setEnabled(table.getSelectionModel().getSelectedItemsCount() == 1);
+                deleteButton.setEnabled(table.getSelectionModel().getSelectedItemsCount() == 1);
+            }
+        });
+
         createButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -193,6 +244,24 @@ public class Customer extends JFrame{
                 resetCreatePanel();
             }
         });
+        editButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                buttonPanel.setVisible(false);
+                tablePanel.setVisible(false);
+                editPanel.setVisible(true);
+
+                int id = Integer.parseInt(String.valueOf(table.getModel().getValueAt(table.getSelectedRow(), 0)));
+                resetEditPanel(id);
+            }
+        });
+        deleteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
         createVcCheckBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -219,7 +288,7 @@ public class Customer extends JFrame{
         createConfirmButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (validatePanel(createVcCheckBox, createFirstNameField, createLastNameField, createContactNumberField
+                if (validatePanel(createVcCheckBox, createCompanyField, createFirstNameField, createLastNameField, createContactNumberField
                 , createAddressFirstField, createAddressSecondField, createCityField, createPostcodeField, createEmailField
                 , createAgreedDiscountComboBox, createDiscountRateField)) {
 
@@ -230,6 +299,10 @@ public class Customer extends JFrame{
                     else address = createAddressFirstField.getText()+", "+createCityField.getText()
                             +", "+createPostcodeField.getText();
 
+                    String companyName;
+                    if (createCompanyField.getText().isEmpty())
+                        companyName = "";
+
                     // Valued Customer Insert
                     if (createVcCheckBox.isSelected()) {
                         String value = "";
@@ -238,29 +311,30 @@ public class Customer extends JFrame{
                                 value = createDiscountRateField.getText();
                                 break;
                             case 2:
-                                for (String[] vd : variableDiscountData)
-                                    value += vd[1]+",";
+                                for (String[] vd : variableDiscountData) {
+                                    System.out.println(Arrays.toString(vd));
+                                    value += vd[2] + "-" + vd[1] + ",";
+                                }
                                 value = value.substring(0, value.length()-1);
                                 break;
                         }
 
-                        try {
-                            int ID = DatabaseConnection.getNextID("customer");
-                            if (DatabaseConnection.addCustomer(createFirstNameField.getText(), createLastNameField.getText(), createContactNumberField.getText()
-                                    , address, createEmailField.getText())) {
-
+                        /*try {
+                            if (DatabaseConnection.addCustomer(createCompanyField.getText(), createFirstNameField.getText(),
+                                    createLastNameField.getText(), createContactNumberField.getText(), address, createEmailField.getText())) {
+                                int ID = DatabaseConnection.getNextID("customer");
                                 if (DatabaseConnection.addValuedCustomer(ID, String.valueOf(createAgreedDiscountComboBox.getSelectedItem()), value))
                                     system.changeScreen("customers", mainPanel);
                                 else JOptionPane.showMessageDialog(mainPanel, "Couldn't insert valued customer, regular customer created");
                             } else JOptionPane.showMessageDialog(mainPanel, "Couldn't insert customer");
-                        } catch (SQLException exception) { exception.printStackTrace(); }
+                        } catch (SQLException exception) { exception.printStackTrace(); }*/
                     }
 
                     // Regular Customer Insert
                     else {
                         try {
-                            if (DatabaseConnection.addCustomer(createFirstNameField.getText(), createLastNameField.getText(), createContactNumberField.getText()
-                                    , address, createEmailField.getText())) {
+                            if (DatabaseConnection.addCustomer(createCompanyField.getText(), createFirstNameField.getText(),
+                                    createLastNameField.getText(), createContactNumberField.getText(), address, createEmailField.getText())) {
                                 system.changeScreen("customers", mainPanel);
                             } else JOptionPane.showMessageDialog(mainPanel, "Couldn't insert customer");
                         } catch (SQLException exception) { exception.printStackTrace(); }
@@ -268,20 +342,29 @@ public class Customer extends JFrame{
                 }
             }
         });
-        deleteButton.addActionListener(new ActionListener() {
+        editConfirmButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (!table.getSelectionModel().isSelectionEmpty()) {
-                    //String IDs = customerData.get(table.getSelectedRow())[0];
+                if (validatePanel(editVcCheckBox, editCompanyField, editFirstNameField, editLastNameField, editContactNumberField
+                        , editAddressFirstField, editAddressSecondField, editCityField, editPostcodeField, editEmailField
+                        , editAgreedDiscountComboBox, editDiscountRateField)) {
 
-                    for (int id : table.getSelectedRows()) {
-                        int ID = Integer.parseInt(customerData.get(id)[0]);
-                        DatabaseConnection.removeCustomer(ID);
-                        system.changeScreen("customers", mainPanel);
-                    }
+                    String address;
+                    if (!editAddressSecondField.getText().isEmpty())
+                        address = editAddressFirstField.getText() + ", " + editAddressSecondField.getText() + ", "
+                                + editCityField.getText() + ", " + editPostcodeField.getText();
+                    else address = editAddressFirstField.getText() + ", " + editCityField.getText()
+                            + ", " + editPostcodeField.getText();
                 }
             }
         });
+        editCancelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
         createAgreedDiscountComboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -312,7 +395,7 @@ public class Customer extends JFrame{
                     variableDiscountsSelected = true;
                     for (int row = 0; row<variableDiscountTable.getRowCount(); row++) {
                         String value = variableDiscountTable.getModel().getValueAt(row, 1).toString();
-                        String[] temp = { variableDiscountData.get(row)[0], value };
+                        String[] temp = { variableDiscountData.get(row)[1], value };
                         variableDiscountData.set(row, temp);
                     }
 
@@ -341,15 +424,45 @@ public class Customer extends JFrame{
                 if (!variableDiscountsSelected) {
                     if (createPanelActive)
                         createAgreedDiscountComboBox.setSelectedIndex(0);
-                    /*else if (editPanelActive)
-                        editAgreedDiscountComboBox.setSelectedIndex(0);*/
+                    else if (editPanelActive)
+                        editAgreedDiscountComboBox.setSelectedIndex(0);
                 }
 
                 variableDiscountPanel.setVisible(false);
                 if (createPanelActive)
                     createPanel.setVisible(true);
-                /*else if (editPanelActive)
-                    editPanel.setVisible(true);*/
+                else if (editPanelActive)
+                    editPanel.setVisible(true);
+            }
+        });
+        editVariableChangeButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                editPanel.setVisible(false);
+                variableDiscountPanel.setVisible(true);
+            }
+        });
+        editAgreedDiscountComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                editDiscountRateLabel.setVisible(
+                        editVcCheckBox.isSelected() && editAgreedDiscountComboBox.getSelectedIndex() == 0
+                );
+                editDiscountRateField.setVisible(
+                        editVcCheckBox.isSelected() && editAgreedDiscountComboBox.getSelectedIndex() == 0
+                );
+
+                if (!variableDiscountsSelected && editAgreedDiscountComboBox.getSelectedIndex() == 2) {
+                    editPanel.setVisible(false);
+                    variableDiscountPanel.setVisible(true);
+                    resetVariableDiscountPanel();
+                }
+                editVariableDiscountsLabel.setVisible(
+                        variableDiscountsSelected && editAgreedDiscountComboBox.getSelectedIndex() == 2
+                );
+                editVariableChangeButton.setVisible(
+                        variableDiscountsSelected && editAgreedDiscountComboBox.getSelectedIndex() == 2
+                );
             }
         });
     }
@@ -373,24 +486,18 @@ public class Customer extends JFrame{
         return errorDetected;
     }
 
-    private void resetVariableDiscountPanel() {
-        variableDiscountData = DatabaseConnection.getAvailableTasks();
-        assert variableDiscountData != null;
-        int i = 0;
-        for (String[] d : variableDiscountData) {
-            String[] temp = { d[0], null };
-            variableDiscountData.set(i, temp);
-            i++;
-        }
-
-        ApplicationWindow.displayTable(variableDiscountTable, variableDiscountData, variableDiscountColumns);
-        variableDiscountTable.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(new JTextField()));
-    }
-
     private boolean validatePanel
-            (JCheckBox vcCheckBox, JTextField firstNameField, JTextField lastNameField, JTextField contactNumberField,
+            (JCheckBox vcCheckBox, JTextField companyField, JTextField firstNameField, JTextField lastNameField, JTextField contactNumberField,
              JTextField addressFirstField, JTextField addressSecondField, JTextField cityField, JTextField postcodeField,
              JTextField emailField, JComboBox agreedDiscountComboBox, JTextField discountRateField) {
+
+        if (!companyField.getText().isEmpty() && !companyField.getText().matches(ApplicationWindow.companyRegex)) {
+            companyField.setBorder(ApplicationWindow.borderError);
+            companyField.setToolTipText("Please enter only letters, numbers, commas or '-'");
+        } else {
+            companyField.setBorder(null);
+            companyField.setToolTipText(null);
+        }
 
         if (!firstNameField.getText().matches(ApplicationWindow.nameRegex)) {
             firstNameField.setBorder(ApplicationWindow.borderError);
@@ -490,6 +597,7 @@ public class Customer extends JFrame{
         createAgreedDiscountComboBox.setModel(new DefaultComboBoxModel<>(discountTypes));
 
         createVcCheckBox.setSelected(false);
+        createCompanyField.setBorder(null);
         createFirstNameField.setBorder(null);
         createLastNameField.setBorder(null);
         createContactNumberField.setBorder(null);
@@ -507,7 +615,136 @@ public class Customer extends JFrame{
         addCreateListeners();
     }
 
+    private void resetEditPanel(int id) {
+        editAgreedDiscountComboBox.setModel(new DefaultComboBoxModel<>(discountTypes));
+
+        editCompanyField.setBorder(null);
+        editFirstNameField.setBorder(null);
+        editLastNameField.setBorder(null);
+        editContactNumberField.setBorder(null);
+        editAddressFirstField.setBorder(null);
+        editAddressSecondField.setBorder(null);
+        editCityField.setBorder(null);
+        editPostcodeField.setBorder(null);
+        editEmailField.setBorder(null);
+        editDiscountRateField.setBorder(null);
+
+        String[] customerData = DatabaseConnection.getRowBySingleID("customer", id);
+
+        assert customerData != null;
+        editFirstNameField.setText(customerData[1]);
+        editLastNameField.setText(customerData[2]);
+        editContactNumberField.setText(customerData[3]);
+
+        String[] address = customerData[4].split(", ");
+
+        editAddressFirstField.setText(address[0]);
+        editAddressSecondField.setText(address[1]);
+        editCityField.setText(address[2]);
+        editPostcodeField.setText(address[3]);
+        editEmailField.setText(customerData[5]);
+
+
+        String[] vcData;
+        try {
+            if (!table.getModel().getValueAt(table.getSelectedRow(), 6).toString().isEmpty()) {
+                vcData = DatabaseConnection.getRowBySingleID("valuedCustomer", id);
+                editVcCheckBox.setSelected(true);
+                editAgreedDiscountComboBox.setVisible(true);
+
+                assert vcData != null;
+
+                if (vcData[1].equals("Variable Discount"))
+                    variableDiscountsSelected = true;
+
+                editAgreedDiscountComboBox.setSelectedIndex(0);
+                for (int i=0; i<discountTypes.length; i++) {
+                    if (Objects.equals(editAgreedDiscountComboBox.getSelectedItem(), vcData[1])) {
+                        editAgreedDiscountComboBox.setSelectedIndex(i);
+                        break;
+                    }
+                    if (i+1 != discountTypes.length)
+                        editAgreedDiscountComboBox.setSelectedIndex(i+1);
+                }
+                switch (editAgreedDiscountComboBox.getSelectedIndex()) {
+                    case 0:
+                        editDiscountRateLabel.setVisible(true);
+                        editDiscountRateField.setText(vcData[2]);
+                        break;
+                    case 2:
+                        editVariableDiscountsLabel.setVisible(true);
+                        editVariableChangeButton.setVisible(true);
+
+                        variableDiscountData = DatabaseConnection.getAvailableTasks();
+                        String[] values = vcData[2].split(",");
+                        int i=0;
+                        for (String v : values) {
+                            String[] temp = v.split("-");
+                            values[i] = temp[1];
+                            i++;
+                        }
+                        assert variableDiscountData != null;
+                        int j = 0;
+                        for (String[] vd : variableDiscountData) {
+                            String[] temp = { vd[1], values[j] };
+                            variableDiscountData.set(j, temp);
+                            j++;
+                        }
+                        ApplicationWindow.displayTable(variableDiscountTable, variableDiscountData, variableDiscountColumns);
+                        variableDiscountTable.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(new JTextField()));
+
+                        break;
+                }
+            }
+        } catch (NullPointerException ignored) { editVcCheckBox.setSelected(false); }
+
+        addEditListeners();
+    }
+
+    private void resetVariableDiscountPanel() {
+        variableDiscountData = DatabaseConnection.getAvailableTasks();
+        assert variableDiscountData != null;
+        int i = 0;
+        for (String[] vd : variableDiscountData) {
+            String[] temp = { vd[1], null, vd[0] };
+            variableDiscountData.set(i, temp);
+            i++;
+        }
+
+        ApplicationWindow.displayTable(variableDiscountTable, variableDiscountData, variableDiscountColumns);
+        variableDiscountTable.getColumnModel().getColumn(1).setCellEditor(new DefaultCellEditor(new JTextField()));
+    }
+
+    private void addEditListeners() {
+        editCompanyField.addKeyListener(ApplicationWindow.regexListener);
+        editFirstNameField.addKeyListener(ApplicationWindow.regexListener);
+        editLastNameField.addKeyListener(ApplicationWindow.regexListener);
+        editContactNumberField.addKeyListener(ApplicationWindow.regexListener);
+        editAddressFirstField.addKeyListener(ApplicationWindow.regexListener);
+        editEmailField.addKeyListener(ApplicationWindow.regexListener);
+        editDiscountRateField.addKeyListener(ApplicationWindow.regexListener);
+        editPostcodeField.addKeyListener(ApplicationWindow.regexListener);
+        editAddressSecondField.addKeyListener(ApplicationWindow.regexListener);
+        editCityField.addKeyListener(ApplicationWindow.regexListener);
+        editPanelActive = true;
+    }
+
+    private void removeEditListeners() {
+        editCompanyField.removeKeyListener(ApplicationWindow.regexListener);
+        editFirstNameField.removeKeyListener(ApplicationWindow.regexListener);
+        editLastNameField.removeKeyListener(ApplicationWindow.regexListener);
+        editContactNumberField.removeKeyListener(ApplicationWindow.regexListener);
+        editAddressFirstField.removeKeyListener(ApplicationWindow.regexListener);
+        editEmailField.removeKeyListener(ApplicationWindow.regexListener);
+        editDiscountRateField.removeKeyListener(ApplicationWindow.regexListener);
+        editPostcodeField.removeKeyListener(ApplicationWindow.regexListener);
+        editAddressSecondField.removeKeyListener(ApplicationWindow.regexListener);
+        editCityField.removeKeyListener(ApplicationWindow.regexListener);
+        editPanelActive = false;
+    }
+
     private void addCreateListeners() {
+        createCompanyField.addKeyListener(ApplicationWindow.regexListener);
         createFirstNameField.addKeyListener(ApplicationWindow.regexListener);
         createLastNameField.addKeyListener(ApplicationWindow.regexListener);
         createContactNumberField.addKeyListener(ApplicationWindow.regexListener);
@@ -521,6 +758,7 @@ public class Customer extends JFrame{
     }
 
     private void removeCreateListeners() {
+        createCompanyField.removeKeyListener(ApplicationWindow.regexListener);
         createFirstNameField.removeKeyListener(ApplicationWindow.regexListener);
         createLastNameField.removeKeyListener(ApplicationWindow.regexListener);
         createContactNumberField.removeKeyListener(ApplicationWindow.regexListener);

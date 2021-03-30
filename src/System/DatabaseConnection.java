@@ -34,7 +34,7 @@ public class DatabaseConnection {
         return false;
     }
 
-    public static int getNextID(final String tableName) {
+    /*public static int getNextID(final String tableName) {
         try {
             Connection conn = Connect();
             assert conn != null;
@@ -44,9 +44,23 @@ public class DatabaseConnection {
                     "AND TABLE_NAME = '"+tableName+"'");
             ResultSet res = statement.executeQuery();
             res.next();
-            return Integer.parseInt(res.getString("AUTO_INCREMENT"));
+            return Integer.parseInt(res.getString( "AUTO_INCREMENT"));
         } catch (SQLException e) {
             e.printStackTrace();
+            return -1;
+        }
+    }*/
+
+    public static int getNextID(final String tableName) {
+        try {
+            Connection conn = Connect();
+            assert conn != null;
+            PreparedStatement statement = conn.prepareStatement("SELECT MAX(ID) AS ID FROM "+tableName);
+            ResultSet res = statement.executeQuery();
+            res.next();
+            return Integer.parseInt(res.getString("ID"));
+        } catch (SQLException exception) {
+            exception.printStackTrace();
             return -1;
         }
     }
@@ -94,11 +108,26 @@ public class DatabaseConnection {
         try {
             Connection conn = Connect();
             assert conn != null;
-            PreparedStatement statement = conn.prepareStatement("SELECT description FROM availableTask");
+            PreparedStatement statement = conn.prepareStatement("SELECT ID, description FROM availableTask");
             return returnList(statement);
         } catch (SQLException exception) { exception.printStackTrace(); }
         return null;
     }
+
+    public static String getStaffName(int ID){
+        try {
+            Connection conn = Connect();
+            assert conn != null;
+            PreparedStatement statement = conn.prepareStatement("SELECT firstName, lastName, ID FROM staff " +
+                    "WHERE ID = " +ID);
+            ResultSet res = statement.executeQuery();
+            if (res.next()){
+                return res.getString("firstName")+ " " + res.getString("lastName");
+            }
+        } catch (SQLException exception) { exception.printStackTrace(); }
+        return null;
+    }
+
 
     public static List<String[]> getTechnicians() {
         try {
@@ -106,6 +135,38 @@ public class DatabaseConnection {
             assert conn != null;
             PreparedStatement statement = conn.prepareStatement("SELECT firstName, lastName, ID FROM staff " +
                     "WHERE role = 'Technician'");
+            return returnList(statement);
+        } catch (SQLException exception) { exception.printStackTrace(); }
+        return null;
+    }
+
+    public static List<String[]> getTaskFromJobID(int jobID) {
+        try {
+            Connection conn = Connect();
+            assert conn != null;
+            PreparedStatement statement = conn.prepareStatement("SELECT * FROM task " +
+                    "WHERE jobID = '"+jobID+"'");
+            return returnList(statement);
+        } catch (SQLException exception) { exception.printStackTrace(); }
+        return null;
+    }
+
+    public static List<String[]> getJobFromDates(final String fromDate, final String toDate) {
+        try {
+            Connection conn = Connect();
+            assert conn != null;
+            /*PreparedStatement statement = conn.prepareStatement("SELECT * FROM job WHERE startDate > "+fromDate+" " +
+                    "AND endDate < "+toDate);*/
+            PreparedStatement statement = conn.prepareStatement("SELECT *" +
+                    "FROM job " +
+                    "WHERE (" +
+                    "startDate >= '"+fromDate+"'" +
+                    "AND endDate <= '"+toDate+"'" +
+                    ")" +
+                    "OR (" +
+                    "startDate >= '"+fromDate+"'" +
+                    "AND endDate <= '"+toDate+"'" +
+                    ")");
             return returnList(statement);
         } catch (SQLException exception) { exception.printStackTrace(); }
         return null;
@@ -168,7 +229,11 @@ public class DatabaseConnection {
         try {
             Connection conn = Connect();
             assert conn != null;
-            PreparedStatement statement = conn.prepareStatement("SELECT * FROM "+tableName+" WHERE ID = "+ID);
+            PreparedStatement statement;
+            if (tableName.equals("valuedCustomer")) {
+                statement = conn.prepareStatement("SELECT * FROM "+tableName+" WHERE customerID = "+ID);
+            } else
+                statement = conn.prepareStatement("SELECT * FROM "+tableName+" WHERE ID = "+ID);
             return returnRow(statement);
         } catch (Exception e) { e.printStackTrace(); }
         return null;
@@ -742,13 +807,13 @@ public class DatabaseConnection {
 
     // Editing an existing customer record
     public static boolean
-        editCustomer(final int ID, final String firstName, final String lastName, final String contactNumber, final String address,
-                     final String email) throws SQLException {
+        editCustomer(final int ID, final String companyName, final String firstName, final String lastName,
+                     final String contactNumber, final String address, final String email) throws SQLException {
         Connection conn = Connect();
         assert conn != null;
         PreparedStatement statement = conn.prepareStatement(
-                "UPDATE customer SET firstName = '"+firstName+"', lastName = '"+lastName+"', contactNumber = '" +
-                        ""+contactNumber+"', address = '"+address+"', email = '"+email+"' WHERE ID = "+ID
+                "UPDATE customer SET companyName = '"+companyName+"',firstName = '"+firstName+"', lastName = '"+lastName+"', " +
+                        "contactNumber = '"+contactNumber+"', address = '"+address+"', email = '"+email+"' WHERE ID = "+ID
         );
         return executeStatement(statement);
     }
@@ -778,13 +843,13 @@ public class DatabaseConnection {
 
     // Inserting a new customer record
     public static boolean
-        addCustomer(final String firstName, final String lastName, final String contactNumber, final String address,
-                final String email) throws SQLException {
+        addCustomer(final String companyName, final String firstName, final String lastName, final String contactNumber,
+                    final String address, final String email) throws SQLException {
         Connection conn = Connect();
         assert conn != null;
         PreparedStatement statement = conn.prepareStatement(
-                "INSERT IGNORE INTO customer (firstName, lastName, contactNumber, address, email) VALUES (" +
-                        "'"+firstName+"', '"+lastName+"', '"+contactNumber+"', '"+address+"', '"+email+"')"
+                "INSERT IGNORE INTO customer (companyName, firstName, lastName, contactNumber, address, email) VALUES (" +
+                        "'"+companyName+"', '"+firstName+"', '"+lastName+"', '"+contactNumber+"', '"+address+"', '"+email+"')"
         );
         return executeStatement(statement);
     }
