@@ -210,6 +210,7 @@ public class Job {
         });
 
         ApplicationWindow.displayTable(table, jobData, tableColumns);
+        //ApplicationWindow.currentDateNTime();
         createButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -335,6 +336,14 @@ public class Job {
                 resetLookupPanel();
             }
         });
+
+        lookupCreateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -363,6 +372,7 @@ public class Job {
                 urgencyLabelPanel.setVisible(isUrgentCheckBox.isSelected());
             }
         });
+
     }
 
     private void customerSearch() {
