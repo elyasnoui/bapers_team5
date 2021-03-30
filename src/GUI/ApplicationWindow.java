@@ -21,6 +21,7 @@ public class ApplicationWindow extends JFrame {
     public static String role;
     private List<String[]> jobData;
 
+    public static final String companyRegex = "[a-zA-Z0-9 ,-]{0,35}?";
     public static final String nameRegex = "[A-Z]{1}[a-zA-z-]{1,34}";
     public static final String contactNumberRegex = "[0][1-9][0-9]{9}";
     public static final String addressLineRegex = "[A-Za-z0-9 ]{1,35}?";
@@ -127,6 +128,12 @@ public class ApplicationWindow extends JFrame {
             if (e.getComponent() instanceof JTextField) {
                 boolean valid = false;
                 switch (e.getComponent().getName()) {
+                    case "company":
+                        if (((JTextField) e.getComponent()).getText().matches(companyRegex)) {
+                            ((JTextField) e.getComponent()).setToolTipText("Please enter a valid name, e.g. 'John'");
+                            valid = true;
+                        } else valid = false;
+                        break;
                     case "name":
                         if (((JTextField) e.getComponent()).getText().matches(nameRegex)) {
                             ((JTextField) e.getComponent()).setToolTipText("Please enter a valid name, e.g. 'John'");
@@ -169,7 +176,8 @@ public class ApplicationWindow extends JFrame {
                             valid = true;
                         } else valid = false;
                         break;
-                } if (valid || (e.getComponent().getName().equals("addressLineOpt") && ((JTextField) e.getComponent()).getText().isEmpty())) {
+                } if (valid || ((e.getComponent().getName().equals("addressLineOpt") || e.getComponent().getName().equals("company"))
+                        && ((JTextField) e.getComponent()).getText().isEmpty())) {
                     ((JTextField) e.getComponent()).setBorder(null);
                     ((JTextField) e.getComponent()).setToolTipText(null);
                 } else ((JTextField) e.getComponent()).setBorder(borderError);
