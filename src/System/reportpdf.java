@@ -46,7 +46,8 @@ public class reportpdf {
             PdfWriter.getInstance(document, new FileOutputStream(FILE));
             document.open();
             addMetaData(document);
-            addTitlePage(document);
+            //addTitlePage(document);
+            addjobContent(document);
             document.close();
         } catch (Exception e){
             e.printStackTrace();
@@ -59,21 +60,22 @@ public class reportpdf {
             PdfWriter.getInstance(document, new FileOutputStream(FILE));
             document.open();
             addMetaData(document);
-            addTitlePage(document);
+            //addTitlePage(document);
+            addsummaryContent(document);
             document.close();
         } catch (Exception e){
             e.printStackTrace();
         }
     }
 
-    public static void performancereport() {
+    public static void performanceReport() {
         System.out.println("here");
         try {
             Document document = new Document();
             PdfWriter.getInstance(document, new FileOutputStream(FILE));
             document.open();
             addMetaData(document);
-            addTitlePage(document);
+            //addTitlePage(document);
             addperformanceContent(document);
             document.close();
         } catch (Exception e) {
@@ -93,9 +95,7 @@ public class reportpdf {
         document.addCreator("Team 5");
     }
 
-    public void addJobReportContent(Date start, Date end) {
 
-    }
 
     public static void addTitlePage(Document document)
             throws DocumentException {
@@ -115,7 +115,7 @@ public class reportpdf {
                 "For report printing soon",
                 smallBold));
 
-        addEmptyLine(preface, 8);
+        addEmptyLine(preface, 3);
 
         preface.add(new Paragraph(
                 "Need to now add report to this",
@@ -123,70 +123,358 @@ public class reportpdf {
 
         document.add(preface);
         // Start a new page
-        document.newPage();
+        //document.newPage();
     }
 
     public static void addperformanceContent(Document document) throws DocumentException {
-        Anchor anchor = new Anchor("Individual Performance Report", catFont);
-        anchor.setName("Individual Performance Report");
+        Paragraph anchor = new Paragraph("Individual Performance Report", catFont);
+        //anchor.setName("Individual Performance Report");
+
+        addEmptyLine(anchor,4);
 
         // Second parameter is the number of the chapter
         Chapter catPart = new Chapter(new Paragraph(anchor), 1);
 
         Paragraph subPara = new Paragraph("Subcategory 1", subFont);
-        Section subCatPart = catPart.addSection(subPara);
-        subCatPart.add(new Paragraph("Hello"));
-
-        subPara = new Paragraph("Subcategory 2", subFont);
-        subCatPart = catPart.addSection(subPara);
-        subCatPart.add(new Paragraph("Paragraph 1"));
-        subCatPart.add(new Paragraph("Paragraph 2"));
-        subCatPart.add(new Paragraph("Paragraph 3"));
-
-        // add a list
-        createList(subCatPart);
-        Paragraph paragraph = new Paragraph();
-        addEmptyLine(paragraph, 5);
-        subCatPart.add(paragraph);
-
-        // add a table
-        createTable(subCatPart);
-
-        // now add all this to the document
-        document.add(catPart);
-
-        // Next section
-        anchor = new Anchor("Second Chapter", catFont);
-        anchor.setName("Second Chapter");
-
-        // Second parameter is the number of the chapter
-        catPart = new Chapter(new Paragraph(anchor), 1);
-
-        subPara = new Paragraph("Subcategory", subFont);
-        subCatPart = catPart.addSection(subPara);
-        subCatPart.add(new Paragraph("This is a very important message"));
+        //Section subCatPart = catPart.addSection(subPara);
+        //subCatPart.add(new Paragraph("Hello"));
+        addEmptyLine(subPara, 5);
+        // add performance table
+        createPerformanceTable(catPart);
 
         // now add all this to the document
         document.add(catPart);
 
     }
 
-    private static void createTable(Section subCatPart)
+    public static void addsummaryContent(Document document) throws DocumentException {
+        Paragraph anchor = new Paragraph("Summary Performance Report", catFont);
+        //anchor.setName("Summary Performance Report");
+
+        addEmptyLine(anchor,4);
+        // Second parameter is the number of the chapter
+        Chapter catPart = new Chapter(new Paragraph(anchor), 1);
+
+        Paragraph subPara = new Paragraph("Summary Performance Report from:", subFont);
+        //Section subCatPart = catPart.addSection(subPara);
+        //subCatPart.add(new Paragraph("Hello"));
+        addEmptyLine(subPara,5);
+
+
+        // add a table
+        createSummaryTable(catPart);
+
+
+        document.add(catPart);
+
+    }
+
+    public static void addjobContent(Document document) throws DocumentException {
+        Paragraph anchor = new Paragraph("Customer Job Report", catFont);
+       // anchor.setName("Customer Job Report");
+
+        addEmptyLine(anchor,4);
+
+        // Second parameter is the number of the chapter
+        Chapter catPart = new Chapter(new Paragraph(anchor), 1);
+
+        // add a table
+        createJobTable(catPart);
+
+        // now add all this to the document
+        document.add(catPart);
+
+    }
+    private static void createSummaryTable(Section subCatPart)
             throws BadElementException {
+
+        //dayshift 1
+
+        PdfPTable table = new PdfPTable(5);
+
+        // t.setBorderColor(BaseColor.GRAY);
+        // t.setPadding(4);
+        // t.setSpacing(4);
+        // t.setBorderWidth(1);
+        // table.isLockedWidth();
+
+        Paragraph dayShift1 = new Paragraph("Day Shift 1: (5am-2:30pm)",subFont);
+
+        subCatPart.add(dayShift1);
+
+        addEmptyLine(dayShift1,1);
+
+        PdfPCell c1 = new PdfPCell(new Phrase("Date"));
+        c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(c1);
+
+        c1 = new PdfPCell(new Phrase("Copy Room"));
+        c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(c1);
+
+        c1 = new PdfPCell(new Phrase("Development"));
+        c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(c1);
+
+        c1 = new PdfPCell(new Phrase("Finishing"));
+        c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(c1);
+
+        c1 = new PdfPCell(new Phrase("Packing"));
+        c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(c1);
+
+
+
+        table.setHeaderRows(1);
+
+        table.addCell("1.0");
+        table.addCell("1.1");
+        table.addCell("1.2");
+        table.addCell("1.3");
+        table.addCell("1.4");
+        table.addCell("1.5");
+        table.addCell("2.0");
+        table.addCell("2.1");
+        table.addCell("2.2");
+        table.addCell("2.3");
+
+        subCatPart.add(table);
+
+        //day shift 2
+
+        Paragraph dayShift2 = new Paragraph("Day Shift 2: (2:30pm-10pm)",subFont);
+
+        subCatPart.add(dayShift2);
+
+        addEmptyLine(dayShift2,1);
+
+        PdfPTable table2 = new PdfPTable(5);
+
+        PdfPCell c2 = new PdfPCell(new Phrase("Date"));
+        c2.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table2.addCell(c2);
+
+        c2 = new PdfPCell(new Phrase("Copy Room"));
+        c2.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table2.addCell(c2);
+
+        c2 = new PdfPCell(new Phrase("Development"));
+        c2.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table2.addCell(c2);
+
+        c2 = new PdfPCell(new Phrase("Finishing"));
+        c2.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table2.addCell(c2);
+
+        c2 = new PdfPCell(new Phrase("Packing"));
+        c2.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table2.addCell(c2);
+
+        table2.setHeaderRows(1);
+
+        table2.addCell("1.0");
+        table2.addCell("1.1");
+        table2.addCell("1.2");
+        table2.addCell("1.3");
+        table2.addCell("1.4");
+        table2.addCell("1.5");
+        table2.addCell("2.0");
+        table2.addCell("2.1");
+        table2.addCell("2.2");
+        table2.addCell("2.3");
+        table2.addCell("2.4");
+        table2.addCell("2.5");
+
+        subCatPart.add(table2);
+
+        //night shift
+
+        PdfPTable table3 = new PdfPTable(5);
+
+        // t.setBorderColor(BaseColor.GRAY);
+        // t.setPadding(4);
+        // t.setSpacing(4);
+        // t.setBorderWidth(1);
+        // table.isLockedWidth();
+
+        Paragraph nightShift = new Paragraph("Night Shift: (10pm-5am)",subFont);
+
+        subCatPart.add(nightShift);
+
+        addEmptyLine(nightShift,1);
+
+        PdfPCell c3 = new PdfPCell(new Phrase("Date"));
+        c3.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(c1);
+
+        c3 = new PdfPCell(new Phrase("Copy Room"));
+        c3.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(c3);
+
+        c3 = new PdfPCell(new Phrase("Development"));
+        c3.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(c3);
+
+        c3 = new PdfPCell(new Phrase("Finishing"));
+        c3.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table3.addCell(c3);
+
+        c3 = new PdfPCell(new Phrase("Packing"));
+        c3.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table3.addCell(c3);
+
+
+
+        table3.setHeaderRows(1);
+
+        table3.addCell("1.0");
+        table3.addCell("1.1");
+        table3.addCell("1.2");
+        table3.addCell("1.3");
+        table3.addCell("1.4");
+        table3.addCell("1.5");
+        table3.addCell("2.0");
+        table3.addCell("2.1");
+        table3.addCell("2.2");
+        table3.addCell("2.3");
+
+        subCatPart.add(table3);
+
+
+        //For period/total
+
+        PdfPTable table4 = new PdfPTable(5);
+
+        // t.setBorderColor(BaseColor.GRAY);
+        // t.setPadding(4);
+        // t.setSpacing(4);
+        // t.setBorderWidth(1);
+        // table.isLockedWidth();
+
+        Paragraph total = new Paragraph("For Period: (13/01/2020-20/01/2020)",subFont);
+
+        subCatPart.add(total);
+
+        addEmptyLine(total,1);
+
+        PdfPCell c4 = new PdfPCell(new Phrase("Date"));
+        c4.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table4.addCell(c4);
+
+        c4 = new PdfPCell(new Phrase("Copy Room"));
+        c4.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table4.addCell(c4);
+
+        c4 = new PdfPCell(new Phrase("Development"));
+        c4.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table4.addCell(c4);
+
+        c4 = new PdfPCell(new Phrase("Finishing"));
+        c4.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table4.addCell(c4);
+
+        c4 = new PdfPCell(new Phrase("Packing"));
+        c4.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table4.addCell(c4);
+
+
+
+        table4.setHeaderRows(1);
+
+
+
+        table4.addCell("1.0");
+        table4.addCell("1.1");
+        table4.addCell("1.2");
+        table4.addCell("1.3");
+        table4.addCell("1.4");
+        table4.addCell("1.5");
+        table4.addCell("2.0");
+        table4.addCell("2.1");
+        table4.addCell("2.2");
+        table4.addCell("2.3");
+
+        subCatPart.add(table4);
+
+
+
+    }
+
+    private static void createJobTable(Section subCatPart)
+            throws BadElementException {
+
+        PdfPTable table = new PdfPTable(6);
+
+        // t.setBorderColor(BaseColor.GRAY);
+        // t.setPadding(4);
+        // t.setSpacing(4);
+        // t.setBorderWidth(1);
+        // table.isLockedWidth();
+
+
+        PdfPCell c1 = new PdfPCell(new Phrase("Job ID"));
+        c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(c1);
+
+        c1 = new PdfPCell(new Phrase("Tasks"));
+        c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(c1);
+
+        c1 = new PdfPCell(new Phrase("Job Price"));
+        c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(c1);
+
+        c1 = new PdfPCell(new Phrase("isPaid"));
+        c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(c1);
+
+        c1 = new PdfPCell(new Phrase("Start Date"));
+        c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(c1);
+
+        c1 = new PdfPCell(new Phrase("End Date"));
+        c1.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(c1);
+
+
+
+        table.setHeaderRows(1);
+
+        table.addCell("1.0");
+        table.addCell("1.1");
+        table.addCell("1.2");
+        table.addCell("1.3");
+        table.addCell("1.4");
+        table.addCell("1.5");
+        table.addCell("1.6");
+        table.addCell("2.0");
+        table.addCell("2.1");
+        table.addCell("2.2");
+
+
+
+        subCatPart.add(table);
+
+    }
+
+    private static void createPerformanceTable(Section subCatPart)
+            throws BadElementException {
+
         PdfPTable table = new PdfPTable(7);
 
         // t.setBorderColor(BaseColor.GRAY);
         // t.setPadding(4);
         // t.setSpacing(4);
         // t.setBorderWidth(1);
-        //table.isLockedWidth();
+        // table.isLockedWidth();
 
 
         PdfPCell c1 = new PdfPCell(new Phrase("Name"));
         c1.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(c1);
 
-        c1 = new PdfPCell(new Phrase("Id task"));
+        c1 = new PdfPCell(new Phrase("ID Task"));
         c1.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(c1);
 
@@ -228,8 +516,7 @@ public class reportpdf {
         table.addCell("2.4");
         table.addCell("2.5");
         table.addCell("2.6");
-        //table.addCell("1.7");
-        //table.addCell("1.8");
+
 
         subCatPart.add(table);
 

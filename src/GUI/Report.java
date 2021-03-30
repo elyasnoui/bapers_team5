@@ -39,7 +39,7 @@ public class Report {
     private JTextField createNoOfStaffField;
     private JTextField createNoOfJobsField;
     private JTextField createNoOfTasksField;
-    private JButton createConfrimButton;
+    private JButton createConfirmButton;
     private JButton createCancelButton;
     private JScrollPane tablePanel;
     private JButton printButton;
@@ -50,6 +50,8 @@ public class Report {
 
 
     public String reportType;
+    private List<String[]> jobData;
+    private List<String[]> taskData;
     private List<String[]> reportData;
     private List<String[]> performanceReportData;
     private List<String[]> summaryReportData;
@@ -195,29 +197,26 @@ public class Report {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    reportpdf.performancereport();
+                    //reportpdf.performanceReport();
                     ProcessBuilder processBuilder = new ProcessBuilder("cmd.exe", "/C", "data/reports\\reportpdf.pdf");
+
                 } catch (Exception exception) {
                     exception.printStackTrace();
                 } }
         });
 
-        /* reportTypeField.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (reportTypeField.getText() == "Summary Performance Report"){
-                    reportpdf.performancereport();
-                } else if (reportTypeField.getText() == "Job Report "){
 
-                }
-            }
-        });
-
-         */
         createReportTypeComboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                createConfrimButton.setEnabled(createReportTypeComboBox.getSelectedIndex() != 0);
+                createConfirmButton.setEnabled(createReportTypeComboBox.getSelectedIndex() != 0);
+                if(createReportTypeComboBox.getSelectedIndex() == 3 ){
+                    reportpdf.performanceReport();
+                } else if (createReportTypeComboBox.getSelectedIndex() == 2){
+                    reportpdf.summaryReport();
+                } else if (createReportTypeComboBox.getSelectedIndex() == 1){
+                    reportpdf.jobReport();
+                }
             }
         });
     }

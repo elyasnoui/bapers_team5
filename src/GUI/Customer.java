@@ -803,6 +803,8 @@ public class Customer extends JFrame{
         return mainPanel;
     }
 
+    public JPanel getCreatePanel(){ return createPanel;}
+
     public void setPanel(JPanel panel) {
         this.mainPanel = panel;
     }
