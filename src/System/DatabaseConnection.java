@@ -93,6 +93,18 @@ public class DatabaseConnection {
         return row;
     }
 
+    public static boolean isCustomerValuedCustomer(final int ID) {
+        try {
+            Connection conn = Connect();
+            assert conn != null;
+            PreparedStatement statement = conn.prepareStatement("SELECT customerID FROM valuedCustomer WHERE " +
+                    "customerID ="+ID);
+            ResultSet res = statement.executeQuery();
+            return res.next();
+        } catch (SQLException exception) { exception.printStackTrace(); }
+        return false;
+    }
+
     public static String getCustomerName(final int ID) throws SQLException {
         Connection conn = Connect();
         assert conn != null;
