@@ -5,16 +5,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import System.reportpdf;
+import System.Reportpdf;
 
 import System.*;
+import com.itextpdf.text.BadElementException;
+import com.itextpdf.text.DocumentException;
 
 
 public class Report {
@@ -266,6 +266,15 @@ public class Report {
                             performanceReportData.add(row);
                         }
 
+                        Reportpdf reportpdf = new Reportpdf();
+
+                        try {
+                            reportpdf.createPerformanceReport(performanceReportData);
+                        } catch (BadElementException badElementException) {
+                            badElementException.printStackTrace();
+                        } catch (DocumentException documentException) {
+                            documentException.printStackTrace();
+                        }
 
                         break;
                     case "Summary Report":
@@ -277,15 +286,6 @@ public class Report {
 
                         break;
                 }
-
-
-                /*try {
-                    //reportpdf.performanceReport();
-                    ProcessBuilder processBuilder = new ProcessBuilder("cmd.exe", "/C", "data/reports\\reportpdf.pdf");
-
-                } catch (Exception exception) {
-                    exception.printStackTrace();
-                } */
             }
         });
 
@@ -295,11 +295,11 @@ public class Report {
             public void actionPerformed(ActionEvent e) {
                 createConfirmButton.setEnabled(createReportTypeComboBox.getSelectedIndex() != 0);
                 if(createReportTypeComboBox.getSelectedIndex() == 3 ){
-                    reportpdf.performanceReport();
+                    Reportpdf.performanceReport();
                 } else if (createReportTypeComboBox.getSelectedIndex() == 2){
-                    reportpdf.summaryReport();
+                    Reportpdf.summaryReport();
                 } else if (createReportTypeComboBox.getSelectedIndex() == 1){
-                    reportpdf.jobReport();
+                    Reportpdf.jobReport();
                 }
             }
         });

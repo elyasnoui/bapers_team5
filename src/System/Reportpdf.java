@@ -23,9 +23,9 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import java.util.List;
 
-public class reportpdf {
+public class Reportpdf {
 
-    private static String FILE = "data/reports\\reportpdf.pdf";
+    private static String FILE = "data/reports\\Reportpdf.pdf";
     private static Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18,
             Font.BOLD);
     private static Font redFont = new Font(Font.FontFamily.TIMES_ROMAN, 12,
@@ -42,7 +42,7 @@ public class reportpdf {
 
 
 
-    public static List<String[]> getData() {
+    public static List<String[]> getPerformanceData() {
         List<String[]> data = new ArrayList<String[]>();
         String[] tableTitleList = {"Name", "Task ID", "Department", "Date", "Start Time", "Time Taken"};
         data.add(tableTitleList);
@@ -51,7 +51,9 @@ public class reportpdf {
             i++;
             String[] temp = new String[tableTitleList.length];
             for (int j = 0; j < tableTitleList.length; j++) {
-                temp[j] =  (tableTitleList[j] + " " + i);
+                /*temp[j] =  (tableTitleList[j] + " " + i);*/
+
+
             }
             data.add(temp);
         }
@@ -66,7 +68,7 @@ public class reportpdf {
             document.open();
             addMetaData(document);
             //addTitlePage(document);
-            addjobContent(document);
+            addJobContent(document);
             document.close();
         } catch (Exception e){
             e.printStackTrace();
@@ -88,7 +90,6 @@ public class reportpdf {
     }
 
     public static void performanceReport() {
-        System.out.println("here");
         try {
             Document document = new Document();
             PdfWriter.getInstance(document, new FileOutputStream(FILE));
@@ -188,7 +189,7 @@ public class reportpdf {
 
     }
 
-    public static void addjobContent(Document document) throws DocumentException {
+    public static void addJobContent(Document document) throws DocumentException {
         Paragraph anchor = new Paragraph("Customer Job Report", catFont);
        // anchor.setName("Customer Job Report");
 
@@ -242,7 +243,6 @@ public class reportpdf {
         c1 = new PdfPCell(new Phrase("Packing"));
         c1.setHorizontalAlignment(Element.ALIGN_CENTER);
         table.addCell(c1);
-
 
 
         table.setHeaderRows(1);
@@ -480,19 +480,16 @@ public class reportpdf {
     private static void createPerformanceTable(Section subCatPart)
             throws BadElementException {
 
-
         PdfPTable table = new PdfPTable(6);
         table.setWidthPercentage(100);
-        List<String[]> dataset = getData();
+        List<String[]> dataset = getPerformanceData();
         for (String[] record : dataset) {
             for (String field : record) {
                 table.addCell(field);
             }
         }
 
-
         subCatPart.add(table);
-
     }
 
 
@@ -501,6 +498,105 @@ public class reportpdf {
         for (int i = 0; i < number; i++) {
             paragraph.add(new Paragraph(" "));
         }
+    }
+
+    private void createJobReportTemplate() {
+        try{
+            Document document = new Document();
+            PdfWriter.getInstance(document, new FileOutputStream("data/reports/jobReport.pdf"));
+            document.open();
+            addMetaData(document);
+            //addTitlePage(document);
+            addJobContent(document);
+            document.close();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    private void createSummaryReportTemplate(){
+        try{
+            Document document = new Document();
+            PdfWriter.getInstance(document, new FileOutputStream("data/reports/summaryReport.pdf"));
+            document.open();
+            addMetaData(document);
+            //addTitlePage(document);
+            addsummaryContent(document);
+            document.close();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    private Document createPerformanceReportTemplate() {
+        try {
+            Document document = new Document();
+            PdfWriter.getInstance(document, new FileOutputStream("data/reports/performanceReport.pdf"));
+            document.open();
+            addMetaData(document);
+            //addTitlePage(document);
+            return document;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private List<String[]> insertPerformanceData(List<String[]> pd) {
+        //Sort here
+
+
+        //Before this
+        List<String[]> data = new ArrayList<String[]>();
+        String[] tableTitleList = {"Name", "Task ID", "Department", "Date", "Start Time", "Time Taken"};
+        data.add(tableTitleList);
+        for (int i = 0; i < 10; i++) {
+            List<String[]> dataLine = new ArrayList<String[]>();
+            String[] temp = new String[tableTitleList.length];
+            for (int j = 0; j < tableTitleList.length; j++) {
+                /*temp[j] =  (tableTitleList[j] + " " + i);*/
+
+                temp[j] = pd.get(i)[j];
+            }
+            data.add(temp);
+        }
+        return data;
+    }
+
+    public void createPerformanceReport(List<String[]> performanceReportData) throws DocumentException {
+        Document doc = createPerformanceReportTemplate();
+
+        Paragraph anchor = new Paragraph("Individual Performance Report", catFont);
+        //anchor.setName("Individual Performance Report");
+
+        addEmptyLine(anchor,4);
+
+        // Second parameter is the number of the chapter
+        Chapter catPart = new Chapter(new Paragraph(anchor), 1);
+
+        Paragraph subPara = new Paragraph("Subcategory 1", subFont);
+        //Section subCatPart = catPart.addSection(subPara);
+        //subCatPart.add(new Paragraph("Hello"));
+        addEmptyLine(subPara, 5);
+
+        // add performance table
+        PdfPTable table = new PdfPTable(6);
+        table.setWidthPercentage(100);
+        List<String[]> dataset = insertPerformanceData(performanceReportData);
+        for (String[] record : dataset) {
+            for (String field : record) {
+                table.addCell(field);
+            }
+        }
+
+        // now add all this to the document
+        doc.add(catPart);
+
+        doc.add(table);
+
+        //subCatPart.add(table);
+
+        doc.close();
     }
 }
 
