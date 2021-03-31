@@ -5,6 +5,8 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -54,9 +56,14 @@ public class Payment {
     private JTable customerTable;
     private JButton lookupSelectButton;
     private JButton lookupCancelButton;
-    private JButton lookupCreateButton;
-    private JLabel amountLabel;
+    private JLabel jobIDLabel;
+    private JLabel firstNameLabel;
+    private JLabel lastNameLabel;
+    private JLabel amountDueLabel;
+    private JLabel discountLabel;
+    private JLabel amountMinusLabel;
     private List<String[]> paymentData;
+    private List<String[]> paymentData1;
     private List<String[]> cardData;
     private List<String[]> cashData;
     private final String[] tableColumns = {
@@ -75,17 +82,19 @@ public class Payment {
             "Change Given"
     };
     private final String[] customerColumns = {
-            "ID",
-            "First Name",
-            "Surname",
-            "Contact Number",
-            "Address",
-            "Email"
+            "firstName",
+            "lastName",
+            "jobID",
+            "amountDue",
+            "isPaid",
     };
 
     public Payment(Bapers system) {
 
         this.system = system;
+
+        firstNameField.setBorder(null);
+        lastNameField.setBorder(null);
         customerTable.setModel(new DefaultTableModel(null, customerColumns));
 
         try {
@@ -123,64 +132,76 @@ public class Payment {
         bannerIcon = new ImageIcon("data/banners/payment.png");
         bannerLabel.setIcon(bannerIcon);
 
+        addMouseListeners();
+
         logoutButton.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) { system.changeScreen("logout", mainPanel); }
+            public void actionPerformed(ActionEvent e) {
+                system.changeScreen("logout", mainPanel);
+                removeMouseListeners(); }
+
         });
         jobsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 system.changeScreen("jobs", mainPanel);
+                removeMouseListeners();
             }
         });
         customerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 system.changeScreen("customers", mainPanel);
+                removeMouseListeners();
             }
         });
         paymentsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 system.changeScreen("payments", mainPanel);
+                removeMouseListeners();
             }
         });
         staffButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 system.changeScreen("staff", mainPanel);
+                removeMouseListeners();
             }
         });
         tasksButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 system.changeScreen("tasks", mainPanel);
+                removeMouseListeners();
             }
         });
         reportsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 system.changeScreen("reports", mainPanel);
+                removeMouseListeners();
             }
         });
         databaseButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 system.changeScreen("database", mainPanel);
+                removeMouseListeners();
             }
         });
 
-        logoutButton.addMouseListener(ApplicationWindow.highlightListener);
-        jobsButton.addMouseListener(ApplicationWindow.highlightListener);
-        customerButton.addMouseListener(ApplicationWindow.highlightListener);
-        paymentsButton.addMouseListener(ApplicationWindow.highlightListener);
-        staffButton.addMouseListener(ApplicationWindow.highlightListener);
-        tasksButton.addMouseListener(ApplicationWindow.highlightListener);
-        reportsButton.addMouseListener(ApplicationWindow.highlightListener);
-        databaseButton.addMouseListener(ApplicationWindow.highlightListener);
-        createButton.addMouseListener(ApplicationWindow.highlightListener);
-        editButton.addMouseListener(ApplicationWindow.highlightListener);
-        deleteButton.addMouseListener(ApplicationWindow.highlightListener);
+//        logoutButton.addMouseListener(ApplicationWindow.highlightListener);
+//        jobsButton.addMouseListener(ApplicationWindow.highlightListener);
+//        customerButton.addMouseListener(ApplicationWindow.highlightListener);
+//        paymentsButton.addMouseListener(ApplicationWindow.highlightListener);
+//        staffButton.addMouseListener(ApplicationWindow.highlightListener);
+//        tasksButton.addMouseListener(ApplicationWindow.highlightListener);
+//        reportsButton.addMouseListener(ApplicationWindow.highlightListener);
+//        databaseButton.addMouseListener(ApplicationWindow.highlightListener);
+//        createButton.addMouseListener(ApplicationWindow.highlightListener);
+//        editButton.addMouseListener(ApplicationWindow.highlightListener);
+//        deleteButton.addMouseListener(ApplicationWindow.highlightListener);
 
         ApplicationWindow.displayTable(table, paymentData, tableColumns);
         createButton.addActionListener(new ActionListener() {
@@ -199,6 +220,22 @@ public class Payment {
                 createPanel.setVisible(false);
             }
         });
+        firstNameField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if (firstNameField.getText().length() >= 3 || lastNameField.getText().length() >= 3) {
+                    paymentSearch();
+                } else customerTable.setModel(new DefaultTableModel(null, customerColumns));
+            }
+        });
+        lastNameField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if (lastNameField.getText().length() >= 3 || firstNameField.getText().length() >= 3) {
+                    paymentSearch();
+                } else customerTable.setModel(new DefaultTableModel(null, customerColumns));
+            }
+        });
         lookupButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -206,8 +243,75 @@ public class Payment {
                 customerLookupPanel.setVisible(true);
             }
         });
+        lookupSelectButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!customerTable.getSelectionModel().isSelectionEmpty()) {
+                    String firstName = paymentData.get(customerTable.getSelectedRow())[0];
+                    String lastName = paymentData.get(customerTable.getSelectedRow())[1];
+                    String jobID = paymentData.get(customerTable.getSelectedRow())[2];
+                    String amountDue = paymentData.get(customerTable.getSelectedRow())[2];
+                    firstNameLabel.setText(firstName);
+                    lastNameLabel.setText(lastName);
+                    jobIDLabel.setText(jobID);
+                    amountDueLabel.setText(amountDue);
+                    customerLookupPanel.setVisible(false);
+                    createPanel.setVisible(true);
+                }
+            }
+        });
+        lookupCancelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                customerLookupPanel.setVisible(false);
+                createPanel.setVisible(true);
+            }
+        });
+
     }
 
+
+    private void paymentSearch() {
+        try {
+            paymentData1 = DatabaseConnection.searchPayments(firstNameField.getText(), lastNameField.getText());
+            assert paymentData1 != null;
+            System.out.println(paymentData1);
+            ApplicationWindow.displayTable(customerTable, paymentData1, customerColumns);
+        }
+        catch (Exception e) { e.printStackTrace(); }
+    }
+
+    private void addMouseListeners() {
+        logoutButton.addMouseListener(ApplicationWindow.highlightListener);
+        jobsButton.addMouseListener(ApplicationWindow.highlightListener);
+        customerButton.addMouseListener(ApplicationWindow.highlightListener);
+        paymentsButton.addMouseListener(ApplicationWindow.highlightListener);
+        staffButton.addMouseListener(ApplicationWindow.highlightListener);
+        tasksButton.addMouseListener(ApplicationWindow.highlightListener);
+        reportsButton.addMouseListener(ApplicationWindow.highlightListener);
+        databaseButton.addMouseListener(ApplicationWindow.highlightListener);
+        createButton.addMouseListener(ApplicationWindow.highlightListener);
+        editButton.addMouseListener(ApplicationWindow.highlightListener);
+        deleteButton.addMouseListener(ApplicationWindow.highlightListener);
+        popupCreateButton.addMouseListener(ApplicationWindow.highlightListener);
+        popupCancelButton.addMouseListener(ApplicationWindow.highlightListener);
+    }
+
+    private void removeMouseListeners() {
+        logoutButton.removeMouseListener(ApplicationWindow.highlightListener);
+        jobsButton.removeMouseListener(ApplicationWindow.highlightListener);
+        customerButton.removeMouseListener(ApplicationWindow.highlightListener);
+        paymentsButton.removeMouseListener(ApplicationWindow.highlightListener);
+        staffButton.removeMouseListener(ApplicationWindow.highlightListener);
+        tasksButton.removeMouseListener(ApplicationWindow.highlightListener);
+        reportsButton.removeMouseListener(ApplicationWindow.highlightListener);
+        databaseButton.removeMouseListener(ApplicationWindow.highlightListener);
+        createButton.removeMouseListener(ApplicationWindow.highlightListener);
+        editButton.removeMouseListener(ApplicationWindow.highlightListener);
+        deleteButton.removeMouseListener(ApplicationWindow.highlightListener);
+        popupCreateButton.removeMouseListener(ApplicationWindow.highlightListener);
+        popupCancelButton.removeMouseListener(ApplicationWindow.highlightListener);
+    }
     public JPanel getMainPanel() {
         return mainPanel;
     }
