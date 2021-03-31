@@ -500,18 +500,18 @@ public class Reportpdf {
         }
     }
 
-    private void createJobReportTemplate() {
-        try{
+    private Document createJobReportTemplate() {
+        try {
             Document document = new Document();
-            PdfWriter.getInstance(document, new FileOutputStream("data/reports/jobReport.pdf"));
+            PdfWriter.getInstance(document, new FileOutputStream("data/reports/jobreport.pdf"));
             document.open();
             addMetaData(document);
             //addTitlePage(document);
-            addJobContent(document);
-            document.close();
-        } catch (Exception e){
+            return document;
+        } catch (Exception e) {
             e.printStackTrace();
         }
+        return null;
     }
 
     private void createSummaryReportTemplate(){
@@ -550,13 +550,34 @@ public class Reportpdf {
         List<String[]> data = new ArrayList<String[]>();
         String[] tableTitleList = {"Name", "Task ID", "Department", "Date", "Start Time", "Time Taken"};
         data.add(tableTitleList);
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < pd.size(); i++) {
             List<String[]> dataLine = new ArrayList<String[]>();
             String[] temp = new String[tableTitleList.length];
             for (int j = 0; j < tableTitleList.length; j++) {
                 /*temp[j] =  (tableTitleList[j] + " " + i);*/
 
                 temp[j] = pd.get(i)[j];
+            }
+            data.add(temp);
+        }
+        return data;
+    }
+
+    private List<String[]> insertjobReportData(List<String[]> jd) {
+        //Sort here
+
+
+        //Before this
+        List<String[]> data = new ArrayList<String[]>();
+        String[] tableTitleList = {"Customer Name", "Job ID", "Start Date", "End Date", "Status", "Amount" };
+        data.add(tableTitleList);
+        for (int i = 0; i < jd.size(); i++) {
+            List<String[]> dataLine = new ArrayList<String[]>();
+            String[] temp = new String[tableTitleList.length];
+            for (int j = 0; j < tableTitleList.length; j++) {
+                /*temp[j] =  (tableTitleList[j] + " " + i);*/
+
+                temp[j] = jd.get(i)[j];
             }
             data.add(temp);
         }
@@ -601,7 +622,7 @@ public class Reportpdf {
 
 
     public void createJobReport(List<String[]> jobReportData) throws DocumentException {
-        Document doc = createPerformanceReportTemplate();
+        Document doc = createJobReportTemplate();
 
         Paragraph anchor = new Paragraph("Customer Job Report", catFont);
         //anchor.setName("Individual Performance Report");
@@ -617,9 +638,9 @@ public class Reportpdf {
         addEmptyLine(subPara, 5);
 
         // add performance table
-        PdfPTable table = new PdfPTable(5);
+        PdfPTable table = new PdfPTable(6);
         table.setWidthPercentage(100);
-        List<String[]> dataset = insertPerformanceData(jobReportData);
+        List<String[]> dataset = insertjobReportData(jobReportData);
         for (String[] record : dataset) {
             for (String field : record) {
                 table.addCell(field);

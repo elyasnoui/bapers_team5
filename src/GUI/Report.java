@@ -8,6 +8,7 @@ import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -289,21 +290,22 @@ public class Report {
                         jobData = DatabaseConnection.getJobFromDates(rowData[4],rowData[5]);
                         assert jobData != null;
 
-                        List<String[]> jobPerformanceData = new ArrayList<>();
+                        List<String[]> jobReportData = new ArrayList<>();
                         for(String[] c : jobData){
 
                             String name = DatabaseConnection.getCustomerName(Integer.parseInt(c[7]));
                             String ID = c[0];
-                            String startDate = c[3].substring(0,10);
-                            String endDate = c[4].substring(11,16);
+                            String startDate = c[3];
+                            String endDate = c[4];
                             String status = c[6];
-                            String[] row = {name, ID, startDate, endDate,status};
-                            jobPerformanceData.add(row);
+                            String amount = c[2];
+                            String[] row = {name, ID, startDate, endDate,status, amount};
+                            jobReportData.add(row);
                         }
                         Reportpdf reportpdf1 = new Reportpdf();
 
                         try{
-                            reportpdf1.createJobReport(jobPerformanceData);
+                            reportpdf1.createJobReport(jobReportData);
                         } catch (BadElementException badElementException){
                             badElementException.printStackTrace();
                         } catch (DocumentException documentException){
