@@ -764,17 +764,14 @@ public class DatabaseConnection {
 
     // Editing an existing staff record
     public static boolean
-        editStaff(final int ID, final String firstName, final String lastName, final String contactNumber, final String address,
-                  final String email, final String nationalInsurance, final int workHours, final String username,
-                  final String password, final String role, final String privileges) throws SQLException {
+        editStaff(final int ID, final String title, final String firstName, final String lastName, final String contactNumber,
+                  final String address, final String email, final String username, final String password, final String role) throws SQLException {
         Connection conn = Connect();
         assert conn != null;
         PreparedStatement statement = conn.prepareStatement(
-                "UPDATE staff SET firstName = '"+firstName+"', lastName = '"+lastName+"', contactNumber = '" +
-                        ""+contactNumber+"', address = '"+address+"', email = '"+email+"', nationalInsurance = " +
-                        "'"+nationalInsurance+"', workHours = '"+workHours+"', username = '"+username+"', password = " +
-                        "'"+password+"', role = '"+role+"', privileges = '"+privileges+"' WHERE ID = "+ID
-        );
+                "UPDATE staff SET title = '"+title+"', firstName = '"+firstName+"', lastName = '"+lastName+"', contactNumber = '" +
+                        ""+contactNumber+"', address = '"+address+"', email = '"+email+"', username = '"+username+"', password = " +
+                        "'"+password+"', role = '"+role+"' WHERE ID = "+ID);
         return executeStatement(statement);
     }
 

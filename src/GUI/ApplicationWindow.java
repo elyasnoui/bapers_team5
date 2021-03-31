@@ -29,7 +29,7 @@ public class ApplicationWindow extends JFrame {
     public static final String postcodeRegex = "(([A-Z][0-9]{1,2})|(([A-Z][A-HJ-Y][0-9]{1,2})|(([A-Z][0-9][A-Z])|([A-Z][A-HJ-Y][0-9]?[A-Z])))) [0-9][A-Z]{2}";
     public static final String emailRegex = "([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,4})";
     public static final String discountRegex = "[0-9]?$|^100";
-    public static final String usernameRegex = "[a-zA-Z0-9]{5,15}?";
+    public static final String usernameRegex = "[a-zA-Z0-9]{4,15}?";
     public static final String passwordRegex = "(?=.*[a-z])(?=.*[A-Z])[A-Za-z\\d@_$!%*?&]{6,15}";
     public static final String roleRegex = "[a-zA-Z ]{1,35}";
     public static final LineBorder borderError = new LineBorder(Color.RED, 1);
@@ -181,13 +181,13 @@ public class ApplicationWindow extends JFrame {
                         break;
                     case "username":
                         if (((JTextField) e.getComponent()).getText().matches(usernameRegex)) {
-                            ((JTextField) e.getComponent()).setToolTipText("Please enter a capital and lowercase letter (special characters accepted) (6,15)");
+                            ((JTextField) e.getComponent()).setToolTipText("Please enter only letters and numbers (4,15)");
                             valid = true;
                         } else valid = false;
                         break;
-                    case "password":
+                    case "password": case "newPassword":
                         if (((JTextField) e.getComponent()).getText().matches(passwordRegex)) {
-                            ((JTextField) e.getComponent()).setToolTipText("Please enter only letters and numbers (5,15)");
+                            ((JTextField) e.getComponent()).setToolTipText("Please enter a capital and lowercase letter (special characters accepted) (6,15)");
                             valid = true;
                         } else valid = false;
                         break;
@@ -197,8 +197,8 @@ public class ApplicationWindow extends JFrame {
                             valid = true;
                         } else valid = false;
                         break;
-                } if (valid || ((e.getComponent().getName().equals("addressLineOpt") || e.getComponent().getName().equals("company"))
-                        && ((JTextField) e.getComponent()).getText().isEmpty())) {
+                } if (valid || ((e.getComponent().getName().equals("addressLineOpt") || e.getComponent().getName().equals("company")
+                || e.getComponent().getName().equals("newPassword")) && ((JTextField) e.getComponent()).getText().isEmpty())) {
                     ((JTextField) e.getComponent()).setBorder(null);
                     ((JTextField) e.getComponent()).setToolTipText(null);
                 } else ((JTextField) e.getComponent()).setBorder(borderError);

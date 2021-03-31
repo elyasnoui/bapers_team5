@@ -49,8 +49,24 @@ public class Staff {
     private JTextField createUsernameField;
     private JPasswordField createPasswordConfirmField;
     private JTextField createRoleField;
-    private JButton popupCancelButton;
-    private JButton popupCreateButton;
+    private JComboBox editTitleComboBox;
+    private JTextField editFirstNameField;
+    private JTextField editLastNameField;
+    private JTextField editContactNumberField;
+    private JPanel editPanel;
+    private JTextField editAddressFirstField;
+    private JTextField editAddressSecondField;
+    private JTextField editCityField;
+    private JTextField editPostcodeField;
+    private JTextField editUsernameField;
+    private JPasswordField editPasswordField;
+    private JPasswordField editPasswordConfirmField;
+    private String editHexPassword;
+    private JTextField editRoleField;
+    private JButton editConfirmButton;
+    private JButton editCancelButton;
+    private JTextField editEmailField;
+    private JLabel editStaffIDField;
     private ImageIcon bannerIcon;
     private List<String[]> staffData;
     private final String[] tableColumns = {
@@ -148,6 +164,32 @@ public class Staff {
 
         ApplicationWindow.displayTable(table, staffData, tableColumns);
 
+        // Table listener
+        table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                if (table.getSelectionModel().getSelectedItemsCount() == 1) {
+                    editButton.addMouseListener(ApplicationWindow.highlightListener);
+                    editButton.setToolTipText(null);
+                    deleteButton.addMouseListener(ApplicationWindow.highlightListener);
+                    deleteButton.setToolTipText(null);
+                } else if (table.getSelectionModel().getSelectedItemsCount() > 1) {
+                    editButton.removeMouseListener(ApplicationWindow.highlightListener);
+                    editButton.setToolTipText("Please select only 1 record");
+                    deleteButton.removeMouseListener(ApplicationWindow.highlightListener);
+                    deleteButton.setToolTipText("Please select only 1 record");
+                } else {
+                    editButton.removeMouseListener(ApplicationWindow.highlightListener);
+                    editButton.setToolTipText("Please select a record");
+                    deleteButton.removeMouseListener(ApplicationWindow.highlightListener);
+                    deleteButton.setToolTipText("Please select a record");
+                }
+
+                editButton.setEnabled(table.getSelectionModel().getSelectedItemsCount() == 1);
+                deleteButton.setEnabled(table.getSelectionModel().getSelectedItemsCount() == 1);
+            }
+        });
+
         createButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -161,7 +203,12 @@ public class Staff {
         editButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                tablePanel.setVisible(false);
+                buttonPanel.setVisible(false);
+                editPanel.setVisible(true);
 
+                int id = Integer.parseInt(String.valueOf(table.getModel().getValueAt(table.getSelectedRow(), 0)));
+                resetEditPanel(id);
             }
         });
         deleteButton.addActionListener(new ActionListener() {
@@ -192,7 +239,6 @@ public class Staff {
                         title = String.valueOf(createTitleComboBox.getSelectedItem());
 
                     try {
-                        System.out.println(DatabaseConnection.md5(createPasswordField.getText()));
                         if (!DatabaseConnection.addStaff(title, createFirstNameField.getText(), createLastNameField.getText()
                         , createContactNumberField.getText(), address, createEmailField.getText(), createUsernameField.getText()
                         , DatabaseConnection.md5(createPasswordField.getText()), createRoleField.getText()))
@@ -210,6 +256,53 @@ public class Staff {
                 tablePanel.setVisible(true);
 
                 removeCreateListeners();
+            }
+        });
+        editConfirmButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (validatePanel(editFirstNameField, editLastNameField, editContactNumberField, editAddressFirstField
+                        , editAddressSecondField, editCityField, editPostcodeField, editEmailField, editUsernameField
+                        , editPasswordField, editPasswordConfirmField, editRoleField)) {
+
+                    String address;
+                    if (!editAddressSecondField.getText().isEmpty())
+                        address = editAddressFirstField.getText()+", "+editAddressSecondField.getText()+", "
+                                +editCityField.getText()+", "+editPostcodeField.getText();
+                    else address = editAddressFirstField.getText()+", "+editCityField.getText()
+                            +", "+editPostcodeField.getText();
+
+                    String title;
+                    if (editTitleComboBox.getSelectedIndex() == 5)
+                        title = "";
+                    else
+                        title = String.valueOf(editTitleComboBox.getSelectedItem());
+
+                    try {
+                        if (!editPasswordField.getText().isEmpty()) {
+                            if (!DatabaseConnection.editStaff(Integer.parseInt(editStaffIDField.getText()), title, editFirstNameField.getText(),
+                                    editLastNameField.getText(), editContactNumberField.getText(), address, editEmailField.getText(),
+                                    editUsernameField.getText(), DatabaseConnection.md5(editPasswordField.getText()), editRoleField.getText()))
+                                JOptionPane.showMessageDialog(mainPanel, "Couldn't edit staff with updated password");
+                        } else {
+                            if (!DatabaseConnection.editStaff(Integer.parseInt(editStaffIDField.getText()), title, editFirstNameField.getText(),
+                                    editLastNameField.getText(), editContactNumberField.getText(), address, editEmailField.getText(),
+                                    editUsernameField.getText(), editHexPassword, editRoleField.getText()))
+                                JOptionPane.showMessageDialog(mainPanel, "Couldn't edit staff with previous password");
+                        }
+                        system.changeScreen("staff", mainPanel);
+                    } catch (NoSuchAlgorithmException | SQLException | UnsupportedEncodingException exp) { exp.printStackTrace(); }
+                }
+            }
+        });
+        editCancelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                editPanel.setVisible(false);
+                buttonPanel.setVisible(true);
+                tablePanel.setVisible(true);
+
+                removeEditListeners();
             }
         });
     }
@@ -292,7 +385,10 @@ public class Staff {
             usernameField.setToolTipText(null);
         }
 
-        if (!passwordField.getText().matches(ApplicationWindow.passwordRegex)) {
+        if (passwordField.getName().equals("newPassword") && passwordField.getText().isEmpty()) {
+            passwordField.setBorder(null);
+            passwordField.setToolTipText(null);
+        } else if (!passwordField.getText().matches(ApplicationWindow.passwordRegex)) {
             passwordField.setBorder(ApplicationWindow.borderError);
             passwordField.setToolTipText("Please enter only letters and numbers (5,15)");
         } else {
@@ -300,15 +396,20 @@ public class Staff {
             passwordField.setToolTipText(null);
         }
 
-        if (!passwordConfirmField.getText().matches(ApplicationWindow.passwordRegex)) {
-            passwordConfirmField.setBorder(ApplicationWindow.borderError);
-            passwordConfirmField.setToolTipText("Please enter only letters and numbers (5,15)");
-        } else if (!String.valueOf(passwordConfirmField.getText()).equals(String.valueOf(passwordField.getText()))) {
-            passwordConfirmField.setBorder(ApplicationWindow.borderError);
-            passwordConfirmField.setToolTipText("Passwords do not match");
-        } else {
-            passwordConfirmField.setBorder(null);
-            passwordConfirmField.setToolTipText(null);
+        if (passwordConfirmField.getName().equals("newPassword")) {
+            if (passwordField.getText().isEmpty()) {
+                passwordConfirmField.setBorder(null);
+                passwordConfirmField.setToolTipText(null);
+            } else if (!passwordConfirmField.getText().matches(ApplicationWindow.passwordRegex)) {
+                passwordConfirmField.setBorder(ApplicationWindow.borderError);
+                passwordConfirmField.setToolTipText("Please enter only letters and numbers (5,15)");
+            } else if (!String.valueOf(passwordConfirmField.getText()).equals(String.valueOf(passwordField.getText()))) {
+                passwordConfirmField.setBorder(ApplicationWindow.borderError);
+                passwordConfirmField.setToolTipText("Passwords do not match");
+            } else {
+                passwordConfirmField.setBorder(null);
+                passwordConfirmField.setToolTipText(null);
+            }
         }
 
         if (!roleField.getText().matches(ApplicationWindow.roleRegex)) {
@@ -357,6 +458,78 @@ public class Staff {
         createRoleField.setBorder(null);
 
         addCreateListeners();
+    }
+
+    private void resetEditPanel(int id) {
+        editTitleComboBox.setModel(new DefaultComboBoxModel(titles));
+        editTitleComboBox.setSelectedIndex(0);
+        editFirstNameField.setBorder(null);
+        editLastNameField.setBorder(null);
+        editContactNumberField.setBorder(null);
+        editAddressFirstField.setBorder(null);
+        editAddressSecondField.setBorder(null);
+        editCityField.setBorder(null);
+        editPostcodeField.setBorder(null);
+        editEmailField.setBorder(null);
+        editUsernameField.setBorder(null);
+        editPasswordField.setBorder(null);
+        editPasswordConfirmField.setBorder(null);
+        editRoleField.setBorder(null);
+
+        String[] staffData = DatabaseConnection.getRowBySingleID("staff", id);
+        assert staffData != null;
+        editStaffIDField.setText(staffData[0]);
+        while (!String.valueOf(editTitleComboBox.getSelectedItem()).equals(staffData[1]))
+            editTitleComboBox.setSelectedIndex(editTitleComboBox.getSelectedIndex()+1);
+        editFirstNameField.setText(staffData[2]);
+        editLastNameField.setText(staffData[3]);
+        editContactNumberField.setText(staffData[4]);
+        String[] address = staffData[5].split(", ");
+        editAddressFirstField.setText(address[0]);
+        if (address.length == 4) {
+            editAddressSecondField.setText(address[1]);
+            editCityField.setText(address[2]);
+            editPostcodeField.setText(address[3]);
+        } else {
+            editAddressSecondField.setText("");
+            editCityField.setText(address[1]);
+            editPostcodeField.setText(address[2]);
+        }
+        editEmailField.setText(staffData[6]);
+        editUsernameField.setText(staffData[7]);
+        editHexPassword = staffData[8];
+        editRoleField.setText(staffData[9]);
+    }
+
+    private void addEditListeners() {
+        editFirstNameField.addKeyListener(ApplicationWindow.regexListener);
+        editLastNameField.addKeyListener(ApplicationWindow.regexListener);
+        editContactNumberField.addKeyListener(ApplicationWindow.regexListener);
+        editAddressFirstField.addKeyListener(ApplicationWindow.regexListener);
+        editAddressSecondField.addKeyListener(ApplicationWindow.regexListener);
+        editCityField.addKeyListener(ApplicationWindow.regexListener);
+        editPostcodeField.addKeyListener(ApplicationWindow.regexListener);
+        editEmailField.addKeyListener(ApplicationWindow.regexListener);
+        editUsernameField.addKeyListener(ApplicationWindow.regexListener);
+        editPasswordField.addKeyListener(ApplicationWindow.regexListener);
+        editPasswordConfirmField.addKeyListener(ApplicationWindow.regexListener);
+        editRoleField.addKeyListener(ApplicationWindow.regexListener);
+    }
+
+    private void removeEditListeners() {
+        editFirstNameField.removeKeyListener(ApplicationWindow.regexListener);
+        editLastNameField.removeKeyListener(ApplicationWindow.regexListener);
+        editContactNumberField.removeKeyListener(ApplicationWindow.regexListener);
+        editAddressFirstField.removeKeyListener(ApplicationWindow.regexListener);
+        editAddressSecondField.removeKeyListener(ApplicationWindow.regexListener);
+        editCityField.removeKeyListener(ApplicationWindow.regexListener);
+        editPostcodeField.removeKeyListener(ApplicationWindow.regexListener);
+        editEmailField.removeKeyListener(ApplicationWindow.regexListener);
+        editUsernameField.removeKeyListener(ApplicationWindow.regexListener);
+        editPasswordField.removeKeyListener(ApplicationWindow.regexListener);
+        editPasswordConfirmField.removeKeyListener(ApplicationWindow.regexListener);
+        editRoleField.removeKeyListener(ApplicationWindow.regexListener);
+        editHexPassword = null;
     }
 
     private void addCreateListeners() {
