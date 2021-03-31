@@ -51,6 +51,10 @@ public class DatabaseConnection {
         }
     }*/
 
+    public static int commit(){
+        return commit();
+    }
+
     public static int getNextID(final String tableName) {
         try {
             Connection conn = Connect();
