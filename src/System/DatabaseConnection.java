@@ -230,19 +230,21 @@ public class DatabaseConnection {
             PreparedStatement statement;
             if (firstName.isEmpty() && lastName.isEmpty()) return null;
             else if (firstName.isEmpty())
-                statement = conn.prepareStatement("SELECT jobID, amountdue, isPaid FROM payment " +
+                statement = conn.prepareStatement("SELECT customer.firstName, customer.lastName, jobID, amountdue FROM payment " +
                         "INNER JOIN customer ON payment.customerID = customer.ID WHERE customer.lastName LIKE '"+lastName+"%'");
             else if (lastName.isEmpty())
-                statement = conn.prepareStatement("SELECT jobID, amountdue, isPaid FROM payment " +
-                        "INNER JOIN customer ON payment.customerID = customer.ID WHERE customer.firstName LIKE '"+firstName+"%'");
+                statement = conn.prepareStatement("SELECT staff.firstName, staff.lastName, jobID, amountdue FROM payment " +
+                        "INNER JOIN staff ON payment.staffID = staff.ID WHERE staff.firstName LIKE '"+firstName+"%'");
             else
-                statement = conn.prepareStatement("SELECT jobID, amountdue, isPaid FROM payment INNER JOIN customer " +
+                statement = conn.prepareStatement("SELECT customer.firstName, customer.lastName, jobID, amountdue FROM payment INNER JOIN customer " +
                         "ON payment.customerID = customer.ID WHERE customer.firstName LIKE '" +
                         firstName+"%' OR customer.lastName LIKE '"+lastName+"%'");
             return returnList(statement);
         } catch (SQLException exception) { exception.printStackTrace(); }
         return null;
     }
+
+
 
 
     public static String[] getRowBySingleID(final String tableName, final int ID) {

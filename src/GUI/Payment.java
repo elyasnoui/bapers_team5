@@ -85,8 +85,7 @@ public class Payment {
             "firstName",
             "lastName",
             "jobID",
-            "amountDue",
-            "isPaid",
+            "amountDue"
     };
 
     public Payment(Bapers system) {
@@ -247,10 +246,10 @@ public class Payment {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (!customerTable.getSelectionModel().isSelectionEmpty()) {
-                    String firstName = paymentData.get(customerTable.getSelectedRow())[0];
-                    String lastName = paymentData.get(customerTable.getSelectedRow())[1];
-                    String jobID = paymentData.get(customerTable.getSelectedRow())[2];
-                    String amountDue = paymentData.get(customerTable.getSelectedRow())[2];
+                    String firstName = paymentData1.get(customerTable.getSelectedRow())[0];
+                    String lastName = paymentData1.get(customerTable.getSelectedRow())[1];
+                    String jobID = paymentData1.get(customerTable.getSelectedRow())[2];
+                    String amountDue = paymentData1.get(customerTable.getSelectedRow())[3];
                     firstNameLabel.setText(firstName);
                     lastNameLabel.setText(lastName);
                     jobIDLabel.setText(jobID);
@@ -275,7 +274,6 @@ public class Payment {
         try {
             paymentData1 = DatabaseConnection.searchPayments(firstNameField.getText(), lastNameField.getText());
             assert paymentData1 != null;
-            System.out.println(paymentData1);
             ApplicationWindow.displayTable(customerTable, paymentData1, customerColumns);
         }
         catch (Exception e) { e.printStackTrace(); }
