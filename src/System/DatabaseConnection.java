@@ -96,11 +96,11 @@ public class DatabaseConnection {
     public static String getCustomerName(final int ID) throws SQLException {
         Connection conn = Connect();
         assert conn != null;
-        PreparedStatement statement = conn.prepareStatement("SELECT firstName, lastName FROM customer WHERE " +
+        PreparedStatement statement = conn.prepareStatement("SELECT title, firstName, lastName FROM customer WHERE " +
                 "ID ="+ID);
         ResultSet res = statement.executeQuery();
         if (res.next())
-            return res.getString("firstName")+", "+res.getString("lastName");
+            return res.getString("title")+" "+res.getString("firstName")+" "+res.getString("lastName");
         else return null;
     }
 
@@ -785,7 +785,7 @@ public class DatabaseConnection {
 
     // Editing an existing customer record
     public static boolean
-        editCustomer(final int ID, final String companyName, final String firstName, final String lastName,
+        editCustomer(final int ID, final String companyName, final String title, final String firstName, final String lastName,
                      final String contactNumber, final String address, final String email) throws SQLException {
         Connection conn = Connect();
         assert conn != null;
@@ -821,13 +821,13 @@ public class DatabaseConnection {
 
     // Inserting a new customer record
     public static boolean
-        addCustomer(final String companyName, final String firstName, final String lastName, final String contactNumber,
+        addCustomer(final String companyName, final String title, final String firstName, final String lastName, final String contactNumber,
                     final String address, final String email) throws SQLException {
         Connection conn = Connect();
         assert conn != null;
         PreparedStatement statement = conn.prepareStatement(
-                "INSERT IGNORE INTO customer (companyName, firstName, lastName, contactNumber, address, email) VALUES (" +
-                        "'"+companyName+"', '"+firstName+"', '"+lastName+"', '"+contactNumber+"', '"+address+"', '"+email+"')"
+                "INSERT IGNORE INTO customer (companyName, title, firstName, lastName, contactNumber, address, email) VALUES (" +
+                        "'"+companyName+"', '"+title+"', '"+firstName+"', '"+lastName+"', '"+contactNumber+"', '"+address+"', '"+email+"')"
         );
         return executeStatement(statement);
     }

@@ -21,14 +21,14 @@ public class ApplicationWindow extends JFrame {
     public static String role;
     private List<String[]> jobData;
 
-    public static final String companyRegex = "[a-zA-Z0-9 ,-]{0,35}?";
+    public static final String companyRegex = "[a-zA-Z0-9 )(,-]{0,35}?";
     public static final String nameRegex = "[A-Z]{1}[a-zA-z-]{1,34}";
     public static final String contactNumberRegex = "[0][1-9][0-9]{9}";
     public static final String addressLineRegex = "[A-Za-z0-9 ]{1,35}?";
     public static final String cityRegex = "[A-Za-z ]{1,20}?";
     public static final String postcodeRegex = "(([A-Z][0-9]{1,2})|(([A-Z][A-HJ-Y][0-9]{1,2})|(([A-Z][0-9][A-Z])|([A-Z][A-HJ-Y][0-9]?[A-Z])))) [0-9][A-Z]{2}";
     public static final String emailRegex = "([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,4})";
-    public static final String discountRegex = "[1-9][0-9]?$|^100";
+    public static final String discountRegex = "[0-9]?$|^100";
     public static final LineBorder borderError = new LineBorder(Color.RED, 1);
 
     public ApplicationWindow(String title) {
