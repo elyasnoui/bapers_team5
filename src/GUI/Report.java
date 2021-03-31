@@ -5,7 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -74,13 +73,15 @@ public class Report {
             "End date",
             "No. Staff",
             "No. Jobs",
-            "No. Tasks"
+            "No. Tasks",
+            "Customer ID"
     };
     private final String[] reportTypes = {
             "Please select a type",
             "Job Report",
             "Summary Report",
-            "Performance Report"
+            "Performance Report",
+            "Customer Sales Report"
     };
 
     public Report(Bapers system) {
@@ -102,13 +103,16 @@ public class Report {
                     if (rts[0].equals(rs[0])) {
                         switch (rs[1]) {
                             case "Performance Report":
-                                temp = new String[] { rs[0], rs[1], rs[2], rs[3].substring(0,16), rs[4], rs[5], rts[1], "", "" };
+                                temp = new String[] { rs[0], rs[1], rs[2], rs[3].substring(0,16), rs[4], rs[5], rts[1], "", "", "" };
                                 break;
                             case "Job Report":
-                                temp = new String[] { rs[0], rs[1], rs[2], rs[3].substring(0,16), rs[4], rs[5], "", rts[1], "" };
+                                temp = new String[] { rs[0], rs[1], rs[2], rs[3].substring(0,16), rs[4], rs[5], "", rts[1], "" , rts[2]};
                                 break;
                             case "Summary Report":
-                                temp = new String[] { rs[0], rs[1], rs[2], rs[3].substring(0,16), rs[4], rs[5], "", "", rts[1] };
+                                temp = new String[] { rs[0], rs[1], rs[2], rs[3].substring(0,16), rs[4], rs[5], "", "", rts[1], "" };
+                                break;
+                            case "Customer Sales Report":
+                                temp = new String[] { rs[0], rs[1], rs[2], rs[3].substring(0,16), rs[4], rs[5], "", rts[1], "" , ""};
                                 break;
                             default:
                                 temp = new String[] { rs[0], "Invalid Report" };
@@ -285,41 +289,45 @@ public class Report {
 
 
                         break;
-                    case "Job Report":
-
-                        jobData = DatabaseConnection.getJobFromDates(rowData[4],rowData[5], "Job Report");
+                    case "Customer Sales Report":
+                        jobData = DatabaseConnection.getJobFromDates(rowData[4],rowData[5], "Customer Sales Report");
                         assert jobData != null;
 
-                        List<String[]> jobReportData = new ArrayList<>();
+                        List<String[]> customerSalesData = new ArrayList<>();
                         for(String[] c : jobData){
 
-                            String companyName = DatabaseConnection.getCompanyName(Integer.parseInt(c[1]));
+                            String companyName = DatabaseConnection.getCompanyName(Integer.parseInt(c[7]));
                             String name = DatabaseConnection.getCustomerName(Integer.parseInt(c[7]));
                             String ID = c[0];
                             String startDate = c[3];
                             String endDate = c[4];
                             String status = c[6];
                             String amount = c[2];
-                            String[] row = {companyName, name, ID, startDate, endDate,status, amount};
-                            jobReportData.add(row);
+                            String total = "";
+                            String[] row = { companyName, name, ID, startDate, endDate, status, amount, total };
+                            customerSalesData.add(row);
                         }
                         Reportpdf reportpdf1 = new Reportpdf();
 
                         // Calculating total for each job after sorting by name
-                        for (int i = 0; i < jobReportData.size(); i++) {
-                            int j = i;
-                            double total = Double.parseDouble(jobReportData.get(j)[6]);
-                            while (j+1 != jobReportData.size() && jobReportData.get(j)[0] == jobReportData.get(j+1)[0]) {
-                                total += Double.parseDouble(jobReportData.get(j+1)[6]);
-                                j++;
+                        for (int i = 0; i < customerSalesData.size(); i++) {
+                            double total = Double.parseDouble(customerSalesData.get(i)[6]);
+                            while (i+1 != customerSalesData.size() && customerSalesData.get(i)[1].equals(customerSalesData.get(i + 1)[1])) {
+                                total += Double.parseDouble(customerSalesData.get(i+1)[6]);
+                                i++;
                             }
+                            String[] newRow = { customerSalesData.get(i)[0], customerSalesData.get(i)[1], customerSalesData.get(i)[2],
+                                    customerSalesData.get(i)[3], customerSalesData.get(i)[4], customerSalesData.get(i)[5], customerSalesData.get(i)[6],
+                                    String.valueOf(total) };
+                            customerSalesData.set(i, newRow);
+                        }
 
-                            System.out.println(total);
-
+                        for (String[] s : customerSalesData) {
+                            System.out.println(Arrays.toString(s));
                         }
 
                         try{
-                            reportpdf1.createJobReport(jobReportData);
+                            reportpdf1.createCustomerSalesReport(customerSalesData);
                         } catch (BadElementException badElementException){
                             badElementException.printStackTrace();
                         } catch (DocumentException documentException){
@@ -327,6 +335,51 @@ public class Report {
                         }
 
                         break;
+
+                    case "Job Report":
+                        int ID = Integer.parseInt(String.valueOf(table.getModel().getValueAt(table.getSelectedRow(), 9)));
+                        jobData = DatabaseConnection.jobReportWithID(rowData[4],rowData[5], 1);
+
+                        assert jobData != null;
+                        List<String[]> jobReportData = new ArrayList<>();
+                        for(String[] c : jobData){
+
+                            String companyName = DatabaseConnection.getCompanyName(Integer.parseInt(c[7]));
+                            String name = DatabaseConnection.getCustomerName(Integer.parseInt(c[7]));
+                            String startDate = c[3];
+                            String endDate = c[4];
+                            String status = c[6];
+                            String amount = c[2];
+                            String total = "";
+                            String[] row = { companyName, name, String.valueOf(ID), startDate, endDate, status, amount, total };
+                            jobReportData.add(row);
+                        }
+
+                        Reportpdf reportpdf2 = new Reportpdf();
+
+                        // Calculating total for each job after sorting by name
+                        for (int i = 0; i < jobReportData.size(); i++) {
+                            double total = Double.parseDouble(jobReportData.get(i)[6]);
+                            while (i+1 != jobReportData.size() && jobReportData.get(i)[1].equals(jobReportData.get(i + 1)[1])) {
+                                total += Double.parseDouble(jobReportData.get(i+1)[6]);
+                                i++;
+                            }
+                            String[] newRow = { jobReportData.get(i)[0], jobReportData.get(i)[1], jobReportData.get(i)[2],
+                                    jobReportData.get(i)[3], jobReportData.get(i)[4], jobReportData.get(i)[5], jobReportData.get(i)[6],
+                                    String.valueOf(total) };
+                            jobReportData.set(i, newRow);
+                        }
+
+                        try{
+                            reportpdf2.createJobReport(jobReportData);
+                        } catch (BadElementException badElementException){
+                            badElementException.printStackTrace();
+                        } catch (DocumentException documentException){
+                            documentException.printStackTrace();
+                        }
+
+                        break;
+
                 }
             }
         });
@@ -337,11 +390,11 @@ public class Report {
             public void actionPerformed(ActionEvent e) {
                 createConfirmButton.setEnabled(createReportTypeComboBox.getSelectedIndex() != 0);
                 if(createReportTypeComboBox.getSelectedIndex() == 3 ){
-                    Reportpdf.performanceReport();
+                    System.out.println("index 0");
                 } else if (createReportTypeComboBox.getSelectedIndex() == 2){
-                    Reportpdf.summaryReport();
+                    System.out.println("index 2");
                 } else if (createReportTypeComboBox.getSelectedIndex() == 1){
-                    Reportpdf.jobReport();
+                    System.out.println("index 1");
                 }
             }
         });

@@ -180,18 +180,31 @@ public class DatabaseConnection {
         return null;
     }
 
+    public static List<String[]> jobReportWithID(final String fromDate, final String toDate, final int ID) {
+        try {
+            Connection conn = Connect();
+            assert conn != null;
+            PreparedStatement statement = conn.prepareStatement("SELECT * FROM job WHERE customerID = "+ID+" AND " +
+                            "((startDate >= '"+fromDate+"' " +
+                            "AND endDate <= '"+toDate+"') " +
+                            "OR (startDate >= '"+fromDate+"' AND endDate <= '"+toDate+"')) ");
+            return returnList(statement);
+        } catch (SQLException exception) { exception.printStackTrace(); }
+        return null;
+    }
+
     public static List<String[]> getJobFromDates(final String fromDate, final String toDate, final String reportType) {
         try {
             Connection conn = Connect();
             assert conn != null;
             PreparedStatement statement;
             switch (reportType) {
-                case "Job Report":
+                case "Customer Sales Report":
                     statement = conn.prepareStatement("SELECT * FROM job WHERE " +
                             "(startDate >= '"+fromDate+"' " +
                             "AND endDate <= '"+toDate+"') " +
                             "OR (startDate >= '"+fromDate+"' AND endDate <= '"+toDate+"') " +
-                            "ORDER BY customerID DESC");
+                            "ORDER BY customerID");
 
                     break;
                 default:
@@ -793,16 +806,14 @@ public class DatabaseConnection {
 
     // Inserting a new staff record
     public static boolean
-        addStaff(final String firstName, final String lastName, final String contactNumber, final String address,
-                 final String email, final String nationalInsurance, final int workHours, final String username,
-                 final String password, final String role, final String privileges) throws SQLException {
+        addStaff(final String title, final String firstName, final String lastName, final String contactNumber, final String address,
+                 final String email, final String username, final String password, final String role) throws SQLException {
         Connection conn = Connect();
         assert conn != null;
         PreparedStatement statement = conn.prepareStatement(
-                "INSERT IGNORE INTO staff (firstName, lastName, contactNumber, address, email, nationalInsurance," +
-                        "workHours, username, password, role, privileges) VALUES ('"+firstName+"', '"+lastName+"', " +
-                        "'"+contactNumber+"', '"+address+"', '"+email+"', '"+nationalInsurance+"', '"+workHours+"', " +
-                        "'"+username+"', '"+password+"', '"+role+"', '"+privileges+"')"
+                "INSERT IGNORE INTO staff (title, firstName, lastName, contactNumber, address, email, username, password, role) " +
+                        "VALUES ('"+title+"', '"+firstName+"', '"+lastName+"', '"+contactNumber+"', '"+address+"', '"+email+"', " +
+                        "'"+username+"', '"+password+"', '"+role+"')"
         );
         return executeStatement(statement);
     }

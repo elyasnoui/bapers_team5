@@ -5,6 +5,8 @@ import System.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -53,6 +55,7 @@ public class Staff {
     private List<String[]> staffData;
     private final String[] tableColumns = {
             "ID",
+            "Title",
             "First Name",
             "Last Name",
             "Contact Number",
@@ -77,7 +80,7 @@ public class Staff {
         try {
             staffData = DatabaseConnection.getData("staff");
             for (String[] ss : staffData)
-                ss[7] = "•••••••";
+                ss[8] = "•••••••";
         }
         catch (Exception e) { e.printStackTrace(); }
 
@@ -155,11 +158,58 @@ public class Staff {
                 resetCreatePanel();
             }
         });
+        editButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
 
+            }
+        });
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
 
+            }
+        });
+
+        createConfirmButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (validatePanel(createFirstNameField, createLastNameField, createContactNumberField, createAddressFirstField
+                , createAddressSecondField, createCityField, createPostcodeField, createEmailField, createUsernameField
+                , createPasswordField, createPasswordConfirmField, createRoleField)) {
+
+                    String address;
+                    if (!createAddressSecondField.getText().isEmpty())
+                        address = createAddressFirstField.getText()+", "+createAddressSecondField.getText()+", "
+                                +createCityField.getText()+", "+createPostcodeField.getText();
+                    else address = createAddressFirstField.getText()+", "+createCityField.getText()
+                            +", "+createPostcodeField.getText();
+
+                    String title;
+                    if (createTitleComboBox.getSelectedIndex() == 5)
+                        title = "";
+                    else
+                        title = String.valueOf(createTitleComboBox.getSelectedItem());
+
+                    try {
+                        System.out.println(DatabaseConnection.md5(createPasswordField.getText()));
+                        if (!DatabaseConnection.addStaff(title, createFirstNameField.getText(), createLastNameField.getText()
+                        , createContactNumberField.getText(), address, createEmailField.getText(), createUsernameField.getText()
+                        , DatabaseConnection.md5(createPasswordField.getText()), createRoleField.getText()))
+                            JOptionPane.showMessageDialog(mainPanel, "Couldn't insert staff");
+                        system.changeScreen("staff", mainPanel);
+                    } catch (NoSuchAlgorithmException | SQLException | UnsupportedEncodingException exp) { exp.printStackTrace(); }
+                }
+            }
+        });
+        createCancelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                createPanel.setVisible(false);
+                buttonPanel.setVisible(true);
+                tablePanel.setVisible(true);
+
+                removeCreateListeners();
             }
         });
     }
@@ -242,15 +292,41 @@ public class Staff {
             usernameField.setToolTipText(null);
         }
 
-        if (!passwordConfirmField.getText().matches(ApplicationWindow.usernameRegex)) {
-            usernameField.setBorder(ApplicationWindow.borderError);
-            usernameField.setToolTipText("Please enter only letters and numbers (5,15)");
+        if (!passwordField.getText().matches(ApplicationWindow.passwordRegex)) {
+            passwordField.setBorder(ApplicationWindow.borderError);
+            passwordField.setToolTipText("Please enter only letters and numbers (5,15)");
         } else {
-            usernameField.setBorder(null);
-            usernameField.setToolTipText(null);
+            passwordField.setBorder(null);
+            passwordField.setToolTipText(null);
         }
 
-        return false;
+        if (!passwordConfirmField.getText().matches(ApplicationWindow.passwordRegex)) {
+            passwordConfirmField.setBorder(ApplicationWindow.borderError);
+            passwordConfirmField.setToolTipText("Please enter only letters and numbers (5,15)");
+        } else if (!String.valueOf(passwordConfirmField.getText()).equals(String.valueOf(passwordField.getText()))) {
+            passwordConfirmField.setBorder(ApplicationWindow.borderError);
+            passwordConfirmField.setToolTipText("Passwords do not match");
+        } else {
+            passwordConfirmField.setBorder(null);
+            passwordConfirmField.setToolTipText(null);
+        }
+
+        if (!roleField.getText().matches(ApplicationWindow.roleRegex)) {
+            roleField.setBorder(ApplicationWindow.borderError);
+            roleField.setToolTipText("Please enter only letters");
+        } else {
+            roleField.setBorder(null);
+            roleField.setToolTipText(null);
+        }
+
+        if (!(firstNameField.getBorder() == ApplicationWindow.borderError || lastNameField.getBorder() == ApplicationWindow.borderError
+        || contactNumberField.getBorder() == ApplicationWindow.borderError || addressFirstField.getBorder() == ApplicationWindow.borderError
+        || addressSecondField.getBorder() == ApplicationWindow.borderError || cityField.getBorder() == ApplicationWindow.borderError
+        || postcodeField.getBorder() == ApplicationWindow.borderError || emailField.getBorder() == ApplicationWindow.borderError
+        || usernameField.getBorder() == ApplicationWindow.borderError || passwordField.getBorder() == ApplicationWindow.borderError
+        || passwordConfirmField.getBorder() == ApplicationWindow.borderError || roleField.getBorder() == ApplicationWindow.borderError))
+            return true;
+        else return false;
     }
 
     private void resetCreatePanel() {
@@ -271,12 +347,46 @@ public class Staff {
         createPostcodeField.setBorder(null);
         createEmailField.setText("");
         createEmailField.setBorder(null);
+        createUsernameField.setText("");
+        createUsernameField.setBorder(null);
         createPasswordField.setText("");
         createPasswordField.setBorder(null);
         createPasswordConfirmField.setText("");
         createPasswordConfirmField.setBorder(null);
         createRoleField.setText("");
         createRoleField.setBorder(null);
+
+        addCreateListeners();
+    }
+
+    private void addCreateListeners() {
+        createFirstNameField.addKeyListener(ApplicationWindow.regexListener);
+        createLastNameField.addKeyListener(ApplicationWindow.regexListener);
+        createContactNumberField.addKeyListener(ApplicationWindow.regexListener);
+        createAddressFirstField.addKeyListener(ApplicationWindow.regexListener);
+        createAddressSecondField.addKeyListener(ApplicationWindow.regexListener);
+        createCityField.addKeyListener(ApplicationWindow.regexListener);
+        createPostcodeField.addKeyListener(ApplicationWindow.regexListener);
+        createEmailField.addKeyListener(ApplicationWindow.regexListener);
+        createUsernameField.addKeyListener(ApplicationWindow.regexListener);
+        createPasswordField.addKeyListener(ApplicationWindow.regexListener);
+        createPasswordConfirmField.addKeyListener(ApplicationWindow.regexListener);
+        createRoleField.addKeyListener(ApplicationWindow.regexListener);
+    }
+
+    private void removeCreateListeners() {
+        createFirstNameField.removeKeyListener(ApplicationWindow.regexListener);
+        createLastNameField.removeKeyListener(ApplicationWindow.regexListener);
+        createContactNumberField.removeKeyListener(ApplicationWindow.regexListener);
+        createAddressFirstField.removeKeyListener(ApplicationWindow.regexListener);
+        createAddressSecondField.removeKeyListener(ApplicationWindow.regexListener);
+        createCityField.removeKeyListener(ApplicationWindow.regexListener);
+        createPostcodeField.removeKeyListener(ApplicationWindow.regexListener);
+        createEmailField.removeKeyListener(ApplicationWindow.regexListener);
+        createUsernameField.removeKeyListener(ApplicationWindow.regexListener);
+        createPasswordField.removeKeyListener(ApplicationWindow.regexListener);
+        createPasswordConfirmField.removeKeyListener(ApplicationWindow.regexListener);
+        createRoleField.removeKeyListener(ApplicationWindow.regexListener);
     }
 
     private void addMouseListeners() {
