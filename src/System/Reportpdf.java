@@ -598,5 +598,44 @@ public class Reportpdf {
 
         doc.close();
     }
+
+
+    public void createJobReport(List<String[]> jobReportData) throws DocumentException {
+        Document doc = createPerformanceReportTemplate();
+
+        Paragraph anchor = new Paragraph("Customer Job Report", catFont);
+        //anchor.setName("Individual Performance Report");
+
+        addEmptyLine(anchor,4);
+
+        // Second parameter is the number of the chapter
+        Chapter catPart = new Chapter(new Paragraph(anchor), 1);
+
+        Paragraph subPara = new Paragraph("Subcategory 1", subFont);
+        //Section subCatPart = catPart.addSection(subPara);
+        //subCatPart.add(new Paragraph("Hello"));
+        addEmptyLine(subPara, 5);
+
+        // add performance table
+        PdfPTable table = new PdfPTable(5);
+        table.setWidthPercentage(100);
+        List<String[]> dataset = insertPerformanceData(jobReportData);
+        for (String[] record : dataset) {
+            for (String field : record) {
+                table.addCell(field);
+            }
+        }
+
+        // now add all this to the document
+        doc.add(catPart);
+
+        doc.add(table);
+
+        //subCatPart.add(table);
+
+        doc.close();
+    }
 }
+
+
 

@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -280,9 +281,34 @@ public class Report {
                     case "Summary Report":
 
 
+
+
                         break;
                     case "Job Report":
 
+                        jobData = DatabaseConnection.getJobFromDates(rowData[4],rowData[5]);
+                        assert jobData != null;
+
+                        List<String[]> jobPerformanceData = new ArrayList<>();
+                        for(String[] c : jobData){
+
+                            String name = DatabaseConnection.getCustomerName(Integer.parseInt(c[7]));
+                            String ID = c[0];
+                            String startDate = c[3].substring(0,10);
+                            String endDate = c[4].substring(11,16);
+                            String status = c[6];
+                            String[] row = {name, ID, startDate, endDate,status};
+                            jobPerformanceData.add(row);
+                        }
+                        Reportpdf reportpdf1 = new Reportpdf();
+
+                        try{
+                            reportpdf1.createJobReport(jobPerformanceData);
+                        } catch (BadElementException badElementException){
+                            badElementException.printStackTrace();
+                        } catch (DocumentException documentException){
+                            documentException.printStackTrace();
+                        }
 
                         break;
                 }

@@ -93,15 +93,18 @@ public class DatabaseConnection {
         return row;
     }
 
-    public static String getCustomerName(final int ID) throws SQLException {
-        Connection conn = Connect();
-        assert conn != null;
-        PreparedStatement statement = conn.prepareStatement("SELECT title, firstName, lastName FROM customer WHERE " +
-                "ID ="+ID);
-        ResultSet res = statement.executeQuery();
-        if (res.next())
-            return res.getString("title")+" "+res.getString("firstName")+" "+res.getString("lastName");
-        else return null;
+    public static String getCustomerName(int ID) {
+        try {
+            Connection conn = Connect();
+            assert conn != null;
+            PreparedStatement statement = conn.prepareStatement("SELECT title, firstName, lastName FROM customer " +
+                    "WHERE ID = " +ID);
+            ResultSet res = statement.executeQuery();
+            if (res.next()){
+                return res.getString("title") + " " + res.getString("firstName") + " " + res.getString("lastName");
+            }
+        } catch (SQLException exception) { exception.printStackTrace(); }
+        return null;
     }
 
     public static List<String[]> getAvailableTasks() {
