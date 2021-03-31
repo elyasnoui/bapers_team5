@@ -242,12 +242,39 @@ public class Staff {
             usernameField.setToolTipText(null);
         }
 
-        if (!passwordConfirmField.getText().matches(ApplicationWindow.usernameRegex)) {
-            usernameField.setBorder(ApplicationWindow.borderError);
-            usernameField.setToolTipText("Please enter only letters and numbers (5,15)");
+        if (!passwordField.getText().matches(ApplicationWindow.passwordRegex)) {
+            passwordField.setBorder(ApplicationWindow.borderError);
+            passwordField.setToolTipText("Please enter only letters and numbers (5,15)");
         } else {
-            usernameField.setBorder(null);
-            usernameField.setToolTipText(null);
+            passwordField.setBorder(null);
+            passwordField.setToolTipText(null);
+        }
+
+        if (!passwordConfirmField.getText().matches(ApplicationWindow.passwordRegex)) {
+            passwordConfirmField.setBorder(ApplicationWindow.borderError);
+            passwordConfirmField.setToolTipText("Please enter only letters and numbers (5,15)");
+        } else if (!String.valueOf(passwordConfirmField.getText()).equals(String.valueOf(passwordField.getText()))) {
+            passwordConfirmField.setBorder(ApplicationWindow.borderError);
+            passwordConfirmField.setToolTipText("Passwords do not match");
+        } else {
+            passwordConfirmField.setBorder(null);
+            passwordConfirmField.setToolTipText(null);
+        }
+
+        if (!roleField.getText().matches(ApplicationWindow.usernameRegex)) {
+            roleField.setBorder(ApplicationWindow.borderError);
+            roleField.setToolTipText("Please enter only letters");
+        } else {
+            roleField.setBorder(null);
+            roleField.setToolTipText(null);
+        }
+
+        if (!(firstNameField.getBorder() == ApplicationWindow.borderError || lastNameField.getBorder() == ApplicationWindow.borderError
+        || contactNumberField.getBorder() == ApplicationWindow.borderError || addressFirstField.getBorder() == ApplicationWindow.borderError
+        || addressSecondField.getBorder() == ApplicationWindow.borderError || cityField.getBorder() == ApplicationWindow.borderError
+        || postcodeField.getBorder() == ApplicationWindow.borderError || emailField.getBorder() == ApplicationWindow.borderError)) {
+
+
         }
 
         return false;

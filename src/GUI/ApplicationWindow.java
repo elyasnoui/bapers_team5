@@ -31,6 +31,7 @@ public class ApplicationWindow extends JFrame {
     public static final String discountRegex = "[0-9]?$|^100";
     public static final String usernameRegex = "[a-zA-Z0-9]{5,15}?";
     public static final String passwordRegex = "(?=.*[a-z])(?=.*[A-Z])[A-Za-z\\d_@$!%*?&]{6,15}";
+    public static final String roleRegex = "[a-zA-Z ]{1,35}";
     public static final LineBorder borderError = new LineBorder(Color.RED, 1);
 
     public ApplicationWindow(String title) {

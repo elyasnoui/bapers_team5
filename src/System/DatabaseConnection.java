@@ -191,7 +191,7 @@ public class DatabaseConnection {
                             "(startDate >= '"+fromDate+"' " +
                             "AND endDate <= '"+toDate+"') " +
                             "OR (startDate >= '"+fromDate+"' AND endDate <= '"+toDate+"') " +
-                            "ORDER BY customerID DESC");
+                            "ORDER BY customerID");
 
                     break;
                 default:

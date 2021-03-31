@@ -293,29 +293,34 @@ public class Report {
                         List<String[]> jobReportData = new ArrayList<>();
                         for(String[] c : jobData){
 
-                            String companyName = DatabaseConnection.getCompanyName(Integer.parseInt(c[1]));
+                            String companyName = DatabaseConnection.getCompanyName(Integer.parseInt(c[7]));
                             String name = DatabaseConnection.getCustomerName(Integer.parseInt(c[7]));
                             String ID = c[0];
                             String startDate = c[3];
                             String endDate = c[4];
                             String status = c[6];
                             String amount = c[2];
-                            String[] row = {companyName, name, ID, startDate, endDate,status, amount};
+                            String total = "";
+                            String[] row = { companyName, name, ID, startDate, endDate, status, amount, total };
                             jobReportData.add(row);
                         }
                         Reportpdf reportpdf1 = new Reportpdf();
 
                         // Calculating total for each job after sorting by name
                         for (int i = 0; i < jobReportData.size(); i++) {
-                            int j = i;
-                            double total = Double.parseDouble(jobReportData.get(j)[6]);
-                            while (j+1 != jobReportData.size() && jobReportData.get(j)[0] == jobReportData.get(j+1)[0]) {
-                                total += Double.parseDouble(jobReportData.get(j+1)[6]);
-                                j++;
+                            double total = Double.parseDouble(jobReportData.get(i)[6]);
+                            while (i+1 != jobReportData.size() && jobReportData.get(i)[1].equals(jobReportData.get(i + 1)[1])) {
+                                total += Double.parseDouble(jobReportData.get(i+1)[6]);
+                                i++;
                             }
+                            String[] newRow = { jobReportData.get(i)[0], jobReportData.get(i)[1], jobReportData.get(i)[2],
+                                    jobReportData.get(i)[3], jobReportData.get(i)[4], jobReportData.get(i)[5], jobReportData.get(i)[6],
+                                    String.valueOf(total) };
+                            jobReportData.set(i, newRow);
+                        }
 
-                            System.out.println(total);
-
+                        for (String[] s : jobReportData) {
+                            System.out.println(Arrays.toString(s));
                         }
 
                         try{
