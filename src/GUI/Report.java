@@ -293,16 +293,30 @@ public class Report {
                         List<String[]> jobReportData = new ArrayList<>();
                         for(String[] c : jobData){
 
+                            String companyName = DatabaseConnection.getCompanyName(Integer.parseInt(c[1]));
                             String name = DatabaseConnection.getCustomerName(Integer.parseInt(c[7]));
                             String ID = c[0];
                             String startDate = c[3];
                             String endDate = c[4];
                             String status = c[6];
                             String amount = c[2];
-                            String[] row = {name, ID, startDate, endDate,status, amount};
+                            String[] row = {companyName, name, ID, startDate, endDate,status, amount};
                             jobReportData.add(row);
                         }
                         Reportpdf reportpdf1 = new Reportpdf();
+
+                        // Calculating total for each job after sorting by name
+                        for (int i = 0; i < jobReportData.size(); i++) {
+                            int j = i;
+                            double total = Double.parseDouble(jobReportData.get(j)[6]);
+                            while (j+1 != jobReportData.size() && jobReportData.get(j)[0] == jobReportData.get(j+1)[0]) {
+                                total += Double.parseDouble(jobReportData.get(j+1)[6]);
+                                j++;
+                            }
+
+                            System.out.println(total);
+
+                        }
 
                         try{
                             reportpdf1.createJobReport(jobReportData);

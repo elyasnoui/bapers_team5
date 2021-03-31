@@ -569,7 +569,7 @@ public class Reportpdf {
 
         //Before this
         List<String[]> data = new ArrayList<String[]>();
-        String[] tableTitleList = {"Customer Name", "Job ID", "Start Date", "End Date", "Status", "Amount" };
+        String[] tableTitleList = {"Company Name", "Customer Name", "Job ID", "Start Date", "End Date", "Status", "Amount" };
         data.add(tableTitleList);
         for (int i = 0; i < jd.size(); i++) {
             List<String[]> dataLine = new ArrayList<String[]>();
@@ -638,7 +638,7 @@ public class Reportpdf {
         addEmptyLine(subPara, 5);
 
         // add performance table
-        PdfPTable table = new PdfPTable(6);
+        PdfPTable table = new PdfPTable(7);
         table.setWidthPercentage(100);
         List<String[]> dataset = insertjobReportData(jobReportData);
         for (String[] record : dataset) {

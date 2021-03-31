@@ -105,6 +105,20 @@ public class DatabaseConnection {
         return row;
     }
 
+    public static String getCompanyName(int ID) {
+        try {
+            Connection conn = Connect();
+            assert conn != null;
+            PreparedStatement statement = conn.prepareStatement("SELECT companyName FROM customer " +
+                    "WHERE ID = " +ID);
+            ResultSet res = statement.executeQuery();
+            if (res.next()){
+                return res.getString("companyName");
+            }
+        } catch (SQLException exception) { exception.printStackTrace(); }
+        return null;
+    }
+
     public static String getCustomerName(int ID) {
         try {
             Connection conn = Connect();
