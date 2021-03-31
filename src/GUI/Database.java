@@ -135,20 +135,21 @@ public class Database  {
         pathButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JFileChooser fc = new JFileChooser();
-                fc.showOpenDialog(fc.getParent());
+                JFileChooser fc = new JFileChooser("data/sql/dump");
+                int result = fc.showOpenDialog(fc.getParent());
                 String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 
-                try {
-                    File f = fc.getSelectedFile();
-                    path = f.getAbsolutePath();
-                    path = path.replace('\\','/');
-                    filename = path + "_" + date + ".sql";
-                    searchText.setText(filename);
-                }catch (Exception e1){
-                    e1.printStackTrace();
+                if (!(result == JFileChooser.CANCEL_OPTION)) {
+                    try {
+                        File f = fc.getSelectedFile();
+                        path = f.getPath();
+                        filename = path + "_" + date + ".sql";
+                        searchText.setText(filename);
+                    } catch (Exception e1) { e1.printStackTrace(); }
+                } else {
+                    path = "";
+                    searchText.setText(null);
                 }
-
             }
         });
 
@@ -158,7 +159,7 @@ public class Database  {
             Process p;
             try{
                 Runtime runtime = Runtime.getRuntime();
-                p=runtime.exec("C:\\Program Files\\MySQL\\MySQL Server 8.0\\bin\\mysqldump.exe -P3306 -h 34.105.223.156 -u root -pcityproject5 bapers_db -r" + filename);
+                p=runtime.exec("data/sql/mysqldump.exe -P3306 -h 34.105.223.156 -u root -pcityproject5 bapers_db -r" + filename);
 
                 int processComplete = p.waitFor();
                 if(processComplete==0){
@@ -177,7 +178,7 @@ public class Database  {
             public void actionPerformed(ActionEvent e) {
             String user = "root";
             String pass = "cityproject5";
-            String[] restoreCmd = new String[] {"C:\\Program Files\\MySQL\\MySQL Server 8.0\\bin\\mysqldump.exe","--user="+user,"--password="+pass,"-e","source "+filename};
+            String[] restoreCmd = new String[] {"data/sql/mysqldump.exe","--user="+user,"--password="+pass,"-e","source "+filename};
 
             Process process;
             try{

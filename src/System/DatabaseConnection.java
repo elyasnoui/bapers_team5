@@ -257,11 +257,11 @@ public class DatabaseConnection {
             PreparedStatement statement;
             if (firstName.isEmpty() && lastName.isEmpty()) return null;
             else if (firstName.isEmpty())
-                statement = conn.prepareStatement("SELECT * FROM customer WHERE lastName LIKE '"+lastName+"%'");
+                statement = conn.prepareStatement("SELECT ID, title, firstName, lastName, email  FROM customer WHERE lastName LIKE '"+lastName+"%'");
             else if (lastName.isEmpty())
-                statement = conn.prepareStatement("SELECT * FROM customer WHERE firstName LIKE '"+firstName+"%'");
+                statement = conn.prepareStatement("SELECT ID, title, firstName, lastName, email FROM customer WHERE firstName LIKE '"+firstName+"%'");
             else
-                statement = conn.prepareStatement("SELECT * FROM customer WHERE firstName LIKE '" +
+                statement = conn.prepareStatement("SELECT ID, title, firstName, lastName, email FROM customer WHERE firstName LIKE '" +
                     firstName+"%' OR lastName LIKE '"+lastName+"%'");
             return returnList(statement);
         } catch (SQLException exception) { exception.printStackTrace(); }
