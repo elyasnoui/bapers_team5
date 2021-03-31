@@ -249,7 +249,7 @@ public class Report {
                 assert rowData != null;
                 switch (rowData[1]) {
                     case "Performance Report":
-                        jobData = DatabaseConnection.getJobFromDates(rowData[4], rowData[5], "Performance Report");
+                        jobData = DatabaseConnection.getTaskFromDates(rowData[4], rowData[5], "Performance Report");
                         assert jobData != null;
                         List<String[]> taskData = new ArrayList<>();
                         List<String[]> temp;

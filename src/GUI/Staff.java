@@ -214,7 +214,8 @@ public class Staff {
         deleteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                int id = Integer.parseInt(String.valueOf(table.getModel().getValueAt(table.getSelectedRow(), 0)));
+                DatabaseConnection.removeStaff(id);
             }
         });
 
@@ -385,19 +386,21 @@ public class Staff {
             usernameField.setToolTipText(null);
         }
 
-        if (passwordField.getName().equals("newPassword") && passwordField.getText().isEmpty()) {
-            passwordField.setBorder(null);
-            passwordField.setToolTipText(null);
-        } else if (!passwordField.getText().matches(ApplicationWindow.passwordRegex)) {
-            passwordField.setBorder(ApplicationWindow.borderError);
-            passwordField.setToolTipText("Please enter only letters and numbers (5,15)");
-        } else {
-            passwordField.setBorder(null);
-            passwordField.setToolTipText(null);
+        if (passwordField.getName().equals("newPassword")) {
+            if (passwordField.getText().isEmpty()) {
+                passwordField.setBorder(null);
+                passwordField.setToolTipText(null);
+            } else if (!passwordField.getText().matches(ApplicationWindow.passwordRegex)) {
+                passwordField.setBorder(ApplicationWindow.borderError);
+                passwordField.setToolTipText("Please enter only letters and numbers (5,15)");
+            } else {
+                passwordField.setBorder(null);
+                passwordField.setToolTipText(null);
+            }
         }
 
         if (passwordConfirmField.getName().equals("newPassword")) {
-            if (passwordField.getText().isEmpty()) {
+            if (passwordConfirmField.getText().isEmpty()) {
                 passwordConfirmField.setBorder(null);
                 passwordConfirmField.setToolTipText(null);
             } else if (!passwordConfirmField.getText().matches(ApplicationWindow.passwordRegex)) {
@@ -499,6 +502,8 @@ public class Staff {
         editUsernameField.setText(staffData[7]);
         editHexPassword = staffData[8];
         editRoleField.setText(staffData[9]);
+
+        addEditListeners();
     }
 
     private void addEditListeners() {
