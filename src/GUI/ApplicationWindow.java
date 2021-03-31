@@ -185,9 +185,17 @@ public class ApplicationWindow extends JFrame {
                             valid = true;
                         } else valid = false;
                         break;
-                    case "password": case "newPassword":
-                        if (((JTextField) e.getComponent()).getText().matches(passwordRegex)) {
-                            ((JTextField) e.getComponent()).setToolTipText("Please enter a capital and lowercase letter (special characters accepted) (6,15)");
+                    case "password":
+                        if (((JPasswordField) e.getComponent()).getText().matches(passwordRegex)) {
+                            ((JPasswordField) e.getComponent()).setToolTipText("Please enter a capital and lowercase letter (special characters accepted) (6,15)");
+                            valid = true;
+                        } else valid = false;
+                        break;
+                    case "newPassword":
+                        if (((JPasswordField) e.getComponent()).getText().isEmpty())
+                            valid = false;
+                        else if (((JPasswordField) e.getComponent()).getText().matches(passwordRegex)) {
+                            ((JPasswordField) e.getComponent()).setToolTipText("Please enter a capital and lowercase letter (special characters accepted) (6,15)");
                             valid = true;
                         } else valid = false;
                         break;
@@ -197,8 +205,8 @@ public class ApplicationWindow extends JFrame {
                             valid = true;
                         } else valid = false;
                         break;
-                } if (valid || ((e.getComponent().getName().equals("addressLineOpt") || e.getComponent().getName().equals("company")
-                || e.getComponent().getName().equals("newPassword")) && ((JTextField) e.getComponent()).getText().isEmpty())) {
+                } if (valid || ((e.getComponent().getName().equals("addressLineOpt") || e.getComponent().getName().equals("company"))
+                        && ((JTextField) e.getComponent()).getText().isEmpty())) {
                     ((JTextField) e.getComponent()).setBorder(null);
                     ((JTextField) e.getComponent()).setToolTipText(null);
                 } else ((JTextField) e.getComponent()).setBorder(borderError);
