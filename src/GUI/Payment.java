@@ -40,7 +40,6 @@ public class Payment {
     private JLabel customerIDLabel;
     private JLabel customerIDValue;
     private JPanel urgencyLabelPanel;
-    private JLabel deadlineValue;
     private JPanel urgencyPanel;
     private JButton firstTierButton;
     private JButton secondTierButton;
@@ -62,6 +61,18 @@ public class Payment {
     private JLabel amountDueLabel;
     private JLabel discountLabel;
     private JLabel amountMinusLabel;
+    private JCheckBox cardCheckBox;
+    private JLabel cardTypeLabel;
+    private JLabel expiryDateLabel;
+    private JLabel last4DigitsLabel;
+    private JComboBox cardTypeComboBox;
+    private JCheckBox cashCheckBox;
+    private JLabel cashGivenLabel;
+    private JLabel changeGivenLabel;
+    private JTextField expiryPT1;
+    private JTextField expiryPT2;
+    private JLabel expirySlash;
+    private JTextField last4DigitsField;
     private List<String[]> paymentData;
     private List<String[]> paymentData1;
     private List<String[]> cardData;
@@ -81,11 +92,19 @@ public class Payment {
             "Cash Paid",
             "Change Given"
     };
+    private final String[] cardTypes = {
+            "Mastercard Debit Card",
+            "Visa Debit Card",
+            "Amex Credit Card",
+            "Mastercard Credit Card",
+            "Visa Credit Card"
+    };
     private final String[] customerColumns = {
             "firstName",
             "lastName",
             "jobID",
-            "amountDue"
+            "amountDue",
+            "discount"
     };
 
     public Payment(Bapers system) {
@@ -94,7 +113,10 @@ public class Payment {
 
         firstNameField.setBorder(null);
         lastNameField.setBorder(null);
+        cardTypeComboBox.setModel(new DefaultComboBoxModel<>(cardTypes));
         customerTable.setModel(new DefaultTableModel(null, customerColumns));
+
+
 
         try {
             paymentData = DatabaseConnection.getData("payment");
@@ -217,6 +239,7 @@ public class Payment {
                 tablePanel.setVisible(true);
                 buttonPanel.setVisible(true);
                 createPanel.setVisible(false);
+                resetCreatePanel();
             }
         });
         firstNameField.addKeyListener(new KeyAdapter() {
@@ -250,10 +273,14 @@ public class Payment {
                     String lastName = paymentData1.get(customerTable.getSelectedRow())[1];
                     String jobID = paymentData1.get(customerTable.getSelectedRow())[2];
                     String amountDue = paymentData1.get(customerTable.getSelectedRow())[3];
+                    String discount = paymentData1.get(customerTable.getSelectedRow())[4];
+                    double deductions = Double.parseDouble(amountDue) - Double.parseDouble(discount);
                     firstNameLabel.setText(firstName);
                     lastNameLabel.setText(lastName);
                     jobIDLabel.setText(jobID);
                     amountDueLabel.setText(amountDue);
+                    discountLabel.setText(discount);
+                    amountMinusLabel.setText(Double.toString(deductions));
                     customerLookupPanel.setVisible(false);
                     createPanel.setVisible(true);
                 }
@@ -264,11 +291,80 @@ public class Payment {
             public void actionPerformed(ActionEvent e) {
                 customerLookupPanel.setVisible(false);
                 createPanel.setVisible(true);
+                resetLookupPanel();
+
             }
         });
 
+        cardCheckBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (cardCheckBox.isSelected()){
+                    cardTypeLabel.setVisible(true);
+                    expiryDateLabel.setVisible(true);
+                    last4DigitsLabel.setVisible(true);
+                    cardTypeComboBox.setVisible(true);
+                    expiryPT1.setVisible(true);
+                    expirySlash.setVisible(true);
+                    expiryPT2.setVisible(true);
+                    last4DigitsField.setVisible(true);
+
+                    cashGivenLabel.setVisible(false);
+                    changeGivenLabel.setVisible(false);
+                }
+                else{
+                    cardTypeLabel.setVisible(false);
+                    expiryDateLabel.setVisible(false);
+                    last4DigitsLabel.setVisible(false);
+                    cardTypeComboBox.setVisible(false);
+                    expiryPT1.setVisible(false);
+                    expirySlash.setVisible(false);
+                    expiryPT2.setVisible(false);
+                    last4DigitsField.setVisible(false);
+                }
+
+            }
+        });
+        cashCheckBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(cashCheckBox.isSelected()){
+                    cashGivenLabel.setVisible(true);
+                    changeGivenLabel.setVisible(true);
+
+                    cardTypeLabel.setVisible(false);
+                    expiryDateLabel.setVisible(false);
+                    last4DigitsLabel.setVisible(false);
+                    cardTypeComboBox.setVisible(false);
+                    expiryPT1.setVisible(false);
+                    expirySlash.setVisible(false);
+                    expiryPT2.setVisible(false);
+                    last4DigitsField.setVisible(false);
+
+                }
+                else{
+                    cashGivenLabel.setVisible(false);
+                    changeGivenLabel.setVisible(false);
+                }
+
+            }
+        });
     }
 
+    public void resetLookupPanel() {
+        firstNameField.setText("");
+        lastNameField.setText("");
+        customerTable.setModel(new DefaultTableModel(null, customerColumns));
+    }
+
+    public void resetCreatePanel(){
+        firstNameLabel.setText("");
+        lastNameLabel.setText("");
+        jobIDLabel.setText("");
+        amountDueLabel.setText("");
+        discountLabel.setText("");
+        amountMinusLabel.setText("");
+    }
 
     private void paymentSearch() {
         try {
