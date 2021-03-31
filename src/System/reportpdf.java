@@ -1,6 +1,8 @@
 package System;
 
 import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 import GUI.Report;
@@ -12,7 +14,6 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
-import com.itextpdf.text.List;
 import com.itextpdf.text.ListItem;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
@@ -20,7 +21,7 @@ import com.itextpdf.text.Section;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-
+import java.util.List;
 
 public class reportpdf {
 
@@ -37,6 +38,24 @@ public class reportpdf {
 
     public static String getFILE() {
         return FILE;
+    }
+
+
+
+    public static List<String[]> getData() {
+        List<String[]> data = new ArrayList<String[]>();
+        String[] tableTitleList = {"Name", "Task ID", "Department", "Date", "Start Time", "Time Taken"};
+        data.add(tableTitleList);
+        for (int i = 0; i < 10;) {
+            List<String[]> dataLine = new ArrayList<String[]>();
+            i++;
+            String[] temp = new String[tableTitleList.length];
+            for (int j = 0; j < tableTitleList.length; j++) {
+                temp[j] =  (tableTitleList[j] + " " + i);
+            }
+            data.add(temp);
+        }
+        return data;
     }
 
 
@@ -461,74 +480,22 @@ public class reportpdf {
     private static void createPerformanceTable(Section subCatPart)
             throws BadElementException {
 
-        PdfPTable table = new PdfPTable(7);
 
-        // t.setBorderColor(BaseColor.GRAY);
-        // t.setPadding(4);
-        // t.setSpacing(4);
-        // t.setBorderWidth(1);
-        // table.isLockedWidth();
-
-
-        PdfPCell c1 = new PdfPCell(new Phrase("Name"));
-        c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-        table.addCell(c1);
-
-        c1 = new PdfPCell(new Phrase("ID Task"));
-        c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-        table.addCell(c1);
-
-        c1 = new PdfPCell(new Phrase("Department"));
-        c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-        table.addCell(c1);
-
-        c1 = new PdfPCell(new Phrase("Date"));
-        c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-        table.addCell(c1);
-
-        c1 = new PdfPCell(new Phrase("Start Time"));
-        c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-        table.addCell(c1);
-
-        c1 = new PdfPCell(new Phrase("Time Taken"));
-        c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-        table.addCell(c1);
-
-        c1 = new PdfPCell(new Phrase("Total"));
-        c1.setHorizontalAlignment(Element.ALIGN_CENTER);
-        table.addCell(c1);
-
-
-
-        table.setHeaderRows(1);
-
-        table.addCell("1.0");
-        table.addCell("1.1");
-        table.addCell("1.2");
-        table.addCell("1.3");
-        table.addCell("1.4");
-        table.addCell("1.5");
-        table.addCell("1.6");
-        table.addCell("2.0");
-        table.addCell("2.1");
-        table.addCell("2.2");
-        table.addCell("2.3");
-        table.addCell("2.4");
-        table.addCell("2.5");
-        table.addCell("2.6");
+        PdfPTable table = new PdfPTable(6);
+        table.setWidthPercentage(100);
+        List<String[]> dataset = getData();
+        for (String[] record : dataset) {
+            for (String field : record) {
+                table.addCell(field);
+            }
+        }
 
 
         subCatPart.add(table);
 
     }
 
-    private static void createList(Section subCatPart) {
-        List list = new List(true, false, 10);
-        list.add(new ListItem("First point"));
-        list.add(new ListItem("Second point"));
-        list.add(new ListItem("Third point"));
-        subCatPart.add(list);
-    }
+
 
     private static void addEmptyLine(Paragraph paragraph, int number) {
         for (int i = 0; i < number; i++) {
