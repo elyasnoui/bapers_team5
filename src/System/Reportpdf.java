@@ -105,7 +105,7 @@ public class Reportpdf {
         return null;
     }
 
-    private Document createCustomerSalesReport() {
+    private Document createCustSalesReport() {
         try {
             Document document = new Document();
             PdfWriter.getInstance(document, new FileOutputStream("data/reports/customersales.pdf"));
@@ -174,7 +174,7 @@ public class Reportpdf {
 
         //Before this
         List<String[]> data = new ArrayList<String[]>();
-        String[] tableTitleList = {"Name", "Task ID", "Department", "Date", "Start Time", "Time Taken"};
+        String[] tableTitleList = {"Name", "Task ID", "Department", "Date", "Start Time", "Time Taken", "Total"};
         data.add(tableTitleList);
         for (int i = 0; i < pd.size(); i++) {
             List<String[]> dataLine = new ArrayList<String[]>();
@@ -248,7 +248,7 @@ public class Reportpdf {
         addEmptyLine(subPara, 5);
 
         // add performance table
-        PdfPTable table = new PdfPTable(6);
+        PdfPTable table = new PdfPTable(7);
         table.setWidthPercentage(100);
         List<String[]> dataset = insertPerformanceData(performanceReportData);
         for (String[] record : dataset) {
@@ -267,10 +267,10 @@ public class Reportpdf {
         doc.close();
     }
 
-    public void createSummaryReport(List<String[]> performanceReportData) throws DocumentException {
+    public void createSummaryReport(List<String[]> dayShift1, List<String[]> dayShift2, List<String[]> nightShift ) throws DocumentException {
         Document doc = createSummaryReportTemplate();
 
-        Paragraph anchor = new Paragraph("Individual Performance Report", catFont);
+        Paragraph anchor = new Paragraph("Summary Performance Report", catFont);
         //anchor.setName("Individual Performance Report");
 
         addEmptyLine(anchor,4);
@@ -281,22 +281,42 @@ public class Reportpdf {
         Paragraph subPara = new Paragraph("Subcategory 1", subFont);
         //Section subCatPart = catPart.addSection(subPara);
         //subCatPart.add(new Paragraph("Hello"));
-        addEmptyLine(subPara, 5);
+        addEmptyLine(subPara, 5);   
 
-        // add performance table
+        Paragraph dayshift1 = new Paragraph("Day Shift: (5am-2:30pm");
+
         PdfPTable table = new PdfPTable(6);
         table.setWidthPercentage(100);
-        List<String[]> dataset = insertPerformanceData(performanceReportData);
+        List<String[]> dataset = insertPerformanceData(dayShift1);
         for (String[] record : dataset) {
             for (String field : record) {
                 table.addCell(field);
             }
         }
 
+        PdfPTable table2 = new PdfPTable(6);
+        table.setWidthPercentage(100);
+        List<String[]> dataset2 = insertPerformanceData(dayShift2);
+        for(String[] record2 : dataset2){
+            for ( String field2 : record2){
+                table2.addCell(field2);
+            }
+        }
+
+        PdfPTable table3 = new PdfPTable(6);
+        table.setWidthPercentage(100);
+        List<String[]> dataset3 = insertPerformanceData(dayShift2);
+        for(String[] record3 : dataset3){
+            for ( String field3 : record3){
+                table2.addCell(field3);
+            }
+        }
         // now add all this to the document
         doc.add(catPart);
 
         doc.add(table);
+        doc.add(table2);
+        doc.add(table3);
 
         //subCatPart.add(table);
 
@@ -305,7 +325,7 @@ public class Reportpdf {
 
 
     public void createCustomerSalesReport(List<String[]> customerSalesData) throws DocumentException {
-        Document doc = createCustomerSalesReport();
+        Document doc = createCustSalesReport();
 
         Paragraph anchor = new Paragraph("Customer Sales Report", catFont);
         //anchor.setName("Individual Performance Report");

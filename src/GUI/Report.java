@@ -1,7 +1,6 @@
 package GUI;
 
 import javax.swing.*;
-import javax.xml.crypto.Data;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -249,31 +248,40 @@ public class Report {
                 assert rowData != null;
                 switch (rowData[1]) {
                     case "Performance Report":
-                        jobData = DatabaseConnection.getTaskFromDates(rowData[4], rowData[5], "Performance Report");
-                        assert jobData != null;
-                        List<String[]> taskData = new ArrayList<>();
-                        List<String[]> temp;
-                        for (String[] jd : jobData) {
-                            temp = DatabaseConnection.getTaskFromJobID(Integer.parseInt(jd[0]));
-                            assert temp != null;
-                            for (String[] t : temp) {
-                                taskData.add(t);
-                            }
-                        }
-
+                        taskData = DatabaseConnection.getTaskForPerformance(rowData[4], rowData[5], "Performance Report");
+                        assert taskData != null;
                         List<String[]> performanceReportData = new ArrayList<>();
-                        for (String[] t : taskData) {
-                            String name = DatabaseConnection.getStaffName(Integer.parseInt(t[8]));
-                            String ID = t[0];
-                            String department = t[4];
-                            String date = t[5].substring(0,10);
-                            String startTime = t[5].substring(11,16);
-                            String timeTaken = t[6];
-                            String[] row = { name, ID, department, date, startTime, timeTaken };
-                            performanceReportData.add(row);
-                        }
+
+                            for (String[] t : taskData) {
+                                String name = DatabaseConnection.getStaffName(Integer.parseInt(t[8]));
+                                String ID = t[1];
+                                String department = t[4];
+                                String date = t[5].substring(0,10);
+                                String startTime = t[5].substring(11,16);
+                                String timeTaken = t[6];
+                                String total = "";
+                                String[] row = { name, ID, department, date, startTime, timeTaken, total };
+                                performanceReportData.add(row);
+                            }
 
                         Reportpdf reportpdf = new Reportpdf();
+
+                        for(int i = 0; i < performanceReportData.size(); i++){
+                            double total = Double.parseDouble(performanceReportData.get(i)[5]);
+                            while(i+1 != performanceReportData.size() && performanceReportData.get(i)[0].equals(performanceReportData.get(i + 1)[0])){
+                                total += Double.parseDouble(performanceReportData.get(i+1)[5]);
+                                i++;
+                            }
+                            String[] newRow = { performanceReportData.get(i)[0], performanceReportData.get(i)[1], performanceReportData.get(i)[2],
+                            performanceReportData.get(i)[3], performanceReportData.get(i)[4],performanceReportData.get(i)[5],
+                             String.valueOf(total)};
+                            performanceReportData.set(i, newRow);
+                        }
+
+                        /*for (String[] s : performanceReportData) {
+                            System.out.println(Arrays.toString(s));
+                        }*/
+
 
                         try {
                             reportpdf.createPerformanceReport(performanceReportData);
