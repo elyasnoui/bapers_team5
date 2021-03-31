@@ -180,13 +180,28 @@ public class DatabaseConnection {
         return null;
     }
 
+    public static List<String[]> jobReportWithID(final String fromDate, final String toDate, final int ID) {
+        try {
+            Connection conn = Connect();
+            assert conn != null;
+            PreparedStatement statement = conn.prepareStatement("SELECT * FROM job WHERE " +
+                            "(startDate >= '"+fromDate+"' " +
+                            "AND endDate <= '"+toDate+"') " +
+                            "OR (startDate >= '"+fromDate+"' AND endDate <= '"+toDate+"') AND ID = "+ID+" " +
+                            "ORDER BY customerID");
+
+            return returnList(statement);
+        } catch (SQLException exception) { exception.printStackTrace(); }
+        return null;
+    }
+
     public static List<String[]> getJobFromDates(final String fromDate, final String toDate, final String reportType) {
         try {
             Connection conn = Connect();
             assert conn != null;
             PreparedStatement statement;
             switch (reportType) {
-                case "Job Report":
+                case "Customer Sales Report":
                     statement = conn.prepareStatement("SELECT * FROM job WHERE " +
                             "(startDate >= '"+fromDate+"' " +
                             "AND endDate <= '"+toDate+"') " +
