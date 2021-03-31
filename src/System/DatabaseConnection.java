@@ -51,8 +51,16 @@ public class DatabaseConnection {
         }
     }*/
 
-    public static int commit(){
-        return commit();
+    public static boolean isCustomerValuedCustomer(final int ID) {
+        try {
+            Connection conn = Connect();
+            assert conn != null;
+            PreparedStatement statement = conn.prepareStatement("SELECT customerID FROM valuedCustomer WHERE " +
+                    "customerID ="+ID);
+            ResultSet res = statement.executeQuery();
+            return res.next();
+        } catch (SQLException exception) { exception.printStackTrace(); }
+        return false;
     }
 
     public static int getNextID(final String tableName) {
