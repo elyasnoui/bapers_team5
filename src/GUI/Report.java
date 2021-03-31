@@ -1,6 +1,7 @@
 package GUI;
 
 import javax.swing.*;
+import javax.xml.crypto.Data;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -284,6 +285,20 @@ public class Report {
 
                         break;
                     case "Summary Report":
+                        taskData = DatabaseConnection.getTaskFromDates(rowData[4],rowData[5], "Summary Report");
+                        assert taskData != null;
+
+                        List<String[]> summaryReportData = new ArrayList<>();
+                        for(String[] s : taskData){
+
+                            String date = s[5];
+                            String timeTaken = s[6];
+                            String department = s[4];
+                            String[] row = {date, department, timeTaken};
+                            summaryReportData.add(row);
+                        }
+                            Reportpdf reportpdf3 = new Reportpdf();
+
 
 
 

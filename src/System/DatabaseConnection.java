@@ -174,7 +174,7 @@ public class DatabaseConnection {
             Connection conn = Connect();
             assert conn != null;
             PreparedStatement statement = conn.prepareStatement("SELECT * FROM task " +
-                    "WHERE jobID = '"+jobID+"' ORDER BY staffID");
+                    "WHERE jobID = '"+jobID+"' ORDER BY department");
             return returnList(statement);
         } catch (SQLException exception) { exception.printStackTrace(); }
         return null;
@@ -192,6 +192,24 @@ public class DatabaseConnection {
         } catch (SQLException exception) { exception.printStackTrace(); }
         return null;
     }
+
+    public static List<String[]> getTaskFromDates(final String fromDate, final String toDate, final String reportType) {
+        try {
+            Connection conn = Connect();
+            assert conn != null;
+
+            PreparedStatement statement = conn.prepareStatement("SELECT * FROM task WHERE " +
+                            "(startDate >= '"+fromDate+"' " +
+                            "AND endDate <= '"+toDate+"') " +
+                            "OR (startDate >= '"+fromDate+"' AND endDate <= '"+toDate+"') " +
+                            "ORDER BY task.date");
+
+
+            return returnList(statement);
+        } catch (SQLException exception) { exception.printStackTrace(); }
+        return null;
+    }
+
 
     public static List<String[]> getJobFromDates(final String fromDate, final String toDate, final String reportType) {
         try {
