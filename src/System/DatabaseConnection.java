@@ -793,16 +793,14 @@ public class DatabaseConnection {
 
     // Inserting a new staff record
     public static boolean
-        addStaff(final String firstName, final String lastName, final String contactNumber, final String address,
-                 final String email, final String nationalInsurance, final int workHours, final String username,
-                 final String password, final String role, final String privileges) throws SQLException {
+        addStaff(final String title, final String firstName, final String lastName, final String contactNumber, final String address,
+                 final String email, final String username, final String password, final String role) throws SQLException {
         Connection conn = Connect();
         assert conn != null;
         PreparedStatement statement = conn.prepareStatement(
-                "INSERT IGNORE INTO staff (firstName, lastName, contactNumber, address, email, nationalInsurance," +
-                        "workHours, username, password, role, privileges) VALUES ('"+firstName+"', '"+lastName+"', " +
-                        "'"+contactNumber+"', '"+address+"', '"+email+"', '"+nationalInsurance+"', '"+workHours+"', " +
-                        "'"+username+"', '"+password+"', '"+role+"', '"+privileges+"')"
+                "INSERT IGNORE INTO staff (title, firstName, lastName, contactNumber, address, email, username, password, role) " +
+                        "VALUES ('"+title+"', '"+firstName+"', '"+lastName+"', '"+contactNumber+"', '"+address+"', '"+email+"', " +
+                        "'"+username+"', '"+password+"', '"+role+"')"
         );
         return executeStatement(statement);
     }

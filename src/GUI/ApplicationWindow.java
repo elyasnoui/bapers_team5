@@ -30,7 +30,7 @@ public class ApplicationWindow extends JFrame {
     public static final String emailRegex = "([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,4})";
     public static final String discountRegex = "[0-9]?$|^100";
     public static final String usernameRegex = "[a-zA-Z0-9]{5,15}?";
-    public static final String passwordRegex = "(?=.*[a-z])(?=.*[A-Z])[A-Za-z\\d_@$!%*?&]{6,15}";
+    public static final String passwordRegex = "(?=.*[a-z])(?=.*[A-Z])[A-Za-z\\d@_$!%*?&]{6,15}";
     public static final String roleRegex = "[a-zA-Z ]{1,35}";
     public static final LineBorder borderError = new LineBorder(Color.RED, 1);
 
@@ -176,6 +176,24 @@ public class ApplicationWindow extends JFrame {
                     case "discount":
                         if (((JTextField) e.getComponent()).getText().matches(discountRegex)) {
                             ((JTextField) e.getComponent()).setToolTipText("Please enter only digits (0,100)");
+                            valid = true;
+                        } else valid = false;
+                        break;
+                    case "username":
+                        if (((JTextField) e.getComponent()).getText().matches(usernameRegex)) {
+                            ((JTextField) e.getComponent()).setToolTipText("Please enter a capital and lowercase letter (special characters accepted) (6,15)");
+                            valid = true;
+                        } else valid = false;
+                        break;
+                    case "password":
+                        if (((JTextField) e.getComponent()).getText().matches(passwordRegex)) {
+                            ((JTextField) e.getComponent()).setToolTipText("Please enter only letters and numbers (5,15)");
+                            valid = true;
+                        } else valid = false;
+                        break;
+                    case "role":
+                        if (((JTextField) e.getComponent()).getText().matches(roleRegex)) {
+                            ((JTextField) e.getComponent()).setToolTipText("Please enter only letters");
                             valid = true;
                         } else valid = false;
                         break;
