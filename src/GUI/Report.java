@@ -290,7 +290,6 @@ public class Report {
 
                         break;
                     case "Customer Sales Report":
-
                         jobData = DatabaseConnection.getJobFromDates(rowData[4],rowData[5], "Customer Sales Report");
                         assert jobData != null;
 
@@ -340,8 +339,8 @@ public class Report {
                     case "Job Report":
                         int ID = Integer.parseInt(String.valueOf(table.getModel().getValueAt(table.getSelectedRow(), 9)));
                         jobData = DatabaseConnection.jobReportWithID(rowData[4],rowData[5], 1);
-                        assert jobData != null;
 
+                        assert jobData != null;
                         List<String[]> jobReportData = new ArrayList<>();
                         for(String[] c : jobData){
 
@@ -369,10 +368,6 @@ public class Report {
                                     jobReportData.get(i)[3], jobReportData.get(i)[4], jobReportData.get(i)[5], jobReportData.get(i)[6],
                                     String.valueOf(total) };
                             jobReportData.set(i, newRow);
-                        }
-
-                        for (String[] s : jobReportData) {
-                            System.out.println(Arrays.toString(s));
                         }
 
                         try{

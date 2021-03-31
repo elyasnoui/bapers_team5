@@ -184,12 +184,10 @@ public class DatabaseConnection {
         try {
             Connection conn = Connect();
             assert conn != null;
-            PreparedStatement statement = conn.prepareStatement("SELECT * FROM job WHERE " +
-                            "(startDate >= '"+fromDate+"' " +
+            PreparedStatement statement = conn.prepareStatement("SELECT * FROM job WHERE customerID = "+ID+" AND " +
+                            "((startDate >= '"+fromDate+"' " +
                             "AND endDate <= '"+toDate+"') " +
-                            "OR (startDate >= '"+fromDate+"' AND endDate <= '"+toDate+"') AND ID = "+ID+" " +
-                            "ORDER BY customerID");
-
+                            "OR (startDate >= '"+fromDate+"' AND endDate <= '"+toDate+"')) ");
             return returnList(statement);
         } catch (SQLException exception) { exception.printStackTrace(); }
         return null;
