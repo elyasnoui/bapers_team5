@@ -163,7 +163,7 @@ public class DatabaseConnection {
             Connection conn = Connect();
             assert conn != null;
             PreparedStatement statement = conn.prepareStatement("SELECT firstName, lastName, ID FROM staff " +
-                    "WHERE role = 'Technician'");
+                    "WHERE role LIKE '%Technician%'");
             return returnList(statement);
         } catch (SQLException exception) { exception.printStackTrace(); }
         return null;
@@ -174,28 +174,33 @@ public class DatabaseConnection {
             Connection conn = Connect();
             assert conn != null;
             PreparedStatement statement = conn.prepareStatement("SELECT * FROM task " +
-                    "WHERE jobID = '"+jobID+"'");
+                    "WHERE jobID = '"+jobID+"' ORDER BY staffID");
             return returnList(statement);
         } catch (SQLException exception) { exception.printStackTrace(); }
         return null;
     }
 
-    public static List<String[]> getJobFromDates(final String fromDate, final String toDate) {
+    public static List<String[]> getJobFromDates(final String fromDate, final String toDate, final String reportType) {
         try {
             Connection conn = Connect();
             assert conn != null;
-            /*PreparedStatement statement = conn.prepareStatement("SELECT * FROM job WHERE startDate > "+fromDate+" " +
-                    "AND endDate < "+toDate);*/
-            PreparedStatement statement = conn.prepareStatement("SELECT *" +
-                    "FROM job " +
-                    "WHERE (" +
-                    "startDate >= '"+fromDate+"'" +
-                    "AND endDate <= '"+toDate+"'" +
-                    ")" +
-                    "OR (" +
-                    "startDate >= '"+fromDate+"'" +
-                    "AND endDate <= '"+toDate+"'" +
-                    ")");
+            PreparedStatement statement;
+            switch (reportType) {
+                case "Job Report":
+                    statement = conn.prepareStatement("SELECT * FROM job WHERE " +
+                            "(startDate >= '"+fromDate+"' " +
+                            "AND endDate <= '"+toDate+"') " +
+                            "OR (startDate >= '"+fromDate+"' AND endDate <= '"+toDate+"') " +
+                            "ORDER BY customerID DESC");
+
+                    break;
+                default:
+                    statement = conn.prepareStatement("SELECT * FROM job WHERE " +
+                            "(startDate >= '"+fromDate+"' " +
+                            "AND endDate <= '"+toDate+"') " +
+                            "OR (startDate >= '"+fromDate+"' AND endDate <= '"+toDate+"')");
+                    break;
+            }
             return returnList(statement);
         } catch (SQLException exception) { exception.printStackTrace(); }
         return null;

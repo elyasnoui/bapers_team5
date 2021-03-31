@@ -4,10 +4,7 @@ package GUI;
 import System.*;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -165,6 +162,95 @@ public class Staff {
 
             }
         });
+    }
+
+    private boolean validatePanel
+            (JTextField firstNameField, JTextField lastNameField, JTextField contactNumberField,
+             JTextField addressFirstField, JTextField addressSecondField, JTextField cityField, JTextField postcodeField,
+             JTextField emailField, JTextField usernameField, JPasswordField passwordField, JPasswordField passwordConfirmField,
+             JTextField roleField) {
+
+        if (!firstNameField.getText().matches(ApplicationWindow.nameRegex)) {
+            firstNameField.setBorder(ApplicationWindow.borderError);
+            firstNameField.setToolTipText("Please enter a valid name, e.g. 'John'");
+        } else {
+            firstNameField.setBorder(null);
+            firstNameField.setToolTipText(null);
+        }
+
+        if (!lastNameField.getText().matches(ApplicationWindow.nameRegex)) {
+            lastNameField.setBorder(ApplicationWindow.borderError);
+            lastNameField.setToolTipText("Please enter a valid name, e.g. 'John'");
+        } else {
+            lastNameField.setBorder(null);
+            lastNameField.setToolTipText(null);
+        }
+
+        if (!contactNumberField.getText().matches(ApplicationWindow.contactNumberRegex)) {
+            contactNumberField.setBorder(ApplicationWindow.borderError);
+            contactNumberField.setToolTipText("Please enter a valid UK number (11 digits)");
+        } else {
+            contactNumberField.setBorder(null);
+            contactNumberField.setToolTipText(null);
+        }
+
+        if (!addressFirstField.getText().matches(ApplicationWindow.addressLineRegex)) {
+            addressFirstField.setBorder(ApplicationWindow.borderError);
+            addressFirstField.setToolTipText("Please enter only letters and numbers");
+        } else {
+            addressFirstField.setBorder(null);
+            addressFirstField.setToolTipText(null);
+        }
+
+        if (!addressSecondField.getText().isEmpty() && !addressSecondField.getText().matches(ApplicationWindow.addressLineRegex)) {
+            addressSecondField.setBorder(ApplicationWindow.borderError);
+            addressSecondField.setToolTipText("Please enter only letters and numbers");
+        } else {
+            addressSecondField.setBorder(null);
+            addressSecondField.setToolTipText(null);
+        }
+
+        if (!cityField.getText().matches(ApplicationWindow.cityRegex)) {
+            cityField.setBorder(ApplicationWindow.borderError);
+            cityField.setToolTipText("Please enter only letters");
+        } else {
+            cityField.setBorder(null);
+            cityField.setToolTipText(null);
+        }
+
+        if (!postcodeField.getText().matches(ApplicationWindow.postcodeRegex)) {
+            postcodeField.setBorder(ApplicationWindow.borderError);
+            postcodeField.setToolTipText("Please enter a valid UK postcode");
+        } else {
+            postcodeField.setBorder(null);
+            postcodeField.setToolTipText(null);
+        }
+
+        if (!emailField.getText().matches(ApplicationWindow.emailRegex)) {
+            emailField.setBorder(ApplicationWindow.borderError);
+            emailField.setToolTipText("Please enter in email format");
+        } else {
+            emailField.setBorder(null);
+            emailField.setToolTipText(null);
+        }
+
+        if (!usernameField.getText().matches(ApplicationWindow.usernameRegex)) {
+            usernameField.setBorder(ApplicationWindow.borderError);
+            usernameField.setToolTipText("Please enter only letters and numbers (5,15)");
+        } else {
+            usernameField.setBorder(null);
+            usernameField.setToolTipText(null);
+        }
+
+        if (!passwordConfirmField.getText().matches(ApplicationWindow.usernameRegex)) {
+            usernameField.setBorder(ApplicationWindow.borderError);
+            usernameField.setToolTipText("Please enter only letters and numbers (5,15)");
+        } else {
+            usernameField.setBorder(null);
+            usernameField.setToolTipText(null);
+        }
+
+        return false;
     }
 
     private void resetCreatePanel() {
