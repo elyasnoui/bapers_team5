@@ -623,7 +623,7 @@
               </grid>
             </constraints>
             <properties>
-              <visible value="true"/>
+              <visible value="false"/>
             </properties>
             <border type="none"/>
             <children>

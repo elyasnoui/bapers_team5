@@ -384,12 +384,11 @@ public class Payment {
                                 , Double.parseDouble(createDiscountsField.getText().substring(1)), String.valueOf(createPaymentTypeComboBox.getSelectedItem()), customerID, 4)) {
                                     if (DatabaseConnection.addCard(Integer.parseInt(createJobIDField.getText()), String.valueOf(createCardTypeComboBox.getSelectedItem()), createExpiryDateField.getText(),
                                             Integer.parseInt(createLastFourDigitsField.getText()))) {
-                                        if (!DatabaseConnection.updateJobStatus(Integer.parseInt(createJobIDField.getText()), "Paid"))
-                                            JOptionPane.showMessageDialog(mainPanel, "Couldn't update job status.");
-                                    } else JOptionPane.showMessageDialog(mainPanel, "Couldn't add card.");
-                                } else JOptionPane.showMessageDialog(mainPanel, "Couldn't add payment.");
+                                        DatabaseConnection.updateJobStatus(Integer.parseInt(createJobIDField.getText()), "Paid");
+                                    }
+                                }
                             } catch (SQLException exception) { exception.printStackTrace(); }
-                        } else JOptionPane.showMessageDialog(mainPanel, "Please check your card details");
+                        }
                         break;
                     case 2:
                         if (createCashPaidField.getText().matches(ApplicationWindow.money) && Double.parseDouble(createCashPaidField.getText()) >=
@@ -399,11 +398,9 @@ public class Payment {
                                         , Double.parseDouble(createDiscountsField.getText().substring(1)), String.valueOf(createPaymentTypeComboBox.getSelectedItem()), customerID, 4)) {
                                     if (!DatabaseConnection.addCash(Integer.parseInt(createJobIDField.getText()), Double.parseDouble(createCashPaidField.getText()),
                                             Double.parseDouble(createChangeGivenValue.getText().substring(1)))) {
-                                        if (!DatabaseConnection.updateJobStatus(Integer.parseInt(createJobIDField.getText()), "Paid")) {
-                                            JOptionPane.showMessageDialog(mainPanel, "Couldn't update job status.");
-                                        } else system.changeScreen("payment", mainPanel);
-                                    } else JOptionPane.showMessageDialog(mainPanel, "Couldn't add cash..");
-                                } else JOptionPane.showMessageDialog(mainPanel, "Couldn't add payment.");
+                                        DatabaseConnection.updateJobStatus(Integer.parseInt(createJobIDField.getText()), "Paid");
+                                    }
+                                }
                             } catch (SQLException exception) { exception.printStackTrace(); }
                         } else JOptionPane.showMessageDialog(mainPanel, "You can only pay at or above the total amount");
 
@@ -412,6 +409,11 @@ public class Payment {
                         JOptionPane.showMessageDialog(mainPanel, "Please select a payment type");
                         break;
                 }
+
+                try {
+                    DatabaseConnection.updateJobStatus(Integer.parseInt(createJobIDField.getText()), "Paid");
+                } catch (SQLException exception) { exception.printStackTrace(); }
+                system.changeScreen("payments", mainPanel);
             }
         });
         createCancelButton.addActionListener(new ActionListener() {
