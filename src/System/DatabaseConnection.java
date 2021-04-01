@@ -293,13 +293,13 @@ public class DatabaseConnection {
             if (firstName.isEmpty() && lastName.isEmpty()) return null;
             else if (firstName.isEmpty())
                 statement = conn.prepareStatement("SELECT customer.firstName, customer.lastName, jobID, amountdue, discount FROM payment " +
-                        "INNER JOIN customer ON payment.customerID = customer.ID WHERE customer.lastName LIKE '"+lastName+"%'");
+                        "INNER JOIN job ON payment.jobID = job.ID INNER JOIN customer ON job.ID = customer.ID  WHERE customer.lastName LIKE '"+lastName+"%'");
             else if (lastName.isEmpty())
                 statement = conn.prepareStatement("SELECT customer.firstName, customer.lastName, jobID, amountdue, discount FROM payment " +
                         "INNER JOIN job ON payment.jobID = job.ID INNER JOIN customer ON job.ID = customer.ID WHERE customer.firstName LIKE '"+firstName+"%'");
             else
-                statement = conn.prepareStatement("SELECT customer.firstName, customer.lastName, jobID, amountdue, discount FROM payment INNER JOIN customer " +
-                        "ON payment.customerID = customer.ID WHERE customer.firstName LIKE '" +
+                statement = conn.prepareStatement("SELECT customer.firstName, customer.lastName, jobID, amountdue, discount FROM payment INNER JOIN job " +
+                        "ON payment.jobID = job.ID INNER JOIN customer ON job.ID = customer.ID   WHERE customer.firstName LIKE '" +
                         firstName+"%' OR customer.lastName LIKE '"+lastName+"%'");
             return returnList(statement);
         } catch (SQLException exception) { exception.printStackTrace(); }
