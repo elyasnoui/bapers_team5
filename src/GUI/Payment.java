@@ -381,8 +381,8 @@ public class Payment {
                         if (createExpiryDateField.getText().matches(ApplicationWindow.expiryRegex) &&
                         createLastFourDigitsField.getText().matches(ApplicationWindow.last4Digits)) {
                             try {
-                                if (DatabaseConnection.addPayment(Integer.parseInt(createJobIDField.getText()), Double.parseDouble(createFinalTotalField.getText())
-                                , Double.parseDouble(createDiscountsField.getText()), String.valueOf(createPaymentTypeComboBox.getSelectedItem()), customerID, ApplicationWindow.staffID)) {
+                                if (DatabaseConnection.addPayment(Integer.parseInt(createJobIDField.getText()), Double.parseDouble(createFinalTotalField.getText().substring(1))
+                                , Double.parseDouble(createDiscountsField.getText().substring(1)), String.valueOf(createPaymentTypeComboBox.getSelectedItem()), customerID, ApplicationWindow.staffID)) {
                                     if (DatabaseConnection.addCard(Integer.parseInt(createJobIDField.getText()), String.valueOf(createCardTypeComboBox.getSelectedItem()), createExpiryDateField.getText(),
                                             Integer.parseInt(createLastFourDigitsField.getText()))) {
                                         if (!DatabaseConnection.updateJobStatus(Integer.parseInt(createJobIDField.getText()), "Paid"))
@@ -396,10 +396,10 @@ public class Payment {
                         if (createCashPaidField.getText().matches(ApplicationWindow.money) && Double.parseDouble(createCashPaidField.getText()) >=
                         Double.parseDouble(createFinalTotalField.getText().substring(1))) {
                             try {
-                                if (DatabaseConnection.addPayment(Integer.parseInt(createJobIDField.getText()), Double.parseDouble(createFinalTotalField.getText())
+                                if (DatabaseConnection.addPayment(Integer.parseInt(createJobIDField.getText()), Double.parseDouble(createFinalTotalField.getText().substring(1))
                                         , Double.parseDouble(createDiscountsField.getText()), String.valueOf(createPaymentTypeComboBox.getSelectedItem()), customerID, ApplicationWindow.staffID)) {
-                                    if (!DatabaseConnection.addCash(Integer.parseInt(createJobIDField.getText()), Double.parseDouble(createCashPaidField.getText()),
-                                            Double.parseDouble(createChangeGivenValue.getText()))) {
+                                    if (!DatabaseConnection.addCash(Integer.parseInt(createJobIDField.getText()), Double.parseDouble(createCashPaidField.getText().substring(1)),
+                                            Double.parseDouble(createChangeGivenValue.getText().substring(1)))) {
                                         if (!DatabaseConnection.updateJobStatus(Integer.parseInt(createJobIDField.getText()), "Paid"))
                                             JOptionPane.showMessageDialog(mainPanel, "Couldn't update job status.");
                                     } else JOptionPane.showMessageDialog(mainPanel, "Couldn't add cash..");
