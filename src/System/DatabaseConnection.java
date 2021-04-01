@@ -119,6 +119,52 @@ public class DatabaseConnection {
         return null;
     }
 
+    public static int getTechnician(String department) {
+        try {
+            Connection conn = Connect();
+            assert conn != null;
+            PreparedStatement statement;
+            switch (department) {
+                case "Copy room":
+                    statement = conn.prepareStatement("SELECT ID FROM staff WHERE role LIKE '%copy%'");
+                    break;
+                case "Development area":
+                    statement = conn.prepareStatement("SELECT ID FROM staff WHERE role LIKE '%development%'");
+                    break;
+                case "Finishing room":
+                    statement = conn.prepareStatement("SELECT ID FROM staff WHERE role LIKE '%finishing%'");
+                    break;
+                case "Packing":
+                    statement = conn.prepareStatement("SELECT ID FROM staff WHERE role LIKE '%packing%'");
+                    break;
+                default:
+                    statement = conn.prepareStatement("SELECT ID FROM staff WHERE role LIKE 'Technician%'");
+                    break;
+            }
+            ResultSet res = statement.executeQuery();
+            res.next();
+            return Integer.parseInt(res.getString("ID"));
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            return -1;
+        }
+    }
+
+    public static int getTaskIDFromJobID(final int jobID, final int availableTaskID) {
+        try {
+            Connection conn = Connect();
+            assert conn != null;
+            PreparedStatement statement = conn.prepareStatement("SELECT ID FROM task WHERE jobID = "+jobID+" AND " +
+                    "availableTaskID = "+availableTaskID);
+            ResultSet res = statement.executeQuery();
+            res.next();
+            return Integer.parseInt(res.getString("ID"));
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            return -1;
+        }
+    }
+
     public static String getCustomerName(int ID) {
         try {
             Connection conn = Connect();
@@ -164,6 +210,29 @@ public class DatabaseConnection {
             assert conn != null;
             PreparedStatement statement = conn.prepareStatement("SELECT firstName, lastName, ID FROM staff " +
                     "WHERE role LIKE '%Technician%'");
+            return returnList(statement);
+        } catch (SQLException exception) { exception.printStackTrace(); }
+        return null;
+    }
+
+    public static boolean checkForCompletedTasks(int jobID) {
+        try {
+            Connection conn = Connect();
+            assert conn != null;
+            PreparedStatement statement = conn.prepareStatement("SELECT ID FROM task WHERE " +
+                    "jobID ="+jobID+" AND isCompleted = 1");
+            ResultSet res = statement.executeQuery();
+            return res.next();
+        } catch (SQLException exception) { exception.printStackTrace(); }
+        return false;
+    }
+
+    public static List<String[]> getTasksFromJobID(int jobID) {
+        try {
+            Connection conn = Connect();
+            assert conn != null;
+            PreparedStatement statement = conn.prepareStatement("SELECT * FROM task " +
+                    "WHERE jobID = "+jobID);
             return returnList(statement);
         } catch (SQLException exception) { exception.printStackTrace(); }
         return null;
@@ -309,13 +378,13 @@ public class DatabaseConnection {
             if (firstName.isEmpty() && lastName.isEmpty()) return null;
             else if (firstName.isEmpty())
                 statement = conn.prepareStatement("SELECT customer.firstName, customer.lastName, jobID, amountdue, discount FROM payment " +
-                        "INNER JOIN customer ON payment.customerID = customer.ID WHERE customer.lastName LIKE '"+lastName+"%'");
+                        "INNER JOIN job ON payment.jobID = job.ID INNER JOIN customer ON job.ID = customer.ID  WHERE customer.lastName LIKE '"+lastName+"%'");
             else if (lastName.isEmpty())
                 statement = conn.prepareStatement("SELECT customer.firstName, customer.lastName, jobID, amountdue, discount FROM payment " +
                         "INNER JOIN job ON payment.jobID = job.ID INNER JOIN customer ON job.ID = customer.ID WHERE customer.firstName LIKE '"+firstName+"%'");
             else
-                statement = conn.prepareStatement("SELECT customer.firstName, customer.lastName, jobID, amountdue, discount FROM payment INNER JOIN customer " +
-                        "ON payment.customerID = customer.ID WHERE customer.firstName LIKE '" +
+                statement = conn.prepareStatement("SELECT customer.firstName, customer.lastName, jobID, amountdue, discount FROM payment INNER JOIN job " +
+                        "ON payment.jobID = job.ID INNER JOIN customer ON job.ID = customer.ID   WHERE customer.firstName LIKE '" +
                         firstName+"%' OR customer.lastName LIKE '"+lastName+"%'");
             return returnList(statement);
         } catch (SQLException exception) { exception.printStackTrace(); }
@@ -730,6 +799,24 @@ public class DatabaseConnection {
         return executeStatement(statement);
     }
 
+    // Removing several existing task records
+    public static boolean removeAllTasksWithJobID(final int jobID) throws SQLException {
+        Connection conn = Connect();
+        assert conn != null;
+        PreparedStatement statement = conn.prepareStatement(
+                "DELETE FROM task WHERE jobID = "+jobID);
+        return executeStatement(statement);
+    }
+
+    // Removing several existing task records
+    public static boolean removeTasks(final int jobID, final int availableTaskID) throws SQLException {
+        Connection conn = Connect();
+        assert conn != null;
+        PreparedStatement statement = conn.prepareStatement(
+                "DELETE FROM task WHERE jobID = "+jobID+" AND availableTaskID = "+availableTaskID);
+        return executeStatement(statement);
+    }
+
     // Removing an existing task record
     public static boolean removeTask(final int ID) throws SQLException {
         Connection conn = Connect();
@@ -798,18 +885,22 @@ public class DatabaseConnection {
 
     // Inserting a new job record
     public static boolean
-        addJob(final int isUrgent, final double price, final LocalDate startDate, final LocalDate endDate,
-               final LocalDate deadline, final String status, final int customerID) throws SQLException {
+        addJob(final int isUrgent, final double price, final LocalDate startDate, final LocalDateTime deadline,
+               final String status, final int customerID) throws SQLException {
         Connection conn = Connect();
         assert conn != null;
-        PreparedStatement statement = conn.prepareStatement(
-                "INSERT INTO job (isUrgent, price, startDate, endDate, deadline, status, customerID) SELECT * " +
-                        "FROM (SELECT '"+isUrgent+"', '"+price+"', '"+startDate+"', '"+endDate+"', '"+deadline+"', " +
+        /*PreparedStatement statement = conn.prepareStatement(
+                "INSERT INTO job (isUrgent, price, startDate, deadline, status, customerID) SELECT * " +
+                        "FROM (SELECT '"+isUrgent+"', '"+price+"', '"+startDate+"', '"+deadline+"', " +
                         "'"+status+"', '"+customerID+"') AS tmp WHERE NOT EXISTS (SELECT isUrgent, price, startDate, " +
-                        "endDate, deadline, status, customerID FROM job WHERE isUrgent = '"+isUrgent+"' AND " +
-                        "price = '"+price+"' AND startDate = '"+startDate+"' AND endDate = '"+endDate+"' AND " +
-                        "deadline = '"+deadline+"' AND status = '"+status+"' AND customerID = '"+customerID+"') LIMIT 1"
-        );
+                        "deadline, status, customerID FROM job WHERE isUrgent = '"+isUrgent+"' AND " +
+                        "price = '"+price+"' AND startDate = '"+startDate+"' AND deadline = '"+deadline+"' AND " +
+                        "status = '"+status+"' AND customerID = '"+customerID+"') LIMIT 1"
+        );*/
+        PreparedStatement statement = conn.prepareStatement(
+                "INSERT IGNORE INTO job (isUrgent, price, startDate, deadline, status, customerID) " +
+                        "VALUES ('"+isUrgent+"', '"+price+"', '"+startDate+"', '"+deadline+"', '"+status+"', " +
+                        "'"+customerID+"')");
         return executeStatement(statement);
     }
 
