@@ -293,20 +293,89 @@ public class Report {
 
                         break;
                     case "Summary Report":
-                        taskData = DatabaseConnection.getTaskFromDates(rowData[4],rowData[5], "Summary Report");
+
+                        taskData = DatabaseConnection.getTaskForPerformance(rowData[4]+" 05:00:00",rowData[5]+" 14:30:00", "Summary Report");
                         assert taskData != null;
 
-                        List<String[]> summaryReportData = new ArrayList<>();
+                        List<String[]> dayShift1 = new ArrayList<>();
                         for(String[] s : taskData){
 
-                            String date = s[5];
+                            String date = s[5].substring(0,10);
                             String timeTaken = s[6];
                             String department = s[4];
                             String[] row = {date, department, timeTaken};
-                            summaryReportData.add(row);
+                            dayShift1.add(row);
                         }
-                            Reportpdf reportpdf3 = new Reportpdf();
 
+                        Reportpdf reportpdf3 = new Reportpdf();
+
+                        for(int i = 0; i < dayShift1.size(); i++){
+                            double total = Double.parseDouble(dayShift1.get(i)[2]);
+                            while(i+1 != dayShift1.size() && dayShift1.get(i)[0].equals(dayShift1.get(i + 1)[0])){
+                                total += Double.parseDouble(dayShift1.get(i+1)[2]);
+                                i++;
+                            }
+                            String[] newRow = { dayShift1.get(i)[0], dayShift1.get(i)[1], dayShift1.get(i)[2],
+                                    String.valueOf(total)};
+                            dayShift1.set(i, newRow);
+                        }
+
+                        taskData = DatabaseConnection.getTaskForPerformance(rowData[4]+" 14:30:01",rowData[5]+" 22:00:00", "Summary Report");
+                        assert taskData != null;
+
+                        List<String[]> dayShift2 = new ArrayList<>();
+                        for(String[] s : taskData){
+
+                            String date = s[5].substring(0,10);
+                            String timeTaken = s[6];
+                            String department = s[4];
+                            String[] row = {date, department, timeTaken};
+                            dayShift2.add(row);
+                        }
+
+                        for(int i = 0; i < dayShift2.size(); i++){
+                            double total = Double.parseDouble(dayShift2.get(i)[2]);
+                            while(i+1 != dayShift2.size() && dayShift2.get(i)[0].equals(dayShift2.get(i + 1)[0])){
+                                total += Double.parseDouble(dayShift2.get(i+1)[2]);
+                                i++;
+                            }
+                            String[] newRow = { dayShift2.get(i)[0], dayShift2.get(i)[1], dayShift2.get(i)[2],
+                                    String.valueOf(total)};
+                            dayShift2.set(i, newRow);
+                        }
+
+                        taskData = DatabaseConnection.getTaskForPerformance(rowData[4]+ " 22:00:01",rowData[5]+ " 04:59:59", "Summary Report");
+                        assert taskData != null;
+
+                        List<String[]> nightShift = new ArrayList<>();
+                        for(String[] s : taskData){
+
+                            String date = s[5].substring(0,10);
+                            String timeTaken = s[6];
+                            String department = s[4];
+                            String[] row = {date, department, timeTaken};
+                            nightShift.add(row);
+                        }
+
+                        for(int i = 0; i < nightShift.size(); i++){
+                            double total = Double.parseDouble(nightShift.get(i)[2]);
+                            while(i+1 != nightShift.size() && nightShift.get(i)[0].equals(nightShift.get(i + 1)[0])){
+                                total += Double.parseDouble(nightShift.get(i+1)[2]);
+                                i++;
+                            }
+                            String[] newRow = { nightShift.get(i)[0], nightShift.get(i)[1], nightShift.get(i)[2],
+                                    String.valueOf(total)};
+                            nightShift.set(i, newRow);
+                        }
+
+
+                        try {
+                            reportpdf3.createSummaryReport(dayShift1,dayShift2,nightShift);
+                        } catch (BadElementException badElementException) {
+                            badElementException.printStackTrace();
+                        } catch (DocumentException documentException) {
+                            documentException.printStackTrace();
+                        }
 
 
 

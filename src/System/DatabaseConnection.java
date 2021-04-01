@@ -296,6 +296,22 @@ public class DatabaseConnection {
         return null;
     }
 
+    public static List<String[]> getTaskForShift(final String fromDate, final String toDate, final String reportType) {
+        try {
+            Connection conn = Connect();
+            assert conn != null;
+
+            PreparedStatement statement = conn.prepareStatement("SELECT * FROM task WHERE " +
+                    "(task.Date >= '"+fromDate+"' " +
+                    "AND task.date <= '"+toDate+"') " +
+                    "OR (task.date >= '"+fromDate+"' AND task.date <= '"+toDate+"') " +
+                    "ORDER BY staffID, availableTaskID");
+
+
+            return returnList(statement);
+        } catch (SQLException exception) { exception.printStackTrace(); }
+        return null;
+    }
 
     public static List<String[]> getJobFromDates(final String fromDate, final String toDate, final String reportType) {
         try {
@@ -362,13 +378,13 @@ public class DatabaseConnection {
             if (firstName.isEmpty() && lastName.isEmpty()) return null;
             else if (firstName.isEmpty())
                 statement = conn.prepareStatement("SELECT customer.firstName, customer.lastName, jobID, amountdue, discount FROM payment " +
-                        "INNER JOIN customer ON payment.customerID = customer.ID WHERE customer.lastName LIKE '"+lastName+"%'");
+                        "INNER JOIN job ON payment.jobID = job.ID INNER JOIN customer ON job.ID = customer.ID  WHERE customer.lastName LIKE '"+lastName+"%'");
             else if (lastName.isEmpty())
-                statement = conn.prepareStatement("SELECT staff.firstName, staff.lastName, jobID, amountdue, discount FROM payment " +
-                        "INNER JOIN staff ON payment.staffID = staff.ID WHERE staff.firstName LIKE '"+firstName+"%'");
+                statement = conn.prepareStatement("SELECT customer.firstName, customer.lastName, jobID, amountdue, discount FROM payment " +
+                        "INNER JOIN job ON payment.jobID = job.ID INNER JOIN customer ON job.ID = customer.ID WHERE customer.firstName LIKE '"+firstName+"%'");
             else
-                statement = conn.prepareStatement("SELECT customer.firstName, customer.lastName, jobID, amountdue, discount FROM payment INNER JOIN customer " +
-                        "ON payment.customerID = customer.ID WHERE customer.firstName LIKE '" +
+                statement = conn.prepareStatement("SELECT customer.firstName, customer.lastName, jobID, amountdue, discount FROM payment INNER JOIN job " +
+                        "ON payment.jobID = job.ID INNER JOIN customer ON job.ID = customer.ID   WHERE customer.firstName LIKE '" +
                         firstName+"%' OR customer.lastName LIKE '"+lastName+"%'");
             return returnList(statement);
         } catch (SQLException exception) { exception.printStackTrace(); }

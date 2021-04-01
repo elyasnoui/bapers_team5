@@ -126,7 +126,7 @@ public class Reportpdf {
             document.open();
             addMetaData(document);
             //addTitlePage(document);
-            document.close();
+            return document;
         } catch (Exception e){
             e.printStackTrace();
         }
@@ -153,7 +153,7 @@ public class Reportpdf {
 
         //Before this
         List<String[]> data = new ArrayList<String[]>();
-        String[] tableTitleList = {"Date", "Copy Room", "Development", "Finishing", "Packing"};
+        String[] tableTitleList = {"Date", "Department", "Time Taken"};
         data.add(tableTitleList);
         for (int i = 0; i < pd.size(); i++) {
             List<String[]> dataLine = new ArrayList<String[]>();
@@ -281,41 +281,56 @@ public class Reportpdf {
         Paragraph subPara = new Paragraph("Subcategory 1", subFont);
         //Section subCatPart = catPart.addSection(subPara);
         //subCatPart.add(new Paragraph("Hello"));
-        addEmptyLine(subPara, 5);   
+        addEmptyLine(subPara, 5);
 
         Paragraph dayshift1 = new Paragraph("Day Shift: (5am-2:30pm");
+        addEmptyLine(dayshift1,4);
 
-        PdfPTable table = new PdfPTable(6);
+        PdfPTable table = new PdfPTable(3);
         table.setWidthPercentage(100);
-        List<String[]> dataset = insertPerformanceData(dayShift1);
+        List<String[]> dataset = insertSummaryData(dayShift1);
         for (String[] record : dataset) {
             for (String field : record) {
                 table.addCell(field);
             }
         }
 
-        PdfPTable table2 = new PdfPTable(6);
+        Paragraph empty = new Paragraph("");
+        addEmptyLine(empty, 3);
+
+        Paragraph dayshift2 = new Paragraph("Day Shift 2: (2:30pm-10pm");
+        addEmptyLine(dayshift2,4);
+
+        PdfPTable table2 = new PdfPTable(3);
         table.setWidthPercentage(100);
-        List<String[]> dataset2 = insertPerformanceData(dayShift2);
+        List<String[]> dataset2 = insertSummaryData(dayShift2);
         for(String[] record2 : dataset2){
             for ( String field2 : record2){
                 table2.addCell(field2);
             }
         }
+        Paragraph empty2 = new Paragraph("");
+        addEmptyLine(empty2, 3);
+        Paragraph nightshift = new Paragraph("Night Shift: (10pm-5am");
+        addEmptyLine(nightshift,4);
 
-        PdfPTable table3 = new PdfPTable(6);
+        PdfPTable table3 = new PdfPTable(3);
         table.setWidthPercentage(100);
-        List<String[]> dataset3 = insertPerformanceData(dayShift2);
+        List<String[]> dataset3 = insertSummaryData(nightShift);
         for(String[] record3 : dataset3){
             for ( String field3 : record3){
-                table2.addCell(field3);
+                table3.addCell(field3);
             }
         }
         // now add all this to the document
         doc.add(catPart);
-
+        doc.add(dayshift1);
         doc.add(table);
+        doc.add(empty);
+        doc.add(dayshift2);
         doc.add(table2);
+        doc.add(empty2);
+        doc.add(nightshift);
         doc.add(table3);
 
         //subCatPart.add(table);
