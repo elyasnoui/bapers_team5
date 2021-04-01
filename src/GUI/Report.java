@@ -248,7 +248,7 @@ public class Report {
                 assert rowData != null;
                 switch (rowData[1]) {
                     case "Performance Report":
-                        taskData = DatabaseConnection.getTaskForPerformance(rowData[4], rowData[5], "Performance Report");
+                        taskData = DatabaseConnection.getTaskForPerformance(rowData[3], rowData[4], "Performance Report");
                         assert taskData != null;
                         List<String[]> performanceReportData = new ArrayList<>();
 
@@ -294,8 +294,12 @@ public class Report {
                         break;
                     case "Summary Report":
 
-                        taskData = DatabaseConnection.getTaskForShift((rowData[4]+" 05:00:00"),(rowData[5]+" 14:30:00"), "Summary Report");
+                        String shift1p1 = " 05:00:00";
+                        String shift1p2 =  " 14:30:01";
+
+                        taskData = DatabaseConnection.getTaskForShift(rowData[3], " 05:00:00", rowData[4], " 14:30:01", "Summary Report");
                         assert taskData != null;
+                        System.out.println(rowData[5]+shift1p2);
 
                         List<String[]> dayShift1 = new ArrayList<>();
                         for(String[] s : taskData){
@@ -321,7 +325,9 @@ public class Report {
                             dayShift1.set(i, newRow);
                         }
 
-                        taskData = DatabaseConnection.getTaskForShift(rowData[4]+" 14:30:01",rowData[5]+" 22:00:00", "Summary Report");
+                        String shift2p1 = " 14:30:01";
+                        String shift2p2 = " 21:59:59";
+                        taskData = DatabaseConnection.getTaskForShift(rowData[3], " 14:30:01",rowData[4]," 21:59:59", "Summary Report");
                         assert taskData != null;
 
                         List<String[]> dayShift2 = new ArrayList<>();
@@ -346,7 +352,9 @@ public class Report {
                             dayShift2.set(i, newRow);
                         }
 
-                        taskData = DatabaseConnection.getTaskForShift(rowData[4]+ " 22:00:01",rowData[5]+ " 04:59:59", "Summary Report");
+                        String shift3p1 = " 22:00:01";
+                        String shift3p2 = " 04:59:59";
+                        taskData = DatabaseConnection.getTaskForShift(rowData[3], " 22:00:01",rowData[4]," 04:59:59", "Summary Report");
                         assert taskData != null;
 
                         List<String[]> nightShift = new ArrayList<>();
@@ -385,7 +393,7 @@ public class Report {
 
                         break;
                     case "Customer Sales Report":
-                        jobData = DatabaseConnection.getJobFromDates(rowData[4],rowData[5], "Customer Sales Report");
+                        jobData = DatabaseConnection.getJobFromDates(rowData[3],rowData[4], "Customer Sales Report");
                         assert jobData != null;
 
                         List<String[]> customerSalesData = new ArrayList<>();
@@ -433,7 +441,7 @@ public class Report {
 
                     case "Job Report":
                         int ID = Integer.parseInt(String.valueOf(table.getModel().getValueAt(table.getSelectedRow(), 9)));
-                        jobData = DatabaseConnection.jobReportWithID(rowData[4],rowData[5], 1);
+                        jobData = DatabaseConnection.jobReportWithID(rowData[3],rowData[4], 1);
 
                         assert jobData != null;
                         List<String[]> jobReportData = new ArrayList<>();

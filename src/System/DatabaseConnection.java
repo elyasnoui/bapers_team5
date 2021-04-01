@@ -296,15 +296,15 @@ public class DatabaseConnection {
         return null;
     }
 
-    public static List<String[]> getTaskForShift(final String fromDate, final String toDate, final String reportType) {
+    public static List<String[]> getTaskForShift(final String fromDate, final String time , final String toDate, final String time2,final String reportType) {
         try {
             Connection conn = Connect();
             assert conn != null;
 
             PreparedStatement statement = conn.prepareStatement("SELECT * FROM task WHERE " +
-                    "(task.Date >= '"+fromDate+"' " +
-                    "AND task.date <= '"+toDate+"') " +
-                    "OR (task.date >= '"+fromDate+"' AND task.date <= '"+toDate+"') " +
+                    "(task.date >= '"+(fromDate+time)+"' " +
+                    "AND task.date <= '"+(toDate+time2)+"') " +
+                    "OR (task.date >= '"+(fromDate+time)+"' AND task.date <= '"+(toDate+time2)+"') " +
                     "ORDER BY task.date");
 
 
