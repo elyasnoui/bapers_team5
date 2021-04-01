@@ -285,7 +285,7 @@ public class DatabaseConnection {
             assert conn != null;
 
             PreparedStatement statement = conn.prepareStatement("SELECT * FROM task WHERE " +
-                    "(task.Date >= '"+fromDate+"' " +
+                    "(task.date >= '"+fromDate+"' " +
                     "AND task.date <= '"+toDate+"') " +
                     "OR (task.date >= '"+fromDate+"' AND task.date <= '"+toDate+"') " +
                     "ORDER BY staffID, availableTaskID");
@@ -305,7 +305,7 @@ public class DatabaseConnection {
                     "(task.Date >= '"+fromDate+"' " +
                     "AND task.date <= '"+toDate+"') " +
                     "OR (task.date >= '"+fromDate+"' AND task.date <= '"+toDate+"') " +
-                    "ORDER BY staffID, availableTaskID");
+                    "ORDER BY task.date");
 
 
             return returnList(statement);
