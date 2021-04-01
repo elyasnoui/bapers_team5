@@ -3,11 +3,10 @@ package GUI;
 import System.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
+import java.sql.SQLException;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -31,37 +30,20 @@ public class Payment {
     private JPanel buttonPanel;
     private JButton deleteButton;
     private JButton editButton;
-    private JButton createButton;
+    private JButton makeButton;
     private JTable table;
     private JPanel mainPanel;
     private JPanel createPanel;
     private JButton popupCancelButton;
     private JScrollPane tablePanel;
-    private JLabel tasksAddedLabel;
-    private JLabel customerIDLabel;
-    private JLabel customerIDValue;
-    private JPanel urgencyLabelPanel;
-    private JPanel urgencyPanel;
-    private JButton firstTierButton;
-    private JButton secondTierButton;
-    private JButton thirdTierButton;
-    private JLabel isUrgentLabel;
     private JButton popupCreateButton;
-    private JButton removeButton;
     private JButton lookupButton;
     private JPanel customerLookupPanel;
     private JTextField lastNameField;
     private JTextField firstNameField;
-    private JScrollPane customerScrollPane;
     private JTable customerTable;
     private JButton lookupSelectButton;
     private JButton lookupCancelButton;
-    private JLabel jobIDLabel;
-    private JLabel firstNameLabel;
-    private JLabel lastNameLabel;
-    private JLabel amountDueLabel;
-    private JLabel discountLabel;
-    private JLabel amountMinusLabel;
     private JCheckBox cardCheckBox;
     private JLabel cardTypeLabel;
     private JLabel expiryDateLabel;
@@ -74,15 +56,46 @@ public class Payment {
     private JTextField expiryPT2;
     private JLabel expirySlash;
     private JTextField cardNumberField;
+    private JPanel jobLookupPanel;
+    private JTextField lookupToTextField;
+    private JScrollPane jobScrollPane;
+    private JTable jobTable;
+    private JTextField lookupFromTextField;
+    private JComboBox createPaymentTypeComboBox;
+    private JButton createConfirmButton;
+    private JButton createCancelButton;
+    private JLabel createCustomerNameField;
+    private JLabel createJobIDField;
+    private JLabel createTotalBeforeChargesField;
+    private JLabel createDiscountsField;
+    private JLabel createFinalTotalField;
+    private JLabel createVatField;
+    private JLabel createSurchargeField;
+    private JLabel createCardTypeLabel;
+    private JComboBox createCardTypeComboBox;
+    private JLabel createExpiryDateLabel;
+    private JTextField createExpiryDateField;
+    private JTextField createLastFourDigitsField;
+    private JLabel createLastFourDigitsLabel;
+    private JLabel createCashPaidLabel;
+    private JTextField createCashPaidField;
+    private JLabel createChangeDueLabel;
+    private JLabel createChangeGivenValue;
     private List<String[]> paymentData;
     private List<String[]> paymentData1;
     private List<String[]> cardData;
     private List<String[]> cashData;
+    private List<String[]> jobLookupData;
+    private int customerID;
+    private int staffID;
     private static DecimalFormat df2 = new DecimalFormat("0.00");
+
+    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+    SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+
     private final String[] tableColumns = {
             "Job ID",
             "Amount Due",
-            "Is Paid",
             "Discount",
             "Date",
             "Payment Type",
@@ -101,6 +114,11 @@ public class Payment {
             "Mastercard Credit Card",
             "Visa Credit Card"
     };
+    private final String[] paymentTypes = {
+            "Please select a payment type",
+            "Card",
+            "Cash"
+    };
     private final String[] customerColumns = {
             "firstName",
             "lastName",
@@ -108,17 +126,17 @@ public class Payment {
             "amountDue",
             "discount"
     };
+    private final String[] lookupColumns = {
+            "Job ID",
+            "Start Date",
+            "Customer Name",
+            "Price",
+            "Status"
+    };
 
     public Payment(Bapers system) {
 
         this.system = system;
-
-        firstNameField.setBorder(null);
-        lastNameField.setBorder(null);
-        cardTypeComboBox.setModel(new DefaultComboBoxModel<>(cardTypes));
-        customerTable.setModel(new DefaultTableModel(null, customerColumns));
-
-
 
         try {
             paymentData = DatabaseConnection.getData("payment");
@@ -132,13 +150,13 @@ public class Payment {
                 int i = 0;
                 for (String[] ps : paymentData) {
                     if (pts[0].equals(ps[0])) {
-                        switch (ps[5]) {
+                        switch (ps[4]) {
                             case "Card":
-                                temp = new String[] { ps[0], '£'+ps[1], ps[2], '£'+ps[3], ps[4], ps[5], ps[6], ps[7], pts[1],
+                                temp = new String[] { ps[0], '£'+ps[1], '£'+ps[2], ps[3], ps[4], ps[5], ps[6], pts[1],
                                         pts[2], pts[3], "", "" };
                                 break;
                             case "Cash":
-                                temp = new String[] { ps[0], '£'+ps[1], ps[2], '£'+ps[3], ps[4], ps[5], ps[6], ps[7], "",
+                                temp = new String[] { ps[0], '£'+ps[1], '£'+ps[2], ps[3], ps[4], ps[5], ps[6], "",
                                         "", "", '£'+pts[1], '£'+pts[2] };
                                 break;
                             default:
@@ -214,167 +232,261 @@ public class Payment {
             }
         });
 
-//        logoutButton.addMouseListener(ApplicationWindow.highlightListener);
-//        jobsButton.addMouseListener(ApplicationWindow.highlightListener);
-//        customerButton.addMouseListener(ApplicationWindow.highlightListener);
-//        paymentsButton.addMouseListener(ApplicationWindow.highlightListener);
-//        staffButton.addMouseListener(ApplicationWindow.highlightListener);
-//        tasksButton.addMouseListener(ApplicationWindow.highlightListener);
-//        reportsButton.addMouseListener(ApplicationWindow.highlightListener);
-//        databaseButton.addMouseListener(ApplicationWindow.highlightListener);
-//        createButton.addMouseListener(ApplicationWindow.highlightListener);
-//        editButton.addMouseListener(ApplicationWindow.highlightListener);
-//        deleteButton.addMouseListener(ApplicationWindow.highlightListener);
-
         ApplicationWindow.displayTable(table, paymentData, tableColumns);
-        createButton.addActionListener(new ActionListener() {
+        makeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 tablePanel.setVisible(false);
                 buttonPanel.setVisible(false);
-                createPanel.setVisible(true);
-            }
-        });
-        popupCancelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                tablePanel.setVisible(true);
-                buttonPanel.setVisible(true);
-                createPanel.setVisible(false);
-                resetCreatePanel();
-            }
-        });
-        firstNameField.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyReleased(KeyEvent e) {
-                if (firstNameField.getText().length() >= 3 || lastNameField.getText().length() >= 3) {
-                    paymentSearch();
-                } else customerTable.setModel(new DefaultTableModel(null, customerColumns));
-            }
-        });
-        lastNameField.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyReleased(KeyEvent e) {
-                if (lastNameField.getText().length() >= 3 || firstNameField.getText().length() >= 3) {
-                    paymentSearch();
-                } else customerTable.setModel(new DefaultTableModel(null, customerColumns));
-            }
-        });
-        lookupButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                createPanel.setVisible(false);
-                customerLookupPanel.setVisible(true);
+                jobLookupPanel.setVisible(true);
+
+                resetLookupPanel();
             }
         });
         lookupSelectButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (!customerTable.getSelectionModel().isSelectionEmpty()) {
-                    String firstName = paymentData1.get(customerTable.getSelectedRow())[0];
-                    String lastName = paymentData1.get(customerTable.getSelectedRow())[1];
-                    String jobID = paymentData1.get(customerTable.getSelectedRow())[2];
-                    String amountDue = paymentData1.get(customerTable.getSelectedRow())[3];
-                    String discount = paymentData1.get(customerTable.getSelectedRow())[4];
-                    double deductions = Double.parseDouble(amountDue) - Double.parseDouble(discount);
-                    firstNameLabel.setText(firstName);
-                    lastNameLabel.setText(lastName);
-                    jobIDLabel.setText(jobID);
-                    amountDueLabel.setText(amountDue);
-                    discountLabel.setText(discount);
-                    amountMinusLabel.setText(Double.toString(Double.parseDouble(df2.format(deductions))));
-                    customerLookupPanel.setVisible(false);
-                    createPanel.setVisible(true);
+                jobLookupPanel.setVisible(false);
+                createPanel.setVisible(true);
+
+                createCustomerNameField.setText(String.valueOf(jobTable.getValueAt(jobTable.getSelectedRow(), 2)));
+                createJobIDField.setText(String.valueOf(jobTable.getValueAt(jobTable.getSelectedRow(), 0)));
+                createTotalBeforeChargesField.setText(String.valueOf(jobTable.getValueAt(jobTable.getSelectedRow(), 3)));
+                double price = Double.parseDouble(createTotalBeforeChargesField.getText());
+                customerID = Integer.parseInt(jobLookupData.get(jobTable.getSelectedRow())[6]);
+                staffID = Integer.parseInt(jobLookupData.get(jobTable.getSelectedRow())[6]);
+                double surcharge = 0;
+                switch (jobLookupData.get(jobTable.getSelectedRow())[5]) {
+                    case "1":
+                        surcharge = (price*1.5);
+                        price += surcharge;
+                        break;
+                    case "2":
+                        surcharge = price;
+                        price += surcharge;
+                        break;
+                    case "3":
+                        surcharge = (price*0.5);
+                        price += surcharge;
+                        break;
+                    case "4":
+                        surcharge = (price*0.25);
+                        price += surcharge;
+                        break;
                 }
+                createSurchargeField.setText("£"+df2.format(surcharge));
+
+                double discount = 0;
+                if (DatabaseConnection.isCustomerValuedCustomer(customerID)) {
+                    System.out.println(customerID);
+                    String[] vcRow = DatabaseConnection.getRowBySingleID("valuedCustomer", customerID);
+                    assert vcRow != null;
+                    int jobID = Integer.parseInt(jobLookupData.get(jobTable.getSelectedRow())[0]);
+                    switch (vcRow[1]) {
+                        case "Fixed Discount":
+                            discount += price/100 * Double.parseDouble(vcRow[2]);
+                            break;
+                        case "Variable Discount":
+                            String[] vDiscounts = vcRow[2].split(",");
+                            for (String d : vDiscounts) {
+                                String[] vTemp = d.split("-");
+                                List<String[]> taskPrices = DatabaseConnection.getTasksToDiscount(jobID, Integer.parseInt(vTemp[0]));
+                                for (String[] p : taskPrices)
+                                    discount += Double.parseDouble(p[0])/100 * Double.parseDouble(vTemp[1]);
+                            }
+                            break;
+                        case "Flexible Discount":
+                            String[] fDiscounts = vcRow[2].split(",");
+                            double volume = DatabaseConnection.getPaymentVolume(customerID);
+                            String[] fTemp = { "0", "0" };
+                            if (volume <= 1000) fTemp = fDiscounts[0].split("-");
+                            else if (volume <= 2000) fTemp = fDiscounts[1].split("-");
+                            else if (volume > 2000) fTemp = fDiscounts[2].split("-");
+                            discount = price/100 * Double.parseDouble(fTemp[1]);
+                            break;
+                    }
+                }
+                createVatField.setText("£"+df2.format(price*0.2));
+                createDiscountsField.setText("£"+df2.format(discount));
+                double finalPrice = (price+price*0.2)+surcharge-discount;
+                createFinalTotalField.setText("£"+df2.format(finalPrice));
+
+                resetCreatePanel();
             }
         });
         lookupCancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                customerLookupPanel.setVisible(false);
-                createPanel.setVisible(true);
-                resetLookupPanel();
-
+                jobLookupPanel.setVisible(false);
+                tablePanel.setVisible(true);
+                buttonPanel.setVisible(true);
             }
         });
+        KeyAdapter listener = new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if (e.getComponent() instanceof JTextField) {
+                    if (!((JTextField) e.getComponent()).getText().matches(ApplicationWindow.dateRegex)) {
+                        ((JTextField) e.getComponent()).setBorder(ApplicationWindow.borderError);
+                        ((JTextField) e.getComponent()).setToolTipText("Please enter a valid date (dd-mm-yyyy)");
+                    } else {
+                        ((JTextField) e.getComponent()).setBorder(null);
+                        ((JTextField) e.getComponent()).setToolTipText(null);
 
-        cardCheckBox.addActionListener(new ActionListener() {
+                        if (lookupToTextField.getText().matches(ApplicationWindow.dateRegex) &&
+                                lookupFromTextField.getText().matches(ApplicationWindow.dateRegex)) {
+                            jobSearch();
+                        }
+                    }
+                }
+            }
+        };
+        lookupToTextField.addKeyListener(listener);
+        lookupFromTextField.addKeyListener(listener);
+
+        jobTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                lookupSelectButton.setEnabled(jobTable.getSelectionModel().getSelectedItemsCount() == 1);
+
+                if (lookupSelectButton.isEnabled()) lookupSelectButton.setToolTipText(null);
+                else lookupSelectButton.setToolTipText("Please search and select a row");
+
+                if (jobTable.getSelectionModel().getSelectedItemsCount() > 1)
+                    jobTable.getSelectionModel().clearSelection();
+            }
+        });
+        createPaymentTypeComboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (cardCheckBox.isSelected()){
-                    cardTypeLabel.setVisible(true);
-                    expiryDateLabel.setVisible(true);
-                    cardNumberLabel.setVisible(true);
-                    cardTypeComboBox.setVisible(true);
-                    expiryPT1.setVisible(true);
-                    expirySlash.setVisible(true);
-                    expiryPT2.setVisible(true);
-                    cardNumberField.setVisible(true);
+                createCardTypeLabel.setVisible(createPaymentTypeComboBox.getSelectedIndex() == 1);
+                createCardTypeComboBox.setVisible(createPaymentTypeComboBox.getSelectedIndex() == 1);
+                createExpiryDateLabel.setVisible(createPaymentTypeComboBox.getSelectedIndex() == 1);
+                createExpiryDateField.setVisible(createPaymentTypeComboBox.getSelectedIndex() == 1);
+                createLastFourDigitsLabel.setVisible(createPaymentTypeComboBox.getSelectedIndex() == 1);
+                createLastFourDigitsField.setVisible(createPaymentTypeComboBox.getSelectedIndex() == 1);
 
-                    cashGivenLabel.setVisible(false);
-                    changeGivenLabel.setVisible(false);
-                }
-                else{
-                    cardTypeLabel.setVisible(false);
-                    expiryDateLabel.setVisible(false);
-                    cardNumberLabel.setVisible(false);
-                    cardTypeComboBox.setVisible(false);
-                    expiryPT1.setVisible(false);
-                    expirySlash.setVisible(false);
-                    expiryPT2.setVisible(false);
-                    cardNumberField.setVisible(false);
-                }
-
+                createCashPaidLabel.setVisible(createPaymentTypeComboBox.getSelectedIndex() == 2);
+                createCashPaidField.setVisible(createPaymentTypeComboBox.getSelectedIndex() == 2);
+                createChangeDueLabel.setVisible(createPaymentTypeComboBox.getSelectedIndex() == 2);
+                createChangeGivenValue.setVisible(createPaymentTypeComboBox.getSelectedIndex() == 2);
             }
         });
-        cashCheckBox.addActionListener(new ActionListener() {
+        createConfirmButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(cashCheckBox.isSelected()){
-                    cashGivenLabel.setVisible(true);
-                    changeGivenLabel.setVisible(true);
+                switch (createPaymentTypeComboBox.getSelectedIndex()) {
+                    case 1:
+                        if (createExpiryDateField.getText().matches(ApplicationWindow.expiryRegex) &&
+                        createLastFourDigitsField.getText().matches(ApplicationWindow.last4Digits)) {
+                            try {
+                                if (DatabaseConnection.addPayment(Integer.parseInt(createJobIDField.getText()), Double.parseDouble(createFinalTotalField.getText().substring(1))
+                                , Double.parseDouble(createDiscountsField.getText().substring(1)), String.valueOf(createPaymentTypeComboBox.getSelectedItem()), customerID, 4)) {
+                                    if (DatabaseConnection.addCard(Integer.parseInt(createJobIDField.getText()), String.valueOf(createCardTypeComboBox.getSelectedItem()), createExpiryDateField.getText(),
+                                            Integer.parseInt(createLastFourDigitsField.getText()))) {
+                                        if (!DatabaseConnection.updateJobStatus(Integer.parseInt(createJobIDField.getText()), "Paid"))
+                                            JOptionPane.showMessageDialog(mainPanel, "Couldn't update job status.");
+                                    } else JOptionPane.showMessageDialog(mainPanel, "Couldn't add card.");
+                                } else JOptionPane.showMessageDialog(mainPanel, "Couldn't add payment.");
+                            } catch (SQLException exception) { exception.printStackTrace(); }
+                        } else JOptionPane.showMessageDialog(mainPanel, "Please check your card details");
+                        break;
+                    case 2:
+                        if (createCashPaidField.getText().matches(ApplicationWindow.money) && Double.parseDouble(createCashPaidField.getText()) >=
+                        Double.parseDouble(createFinalTotalField.getText().substring(1))) {
+                            try {
+                                if (DatabaseConnection.addPayment(Integer.parseInt(createJobIDField.getText()), Double.parseDouble(createFinalTotalField.getText().substring(1))
+                                        , Double.parseDouble(createDiscountsField.getText().substring(1)), String.valueOf(createPaymentTypeComboBox.getSelectedItem()), customerID, 4)) {
+                                    if (!DatabaseConnection.addCash(Integer.parseInt(createJobIDField.getText()), Double.parseDouble(createCashPaidField.getText()),
+                                            Double.parseDouble(createChangeGivenValue.getText().substring(1)))) {
+                                        if (!DatabaseConnection.updateJobStatus(Integer.parseInt(createJobIDField.getText()), "Paid")) {
+                                            JOptionPane.showMessageDialog(mainPanel, "Couldn't update job status.");
+                                        } else system.changeScreen("payment", mainPanel);
+                                    } else JOptionPane.showMessageDialog(mainPanel, "Couldn't add cash..");
+                                } else JOptionPane.showMessageDialog(mainPanel, "Couldn't add payment.");
+                            } catch (SQLException exception) { exception.printStackTrace(); }
+                        } else JOptionPane.showMessageDialog(mainPanel, "You can only pay at or above the total amount");
 
-                    cardTypeLabel.setVisible(false);
-                    expiryDateLabel.setVisible(false);
-                    cardNumberLabel.setVisible(false);
-                    cardTypeComboBox.setVisible(false);
-                    expiryPT1.setVisible(false);
-                    expirySlash.setVisible(false);
-                    expiryPT2.setVisible(false);
-                    cardNumberField.setVisible(false);
-
+                        break;
+                    default:
+                        JOptionPane.showMessageDialog(mainPanel, "Please select a payment type");
+                        break;
                 }
-                else{
-                    cashGivenLabel.setVisible(false);
-                    changeGivenLabel.setVisible(false);
-                }
+            }
+        });
+        createCancelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                createPanel.setVisible(false);
+                tablePanel.setVisible(true);
+                buttonPanel.setVisible(true);
 
+                removeCreateListeners();
+            }
+        });
+        createCashPaidField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if (createCashPaidField.getText().matches(ApplicationWindow.money)) {
+                    try {
+                        if (Double.parseDouble(createCashPaidField.getText()) >
+                                Double.parseDouble(createFinalTotalField.getText().substring(1))) {
+                            createCashPaidField.setBorder(null);
+                            createChangeGivenValue.setText("£"+ df2.format(Math.abs(Double.parseDouble(
+                                    createFinalTotalField.getText().substring(1)) - Double.parseDouble(createCashPaidField.getText()))));
+                        } else createCashPaidField.setBorder(ApplicationWindow.borderError);
+                    } catch (NumberFormatException ignored) {}
+                }
             }
         });
     }
 
-    public void resetLookupPanel() {
-        firstNameField.setText("");
-        lastNameField.setText("");
-        customerTable.setModel(new DefaultTableModel(null, customerColumns));
-    }
-
-    public void resetCreatePanel(){
-        firstNameLabel.setText("");
-        lastNameLabel.setText("");
-        jobIDLabel.setText("");
-        amountDueLabel.setText("");
-        discountLabel.setText("");
-        amountMinusLabel.setText("");
-    }
-
-    private void paymentSearch() {
+    private void jobSearch() {
         try {
-            paymentData1 = DatabaseConnection.searchPayments(firstNameField.getText(), lastNameField.getText());
-            assert paymentData1 != null;
-            ApplicationWindow.displayTable(customerTable, paymentData1, customerColumns);
+            jobLookupData = DatabaseConnection.searchJobs(sdf2.format(sdf.parse(lookupFromTextField.getText())),
+                    sdf2.format(sdf.parse(lookupToTextField.getText())), "Unpaid");
+            assert jobLookupData != null;
+            for (String[] js : jobLookupData)
+                if (!(js[2] == null))
+                    js[2] = DatabaseConnection.getCustomerName(Integer.parseInt(js[2]));
+            ApplicationWindow.displayTable(jobTable, jobLookupData, lookupColumns);
         }
         catch (Exception e) { e.printStackTrace(); }
+    }
+
+    private void resetLookupPanel() {
+        lookupFromTextField.setText("");
+        lookupFromTextField.setToolTipText("Please enter a valid date (dd-mm-yyyy)");
+        lookupFromTextField.setBorder(null);
+        lookupToTextField.addKeyListener(ApplicationWindow.regexListener);
+        lookupToTextField.setText("");
+        lookupToTextField.setToolTipText("Please enter a valid date (dd-mm-yyyy)");
+        lookupToTextField.setBorder(null);
+        lookupToTextField.addKeyListener(ApplicationWindow.regexListener);
+        jobTable.setModel(new DefaultTableModel(null, lookupColumns));
+        lookupSelectButton.setEnabled(false);
+    }
+
+    private void resetCreatePanel() {
+        createPaymentTypeComboBox.setModel(new DefaultComboBoxModel<>(paymentTypes));
+        createCardTypeComboBox.setModel(new DefaultComboBoxModel<>(cardTypes));
+        createExpiryDateField.setBorder(null);
+        createLastFourDigitsField.setBorder(null);
+        createCashPaidField.setBorder(null);
+
+        addCreateListeners();
+    }
+
+    private void addCreateListeners() {
+        createExpiryDateField.addKeyListener(ApplicationWindow.regexListener);
+        createLastFourDigitsField.addKeyListener(ApplicationWindow.regexListener);
+        createCashPaidField.addKeyListener(ApplicationWindow.regexListener);
+    }
+
+    private void removeCreateListeners() {
+        createExpiryDateField.addKeyListener(ApplicationWindow.regexListener);
+        createLastFourDigitsField.addKeyListener(ApplicationWindow.regexListener);
+        createCashPaidField.addKeyListener(ApplicationWindow.regexListener);
     }
 
     private void addMouseListeners() {
@@ -386,11 +498,7 @@ public class Payment {
         tasksButton.addMouseListener(ApplicationWindow.highlightListener);
         reportsButton.addMouseListener(ApplicationWindow.highlightListener);
         databaseButton.addMouseListener(ApplicationWindow.highlightListener);
-        createButton.addMouseListener(ApplicationWindow.highlightListener);
-        editButton.addMouseListener(ApplicationWindow.highlightListener);
-        deleteButton.addMouseListener(ApplicationWindow.highlightListener);
-        popupCreateButton.addMouseListener(ApplicationWindow.highlightListener);
-        popupCancelButton.addMouseListener(ApplicationWindow.highlightListener);
+        makeButton.addMouseListener(ApplicationWindow.highlightListener);
     }
 
     private void removeMouseListeners() {
@@ -402,11 +510,7 @@ public class Payment {
         tasksButton.removeMouseListener(ApplicationWindow.highlightListener);
         reportsButton.removeMouseListener(ApplicationWindow.highlightListener);
         databaseButton.removeMouseListener(ApplicationWindow.highlightListener);
-        createButton.removeMouseListener(ApplicationWindow.highlightListener);
-        editButton.removeMouseListener(ApplicationWindow.highlightListener);
-        deleteButton.removeMouseListener(ApplicationWindow.highlightListener);
-        popupCreateButton.removeMouseListener(ApplicationWindow.highlightListener);
-        popupCancelButton.removeMouseListener(ApplicationWindow.highlightListener);
+        makeButton.removeMouseListener(ApplicationWindow.highlightListener);
     }
     public JPanel getMainPanel() {
         return mainPanel;
@@ -430,9 +534,5 @@ public class Payment {
 
     public void setRole(String role) {
         this.roleLabel.setText(role);
-    }
-
-    private void createUIComponents() {
-        // TODO: place custom component creation code here
     }
 }

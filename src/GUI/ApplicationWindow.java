@@ -5,11 +5,9 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -19,8 +17,16 @@ import java.util.concurrent.TimeUnit;
 public class ApplicationWindow extends JFrame {
     public static String username;
     public static String role;
+    public static int staffID;
     private List<String[]> jobData;
 
+    public static String money = "[0-9]+(.[0-9]{2})?";
+    public static String last4Digits = "[0-9]{4}";
+    public static String expiryRegex = "(0[1-9]|10|11|12)/20[0-9]{2}";
+    public static String dateRegex = "(?:(?:31(-)(?:0?[13578]|1[02]))\\1|(?:(?:29|30)(-)(?:0?[13-9]|1[0-2])\\2))" +
+            "(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$|^(?:29(-)0?2\\3(?:(?:(?:1[6-9]|[2-9]\\d)?(?:0[48]|[2468][048]" +
+            "|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\\d|2[0-8])(-)(?:(?:0?[1-9" +
+            "])|(?:1[0-2]))\\4(?:(?:1[6-9]|[2-9]\\d)\\d{2})";
     public static final String companyRegex = "[a-zA-Z0-9 )(,-]{0,35}?";
     public static final String nameRegex = "[A-Z]{1}[a-zA-z-]{1,34}";
     public static final String contactNumberRegex = "[0][1-9][0-9]{9}";
@@ -202,6 +208,30 @@ public class ApplicationWindow extends JFrame {
                     case "role":
                         if (((JTextField) e.getComponent()).getText().matches(roleRegex)) {
                             ((JTextField) e.getComponent()).setToolTipText("Please enter only letters");
+                            valid = true;
+                        } else valid = false;
+                        break;
+                    case "date":
+                        if (((JTextField) e.getComponent()).getText().matches(dateRegex)) {
+                            ((JTextField) e.getComponent()).setToolTipText("Please enter only letters");
+                            valid = true;
+                        } else valid = false;
+                        break;
+                    case "expiry":
+                        if (((JTextField) e.getComponent()).getText().matches(expiryRegex)) {
+                            ((JTextField) e.getComponent()).setToolTipText("Please enter in the format of MM/YYYY");
+                            valid = true;
+                        } else valid = false;
+                        break;
+                    case "lastFour":
+                        if (((JTextField) e.getComponent()).getText().matches(last4Digits)) {
+                            ((JTextField) e.getComponent()).setToolTipText("Please enter the last 4 digits of the card");
+                            valid = true;
+                        } else valid = false;
+                        break;
+                    case "money":
+                        if (((JTextField) e.getComponent()).getText().matches(money)) {
+                            ((JTextField) e.getComponent()).setToolTipText("Please enter in money format, E.g. 4, 2.34, 5.99");
                             valid = true;
                         } else valid = false;
                         break;
