@@ -317,7 +317,7 @@ public class DatabaseConnection {
             assert conn != null;
             PreparedStatement statement;
             switch (reportType) {
-                case "Customer Sales Report":
+                case "Customer Sales":
                     statement = conn.prepareStatement("SELECT * FROM job WHERE " +
                             "(startDate >= '"+fromDate+"' " +
                             "AND endDate <= '"+toDate+"') " +

@@ -393,7 +393,7 @@ public class Report {
 
                         break;
                     case "Customer Sales Report":
-                        jobData = DatabaseConnection.getJobFromDates(rowData[4],rowData[5], "Customer Sales Report");
+                        jobData = DatabaseConnection.getJobFromDates(rowData[4],rowData[5], "Customer Sales");
                         assert jobData != null;
 
                         List<String[]> customerSalesData = new ArrayList<>();
