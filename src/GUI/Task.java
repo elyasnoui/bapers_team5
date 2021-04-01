@@ -4,6 +4,7 @@ import System.*;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.xml.crypto.Data;
 import java.awt.event.*;
 import java.net.DatagramPacket;
 import java.sql.SQLException;
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Random;
 
-public class Task {
+public class Task extends Form {
     private JButton CreateButton;
     private JButton editButton;
     private JButton deleteButton;
@@ -67,6 +68,7 @@ public class Task {
     private JLabel editTotalLabel;
     private JButton editConfirmButton;
     private JButton editCancelButton;
+    private JButton completeTaskButton;
     private ImageIcon bannerIcon;
     private Bapers system;
     private List<String[]> availableTaskData;
@@ -441,6 +443,25 @@ public class Task {
                     }
             }
         });
+
+        if (role.startsWith("Technician"))
+            technicianPrivileges();
+
+        completeTaskButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!table.getSelectionModel().isSelectionEmpty() && table.getSelectionModel().getSelectedItemsCount() == 1) {
+                    try {
+                        DatabaseConnection.completeTaskStatus(Integer.parseInt(String.valueOf(table.getModel().getValueAt(table.getSelectedRow(), 0))));
+
+                        int jobID = Integer.parseInt(String.valueOf(table.getValueAt(table.getSelectedRow(), 2)));
+                        boolean jobsLeft = DatabaseConnection.countTasksInJob(jobID);
+                        if (!jobsLeft) DatabaseConnection.updateJobStatus(jobID, "Unpaid");
+                    } catch (SQLException exception) { exception.printStackTrace(); }
+                    system.changeScreen("tasks", mainPanel);
+                }
+            }
+        });
     }
 
     private void deleteRow() {
@@ -544,6 +565,32 @@ public class Task {
         createButton.removeMouseListener(ApplicationWindow.highlightListener);
         editButton.removeMouseListener(ApplicationWindow.highlightListener);
         deleteButton.removeMouseListener(ApplicationWindow.highlightListener);
+    }
+
+    public void technicianPrivileges() {
+        jobsButton.setVisible(false);
+        customerButton.setVisible(false);
+        paymentsButton.setVisible(false);
+        staffButton.setVisible(false);
+        reportsButton.setVisible(false);
+        databaseButton.setVisible(false);
+        createButton.setVisible(false);
+        editButton.setVisible(false);
+        deleteButton.setVisible(false);
+        availableTaskButton.setVisible(false);
+        completeTaskButton.setVisible(true);
+
+        try {
+            taskData = DatabaseConnection.showOnlyActiveTasks();
+            assert taskData != null;
+            for (String[] ts : taskData) {
+                ts[5] = ts[5].substring(0,10);
+                ts[7] = '£' + ts[7];
+                ts[9] = ts[9].equals("true") ? "Yes" : "No";
+            }
+        } catch (Exception exp) { exp.printStackTrace(); }
+
+        ApplicationWindow.displayTable(table, taskData, tableColumns);
     }
 
     public JPanel getMainPanel() {

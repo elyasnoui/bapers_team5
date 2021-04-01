@@ -94,7 +94,7 @@ public class Reportpdf {
     private Document createJobReportTemplate() {
         try {
             Document document = new Document();
-            PdfWriter.getInstance(document, new FileOutputStream("data/reports/jobreport.pdf"));
+            PdfWriter.getInstance(document, new FileOutputStream("data/reports/jobReport2.pdf"));
             document.open();
             addMetaData(document);
             //addTitlePage(document);

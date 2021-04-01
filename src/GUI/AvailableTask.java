@@ -11,7 +11,7 @@ import java.awt.event.KeyEvent;
 import java.sql.SQLException;
 import java.util.List;
 
-public class AvailableTask {
+public class AvailableTask extends Form {
     private Bapers system;
     private JPanel sidePanel;
     private JLabel usernameLabel;

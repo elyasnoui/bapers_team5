@@ -10,7 +10,7 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.util.List;
 
-public class Staff {
+public class Staff extends Form {
     private Bapers system;
     private JButton CreateButton;
     private JButton editButton;

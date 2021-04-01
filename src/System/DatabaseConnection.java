@@ -1,6 +1,7 @@
 package System;
 
 import GUI.ApplicationWindow;
+import GUI.Form;
 import com.mysql.cj.xdevapi.Result;
 
 import java.io.UnsupportedEncodingException;
@@ -378,20 +379,19 @@ public class DatabaseConnection {
         }
     }
 
-   /* public static List<String[]> countTasksInJob(final int jobID) {
+    public static boolean countTasksInJob(final int jobID) {
         try {
             Connection conn = Connect();
             assert conn != null;
-            PreparedStatement statement = conn.prepareStatement("SELECT ID, price FROM task WHERE " +
-                    "jobID = "+jobID);
+            PreparedStatement statement = conn.prepareStatement("SELECT COUNT(ID) AS jobsLeft FROM task WHERE " +
+                    "jobID = "+jobID+" AND isCompleted = 0");
             ResultSet res = statement.executeQuery();
-            res.next();
-            return returnList(statement);
+            return res.next();
         } catch (SQLException exception) {
             exception.printStackTrace();
-            return null;
+            return false;
         }
-    }*/
+    }
 
     public static List<String[]> searchCustomer(final String firstName, final String lastName) {
         try {
@@ -832,6 +832,27 @@ public class DatabaseConnection {
         return executeStatement(statement);
     }
 
+    public static List<String[]> showOnlyActiveJobs() {
+        try {
+            Connection conn = Connect();
+            assert conn != null;
+            PreparedStatement statement = conn.prepareStatement("SELECT * FROM job WHERE status = 'Created' ORDER BY isUrgent DESC");
+            return returnList(statement);
+        } catch (SQLException exception) { exception.printStackTrace(); }
+        return null;
+    }
+
+    public static List<String[]> showOnlyActiveTasks() {
+        try {
+            Connection conn = Connect();
+            assert conn != null;
+            PreparedStatement statement = conn.prepareStatement("SELECT * FROM task WHERE isCompleted = 0 " +
+                    "AND staffID = "+Form.staffID);
+            return returnList(statement);
+        } catch (SQLException exception) { exception.printStackTrace(); }
+        return null;
+    }
+
     // Removing several existing task records
     public static boolean removeAllTasksWithJobID(final int jobID) throws SQLException {
         Connection conn = Connect();
@@ -879,6 +900,15 @@ public class DatabaseConnection {
                 "INSERT IGNORE INTO task (availableTaskID, jobID, description, department, timeTaken, price, " +
                         "staffID, isCompleted) VALUES ('"+availableTaskID+"', '"+jobID+"', '"+description+"', '"+department+"', " +
                         "'"+timeTaken+"', '"+price+"', '"+staffID+"', '"+isCompleted+"')"
+        );
+        return executeStatement(statement);
+    }
+
+    public static boolean completeTaskStatus(final int ID) throws SQLException {
+        Connection conn = Connect();
+        assert conn != null;
+        PreparedStatement statement = conn.prepareStatement(
+                "UPDATE task SET isCompleted = 1 WHERE ID = "+ID
         );
         return executeStatement(statement);
     }
@@ -1079,6 +1109,7 @@ public class DatabaseConnection {
         }
     }
 
+
     // Inserting a new customer record
     public static boolean
         addCustomer(final String companyName, final String title, final String firstName, final String lastName, final String contactNumber,
@@ -1119,9 +1150,9 @@ public class DatabaseConnection {
                 count++;
             res.previous();
             if (count == 1 && res.getString("username").equals(username)) {
-                ApplicationWindow.username = res.getString("username");
-                ApplicationWindow.role = res.getString("role");
-                ApplicationWindow.staffID = Integer.parseInt(res.getString("ID"));
+                Form.username = res.getString("username");
+                Form.role = res.getString("role");
+                Form.staffID = Integer.parseInt(res.getString("ID"));
                 return true;
             }
         } catch (NoSuchAlgorithmException | SQLException | UnsupportedEncodingException e) {

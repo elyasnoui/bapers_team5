@@ -18,7 +18,7 @@ import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.DocumentException;
 
 
-public class Report {
+public class Report extends Form {
     private JPanel mainPanel;
     private JPanel sidePanel;
     private JPanel contentPanel;

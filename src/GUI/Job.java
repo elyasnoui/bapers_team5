@@ -84,6 +84,7 @@ public class Job extends Form {
     private JButton editCancelButton;
     private JLabel editTasksAddedLabel;
     private JLabel editJobIDValue;
+    private JButton showActiveTasksButton;
     private ImageIcon checkBoxIcon;
     private ImageIcon selectedCheckBoxIcon;
     private List<String[]> jobData;
@@ -816,6 +817,22 @@ public class Job extends Form {
                 editPanel.setVisible(false);
                 buttonPanel.setVisible(true);
                 tablePanel.setVisible(true);
+            }
+        });
+        showActiveTasksButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    jobData = DatabaseConnection.showOnlyActiveJobs();
+                    assert jobData != null;
+                    for (String[] js : jobData) {
+                        js[1] = "Tier "+js[1];
+                        js[2] = '£' + js[2];
+                        js[5] = js[5].substring(0,10)+" "+js[5].substring(11,16);
+                    }
+                } catch (Exception exp) { exp.printStackTrace(); }
+
+                ApplicationWindow.displayTable(table, jobData, tableColumns);
             }
         });
     }

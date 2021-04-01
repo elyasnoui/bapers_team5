@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class Payment {
+public class Payment extends Form {
     private Bapers system;
     private JPanel sidePanel;
     private JLabel usernameLabel;

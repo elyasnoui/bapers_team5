@@ -10,7 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-public class Database  {
+public class Database extends Form {
     private Bapers system;
     private JPanel sidePanel;
     private JLabel usernameLabel;

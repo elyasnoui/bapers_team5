@@ -7,7 +7,7 @@ import java.awt.event.*;
 
 import System.*;
 
-public class Login {
+public class Login extends Form {
     private Bapers system;
     private JPanel mainPanel;
     private JPanel sidePanel;
@@ -49,7 +49,7 @@ public class Login {
         DatabaseConnection db = null;
         try {
             if (DatabaseConnection.VerifyLogInCredentials(usernameField.getText(), passwordField.getPassword()))
-                system.changeScreen("jobs", mainPanel);
+                system.filterUser();
             else JOptionPane.showMessageDialog(mainPanel, "Invalid Credentials");
         } catch (Exception exception) {
             exception.printStackTrace();

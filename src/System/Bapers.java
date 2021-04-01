@@ -14,14 +14,14 @@ public class Bapers {
     // TODO: Take out declaration when it no longer needs testing
     private Form currentForm;
     private Login login = new Login(this);
-    private Staff staff = new Staff(this);
-    private Customer customer = new Customer(this);
-    private Job job = new Job(this);
-    private Report report = new Report(this);
-    private Task task = new Task(this);
-    private AvailableTask availableTask = new AvailableTask(this);
-    private Payment payment = new Payment(this);
-    private Database database = new Database(this);
+    private Staff staff;
+    private Customer customer;
+    private Job job;
+    private Report report;
+    private Task task;
+    private AvailableTask availableTask;
+    private Payment payment;
+    private Database database;
 
     public Bapers() {
         /*
@@ -48,7 +48,7 @@ public class Bapers {
         so we can have the program default to the login screen.
          */
 
-        //applicationWindow.add(login.getMainPanel());
+        applicationWindow.add(login.getMainPanel());
 
         //applicationWindow.add(report.getMainPanel());
 
@@ -62,7 +62,7 @@ public class Bapers {
 
         //applicationWindow.add(availableTask.getMainPanel());
 
-        applicationWindow.add(payment.getMainPanel());
+        //applicationWindow.add(payment.getMainPanel());
 
         //applicationWindow.add(database.getMainPanel());
 
@@ -120,29 +120,6 @@ public class Bapers {
          */
     }
 
-    public void updateUserDetails() {
-        customer.setUsername(ApplicationWindow.username);
-        customer.setRole(ApplicationWindow.role);
-
-        staff.setUsername(ApplicationWindow.username);
-        staff.setRole(ApplicationWindow.role);
-
-        job.setUsername(ApplicationWindow.username);
-        job.setRole(ApplicationWindow.role);
-
-        task.setUsername(ApplicationWindow.username);
-        task.setRole(ApplicationWindow.role);
-
-        payment.setUsername(ApplicationWindow.username);
-        payment.setRole(ApplicationWindow.role);
-
-        //report.setUsername(ApplicationWindow.username);
-        //report.setRole(ApplicationWindow.role);
-
-        database.setUsername(ApplicationWindow.username);
-        database.setRole(ApplicationWindow.role);
-    }
-
     public void changeScreen(final String destination, final JPanel panel) {
         applicationWindow.remove(panel);
         switch (destination) {
@@ -154,42 +131,75 @@ public class Bapers {
                 job = new Job(this);
                 applicationWindow.add(job.getMainPanel());
                 currentForm = job;
+                job.setUsername(Form.username);
+                job.setRole(Form.role);
                 break;
             case "customers":
                 customer = new Customer(this);
                 applicationWindow.add(customer.getPanel());
                 currentForm = customer;
+                customer.setUsername(Form.username);
+                customer.setRole(Form.role);
                 break;
             case "payments":
                 payment = new Payment(this);
                 applicationWindow.add(payment.getMainPanel());
+                payment.setUsername(Form.username);
+                payment.setRole(Form.role);
                 break;
             case "staff":
                 staff = new Staff(this);
                 applicationWindow.add(staff.getMainPanel());
+                staff.setUsername(Form.username);
+                staff.setRole(Form.role);
                 break;
             case "tasks":
                 task = new Task(this);
                 applicationWindow.add(task.getMainPanel());
+                task.setUsername(Form.username);
+                task.setRole(Form.role);
                 break;
             case "availableTask":
                 availableTask = new AvailableTask(this);
                 applicationWindow.add(availableTask.getMainPanel());
+                availableTask.setUsername(Form.username);
+                availableTask.setRole(Form.role);
                 break;
             case "reports":
                 report = new Report(this);
                 applicationWindow.add(report.getMainPanel());
+                report.setUsername(Form.username);
+                report.setRole(Form.role);
                 break;
             case "database":
                 database = new Database(this);
                 applicationWindow.add(database.getMainPanel());
+                database.setUsername(Form.username);
+                database.setRole(Form.role);
                 break;
             default:
                 changeScreen("logout", panel);
                 break;
         }
-        updateUserDetails();
         applicationWindow.setVisible(true);
+    }
+
+    public void filterUser() {
+        switch (Form.role) {
+
+            case "Technician (development)": case "Technician (copy)": case "Technician (packing)": case "Technician (finishing)":
+                // Tasks
+                changeScreen("tasks", login.getMainPanel());
+                task.technicianPrivileges();
+
+                break;
+            case "Shift Manager":
+                // Cant see database
+
+                break;
+            default:
+                changeScreen("customers", login.getMainPanel());
+        }
     }
 
     public Form getCurrentForm() {
