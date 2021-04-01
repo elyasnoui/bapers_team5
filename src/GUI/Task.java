@@ -3,10 +3,9 @@ package GUI;
 import System.*;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
 import java.awt.event.*;
+import java.net.DatagramPacket;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -80,15 +79,8 @@ public class Task {
 
     private static DecimalFormat df2 = new DecimalFormat("0.00");
 
-    private String dataRegex = "(?:(?:31(-)(?:0?[13578]|1[02]))\\1|(?:(?:29|30)(-)(?:0?[13-9]|1[0-2])\\2))" +
-            "(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$|^(?:29(-)0?2\\3(?:(?:(?:1[6-9]|[2-9]\\d)?(?:0[48]|[2468][048]" +
-            "|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\\d|2[0-8])(-)(?:(?:0?[1-9" +
-            "])|(?:1[0-2]))\\4(?:(?:1[6-9]|[2-9]\\d)\\d{2})";
-
     SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
     SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
-
-    private final LineBorder borderError = new LineBorder(Color.RED, 1);
 
     private final String[] tableColumns = {
             "ID",
@@ -350,14 +342,14 @@ public class Task {
         lookupFromTextField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
-                if (!lookupFromTextField.getText().matches(dataRegex)) {
-                    lookupFromTextField.setBorder(borderError);
+                if (!lookupFromTextField.getText().matches(ApplicationWindow.dateRegex)) {
+                    lookupFromTextField.setBorder(ApplicationWindow.borderError);
                     lookupFromTextField.setToolTipText("Please enter a valid date (dd-mm-yyyy)");
                 } else {
                     lookupFromTextField.setBorder(null);
                     lookupFromTextField.setToolTipText(null);
 
-                    if (lookupToTextField.getText().matches(dataRegex))
+                    if (lookupToTextField.getText().matches(ApplicationWindow.dateRegex))
                         jobSearch();
                 }
 
@@ -367,14 +359,14 @@ public class Task {
         lookupToTextField.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
-                if (!lookupToTextField.getText().matches(dataRegex)) {
-                    lookupToTextField.setBorder(borderError);
+                if (!lookupToTextField.getText().matches(ApplicationWindow.dateRegex)) {
+                    lookupToTextField.setBorder(ApplicationWindow.borderError);
                     lookupToTextField.setToolTipText("Please enter a valid date (dd-mm-yyyy)");
                 } else {
                     lookupToTextField.setBorder(null);
                     lookupToTextField.setToolTipText(null);
 
-                    if (lookupFromTextField.getText().matches(dataRegex))
+                    if (lookupFromTextField.getText().matches(ApplicationWindow.dateRegex))
                         jobSearch();
                 }
 
@@ -454,6 +446,7 @@ public class Task {
     private void deleteRow() {
         try {
             String jobID = taskData.get(table.getSelectedRow())[2];
+
             if (DatabaseConnection.removeTask(Integer.parseInt(taskData.get(table.getSelectedRow())[0]))) {
                 boolean jobsLeft = false;
 
@@ -463,10 +456,14 @@ public class Task {
                         break;
                     }
 
-                if (!jobsLeft)
+                if (!jobsLeft) {
                     if (!DatabaseConnection.removeJob(Integer.parseInt(jobID)))
                         JOptionPane.showMessageDialog(mainPanel, "Couldn't delete job");
-
+                } else {
+                    int rowJobID = Integer.parseInt(taskData.get(table.getSelectedRow())[2]);
+                    double price = Double.parseDouble(taskData.get(table.getSelectedRow())[7].substring(1));
+                    if (!DatabaseConnection.updateJobPrice(rowJobID, price));
+                }
                 system.changeScreen("tasks", mainPanel);
             } else JOptionPane.showMessageDialog(mainPanel, "Couldn't delete task");
         } catch (SQLException exception) { exception.printStackTrace(); }
@@ -511,7 +508,7 @@ public class Task {
     private void jobSearch() {
         try {
             jobLookupData = DatabaseConnection.searchJobs(sdf2.format(sdf.parse(lookupFromTextField.getText())),
-                    sdf2.format(sdf.parse(lookupToTextField.getText())));
+                    sdf2.format(sdf.parse(lookupToTextField.getText())), "Created");
             assert jobLookupData != null;
             for (String[] js : jobLookupData)
                 if (!(js[2] == null))
