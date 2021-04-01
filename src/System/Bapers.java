@@ -23,8 +23,6 @@ public class Bapers {
     private Payment payment = new Payment(this);
     private Database database = new Database(this);
 
-    private Debug debug = new Debug(this);
-
     public Bapers() {
         /*
         TODO: IF YOU WANT TO TEST YOUR PANEL, COMMENT OUT THE OTHER PANELS AND LEAVE YOURS.

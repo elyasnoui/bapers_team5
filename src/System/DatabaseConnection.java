@@ -339,18 +339,61 @@ public class DatabaseConnection {
         return null;
     }
 
-    public static List<String[]> searchJobs(final String fromDate, final String toDate) {
+    public static List<String[]> searchJobs(final String fromDate, final String toDate, final String status) {
         try {
             Connection conn = Connect();
             assert conn != null;
-            PreparedStatement statement = conn.prepareStatement("SELECT ID, startDate, customerID, price FROM job " +
-                    "WHERE (startDate BETWEEN '"+fromDate+"' AND '"+toDate+"') AND (status = 'Created')"
+            PreparedStatement statement = conn.prepareStatement("SELECT ID, startDate, customerID, price, status, isUrgent, customerID FROM job " +
+                    "WHERE (startDate BETWEEN '"+fromDate+"' AND '"+toDate+"') AND (status = '"+status+"')"
             );
             return returnList(statement);
         } catch (SQLException exception) { exception.printStackTrace(); }
         return null;
     }
 
+    public static List<String[]> getTasksToDiscount(final int jobID, final int availableTaskID) {
+        try {
+            Connection conn = Connect();
+            assert conn != null;
+            PreparedStatement statement = conn.prepareStatement("SELECT price FROM task WHERE " +
+                    "jobID = "+jobID+" AND availableTaskID = "+availableTaskID);
+            return returnList(statement);
+        } catch (SQLException exception) { exception.printStackTrace(); }
+        return null;
+    }
+
+    public static double getPaymentVolume(final int customerID) {
+        try {
+            Connection conn = Connect();
+            assert conn != null;
+            LocalDate now = LocalDate.now();
+            LocalDate from = now.minusMonths(1);
+            PreparedStatement statement = conn.prepareStatement("SELECT COUNT(amountDue) AS volume FROM payment WHERE " +
+                    "customerID = "+customerID+" AND (date BETWEEN '"+from+"' AND '"+now+"')"
+            );
+            ResultSet res = statement.executeQuery();
+            res.next();
+            return Double.parseDouble(res.getString("volume"));
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            return -1;
+        }
+    }
+
+   /* public static List<String[]> countTasksInJob(final int jobID) {
+        try {
+            Connection conn = Connect();
+            assert conn != null;
+            PreparedStatement statement = conn.prepareStatement("SELECT ID, price FROM task WHERE " +
+                    "jobID = "+jobID);
+            ResultSet res = statement.executeQuery();
+            res.next();
+            return returnList(statement);
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            return null;
+        }
+    }*/
 
     public static List<String[]> searchCustomer(final String firstName, final String lastName) {
         try {
@@ -378,21 +421,18 @@ public class DatabaseConnection {
             if (firstName.isEmpty() && lastName.isEmpty()) return null;
             else if (firstName.isEmpty())
                 statement = conn.prepareStatement("SELECT customer.firstName, customer.lastName, jobID, amountdue, discount FROM payment " +
-                        "INNER JOIN job ON payment.jobID = job.ID INNER JOIN customer ON job.ID = customer.ID  WHERE customer.lastName LIKE '"+lastName+"%'");
+                        "INNER JOIN job ON payment.jobID = job.ID INNER JOIN customer ON job.customerID = customer.ID WHERE customer.lastName LIKE '"+lastName+"%'");
             else if (lastName.isEmpty())
                 statement = conn.prepareStatement("SELECT customer.firstName, customer.lastName, jobID, amountdue, discount FROM payment " +
-                        "INNER JOIN job ON payment.jobID = job.ID INNER JOIN customer ON job.ID = customer.ID WHERE customer.firstName LIKE '"+firstName+"%'");
+                        "INNER JOIN job ON payment.jobID = job.ID INNER JOIN customer ON job.customerID = customer.ID WHERE customer.firstName LIKE '"+firstName+"%'");
             else
                 statement = conn.prepareStatement("SELECT customer.firstName, customer.lastName, jobID, amountdue, discount FROM payment INNER JOIN job " +
-                        "ON payment.jobID = job.ID INNER JOIN customer ON job.ID = customer.ID   WHERE customer.firstName LIKE '" +
+                        "ON payment.jobID = job.ID INNER JOIN customer ON job.ID = customer.customerID WHERE customer.firstName LIKE '" +
                         firstName+"%' OR customer.lastName LIKE '"+lastName+"%'");
             return returnList(statement);
         } catch (SQLException exception) { exception.printStackTrace(); }
         return null;
     }
-
-
-
 
     public static String[] getRowBySingleID(final String tableName, final int ID) {
         try {
@@ -819,6 +859,7 @@ public class DatabaseConnection {
 
     // Removing an existing task record
     public static boolean removeTask(final int ID) throws SQLException {
+
         Connection conn = Connect();
         assert conn != null;
         PreparedStatement statement = conn.prepareStatement(
@@ -847,6 +888,15 @@ public class DatabaseConnection {
                         "'"+timeTaken+"', '"+price+"', '"+staffID+"', '"+isCompleted+"')"
         );
         return executeStatement(statement);
+    }
+
+    public static boolean updateJobPrice(final int ID, final double price) throws SQLException {
+            Connection conn = Connect();
+            assert conn != null;
+            PreparedStatement statement = conn.prepareStatement(
+                    "UPDATE job SET price = '"+price+"' WHERE ID = "+ID
+            );
+            return executeStatement(statement);
     }
 
     // Editing an existing job record

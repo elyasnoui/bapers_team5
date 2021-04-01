@@ -103,16 +103,16 @@ public class Report {
                     if (rts[0].equals(rs[0])) {
                         switch (rs[1]) {
                             case "Performance Report":
-                                temp = new String[] { rs[0], rs[1], rs[2], rs[3].substring(0,16), rs[4], rs[5], rts[1], "", "", "" };
+                                temp = new String[] { rs[0], rs[1], rs[2], rs[3].substring(0,16), rs[4], rs[5], rts[0], "", "", "" };
                                 break;
                             case "Job Report":
-                                temp = new String[] { rs[0], rs[1], rs[2], rs[3].substring(0,16), rs[4], rs[5], "", rts[1], "" , rts[2]};
+                                temp = new String[] { rs[0], rs[1], rs[2], rs[3].substring(0,16), rs[4], rs[5], "", rts[0], "" , rts[1] };
                                 break;
                             case "Summary Report":
-                                temp = new String[] { rs[0], rs[1], rs[2], rs[3].substring(0,16), rs[4], rs[5], "", "", rts[1], "" };
+                                temp = new String[] { rs[0], rs[1], rs[2], rs[3].substring(0,16), rs[4], rs[5], "", "", rts[0], "" };
                                 break;
                             case "Customer Sales Report":
-                                temp = new String[] { rs[0], rs[1], rs[2], rs[3].substring(0,16), rs[4], rs[5], "", rts[1], "" , ""};
+                                temp = new String[] { rs[0], rs[1], rs[2], rs[3].substring(0,16), rs[4], rs[5], "", rts[0], "" , ""};
                                 break;
                             default:
                                 temp = new String[] { rs[0], "Invalid Report" };
