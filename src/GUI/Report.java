@@ -294,7 +294,7 @@ public class Report {
                         break;
                     case "Summary Report":
 
-                        taskData = DatabaseConnection.getTaskForPerformance(rowData[4]+" 05:00:00",rowData[5]+" 14:30:00", "Summary Report");
+                        taskData = DatabaseConnection.getTaskForShift((rowData[4]+" 05:00:00"),(rowData[5]+" 14:30:00"), "Summary Report");
                         assert taskData != null;
 
                         List<String[]> dayShift1 = new ArrayList<>();
@@ -303,7 +303,8 @@ public class Report {
                             String date = s[5].substring(0,10);
                             String timeTaken = s[6];
                             String department = s[4];
-                            String[] row = {date, department, timeTaken};
+                            String total = "";
+                            String[] row = {date, department, timeTaken, total};
                             dayShift1.add(row);
                         }
 
@@ -320,7 +321,7 @@ public class Report {
                             dayShift1.set(i, newRow);
                         }
 
-                        taskData = DatabaseConnection.getTaskForPerformance(rowData[4]+" 14:30:01",rowData[5]+" 22:00:00", "Summary Report");
+                        taskData = DatabaseConnection.getTaskForShift(rowData[4]+" 14:30:01",rowData[5]+" 22:00:00", "Summary Report");
                         assert taskData != null;
 
                         List<String[]> dayShift2 = new ArrayList<>();
@@ -329,7 +330,8 @@ public class Report {
                             String date = s[5].substring(0,10);
                             String timeTaken = s[6];
                             String department = s[4];
-                            String[] row = {date, department, timeTaken};
+                            String total = "";
+                            String[] row = {date, department, timeTaken,total};
                             dayShift2.add(row);
                         }
 
@@ -344,7 +346,7 @@ public class Report {
                             dayShift2.set(i, newRow);
                         }
 
-                        taskData = DatabaseConnection.getTaskForPerformance(rowData[4]+ " 22:00:01",rowData[5]+ " 04:59:59", "Summary Report");
+                        taskData = DatabaseConnection.getTaskForShift(rowData[4]+ " 22:00:01",rowData[5]+ " 04:59:59", "Summary Report");
                         assert taskData != null;
 
                         List<String[]> nightShift = new ArrayList<>();
@@ -353,7 +355,8 @@ public class Report {
                             String date = s[5].substring(0,10);
                             String timeTaken = s[6];
                             String department = s[4];
-                            String[] row = {date, department, timeTaken};
+                            String total ="";
+                            String[] row = {date, department, timeTaken, total};
                             nightShift.add(row);
                         }
 

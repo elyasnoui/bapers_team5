@@ -153,7 +153,7 @@ public class Reportpdf {
 
         //Before this
         List<String[]> data = new ArrayList<String[]>();
-        String[] tableTitleList = {"Date", "Department", "Time Taken"};
+        String[] tableTitleList = {"Date", "Department", "Time Taken", "Total"};
         data.add(tableTitleList);
         for (int i = 0; i < pd.size(); i++) {
             List<String[]> dataLine = new ArrayList<String[]>();
@@ -283,10 +283,10 @@ public class Reportpdf {
         //subCatPart.add(new Paragraph("Hello"));
         addEmptyLine(subPara, 5);
 
-        Paragraph dayshift1 = new Paragraph("Day Shift: (5am-2:30pm");
+        Paragraph dayshift1 = new Paragraph("Day Shift: (5am-2:30pm)");
         addEmptyLine(dayshift1,4);
 
-        PdfPTable table = new PdfPTable(3);
+        PdfPTable table = new PdfPTable(4);
         table.setWidthPercentage(100);
         List<String[]> dataset = insertSummaryData(dayShift1);
         for (String[] record : dataset) {
@@ -298,10 +298,10 @@ public class Reportpdf {
         Paragraph empty = new Paragraph("");
         addEmptyLine(empty, 3);
 
-        Paragraph dayshift2 = new Paragraph("Day Shift 2: (2:30pm-10pm");
+        Paragraph dayshift2 = new Paragraph("Day Shift 2: (2:30pm-10pm)");
         addEmptyLine(dayshift2,4);
 
-        PdfPTable table2 = new PdfPTable(3);
+        PdfPTable table2 = new PdfPTable(4);
         table.setWidthPercentage(100);
         List<String[]> dataset2 = insertSummaryData(dayShift2);
         for(String[] record2 : dataset2){
@@ -311,10 +311,10 @@ public class Reportpdf {
         }
         Paragraph empty2 = new Paragraph("");
         addEmptyLine(empty2, 3);
-        Paragraph nightshift = new Paragraph("Night Shift: (10pm-5am");
+        Paragraph nightshift = new Paragraph("Night Shift: (10pm-5am)");
         addEmptyLine(nightshift,4);
 
-        PdfPTable table3 = new PdfPTable(3);
+        PdfPTable table3 = new PdfPTable(4);
         table.setWidthPercentage(100);
         List<String[]> dataset3 = insertSummaryData(nightShift);
         for(String[] record3 : dataset3){
