@@ -227,6 +227,22 @@ public class DatabaseConnection {
         return null;
     }
 
+    public static List<String[]> getTaskForShift(final String fromDate, final String toDate, final String reportType) {
+        try {
+            Connection conn = Connect();
+            assert conn != null;
+
+            PreparedStatement statement = conn.prepareStatement("SELECT * FROM task WHERE " +
+                    "(task.Date >= '"+fromDate+"' " +
+                    "AND task.date <= '"+toDate+"') " +
+                    "OR (task.date >= '"+fromDate+"' AND task.date <= '"+toDate+"') " +
+                    "ORDER BY staffID, availableTaskID");
+
+
+            return returnList(statement);
+        } catch (SQLException exception) { exception.printStackTrace(); }
+        return null;
+    }
 
     public static List<String[]> getJobFromDates(final String fromDate, final String toDate, final String reportType) {
         try {
