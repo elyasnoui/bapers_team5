@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -64,7 +65,7 @@ public class Payment {
     private JCheckBox cardCheckBox;
     private JLabel cardTypeLabel;
     private JLabel expiryDateLabel;
-    private JLabel last4DigitsLabel;
+    private JLabel cardNumberLabel;
     private JComboBox cardTypeComboBox;
     private JCheckBox cashCheckBox;
     private JLabel cashGivenLabel;
@@ -72,11 +73,12 @@ public class Payment {
     private JTextField expiryPT1;
     private JTextField expiryPT2;
     private JLabel expirySlash;
-    private JTextField last4DigitsField;
+    private JTextField cardNumberField;
     private List<String[]> paymentData;
     private List<String[]> paymentData1;
     private List<String[]> cardData;
     private List<String[]> cashData;
+    private static DecimalFormat df2 = new DecimalFormat("0.00");
     private final String[] tableColumns = {
             "Job ID",
             "Amount Due",
@@ -280,7 +282,7 @@ public class Payment {
                     jobIDLabel.setText(jobID);
                     amountDueLabel.setText(amountDue);
                     discountLabel.setText(discount);
-                    amountMinusLabel.setText(Double.toString(deductions));
+                    amountMinusLabel.setText(Double.toString(Double.parseDouble(df2.format(deductions))));
                     customerLookupPanel.setVisible(false);
                     createPanel.setVisible(true);
                 }
@@ -302,12 +304,12 @@ public class Payment {
                 if (cardCheckBox.isSelected()){
                     cardTypeLabel.setVisible(true);
                     expiryDateLabel.setVisible(true);
-                    last4DigitsLabel.setVisible(true);
+                    cardNumberLabel.setVisible(true);
                     cardTypeComboBox.setVisible(true);
                     expiryPT1.setVisible(true);
                     expirySlash.setVisible(true);
                     expiryPT2.setVisible(true);
-                    last4DigitsField.setVisible(true);
+                    cardNumberField.setVisible(true);
 
                     cashGivenLabel.setVisible(false);
                     changeGivenLabel.setVisible(false);
@@ -315,12 +317,12 @@ public class Payment {
                 else{
                     cardTypeLabel.setVisible(false);
                     expiryDateLabel.setVisible(false);
-                    last4DigitsLabel.setVisible(false);
+                    cardNumberLabel.setVisible(false);
                     cardTypeComboBox.setVisible(false);
                     expiryPT1.setVisible(false);
                     expirySlash.setVisible(false);
                     expiryPT2.setVisible(false);
-                    last4DigitsField.setVisible(false);
+                    cardNumberField.setVisible(false);
                 }
 
             }
@@ -334,12 +336,12 @@ public class Payment {
 
                     cardTypeLabel.setVisible(false);
                     expiryDateLabel.setVisible(false);
-                    last4DigitsLabel.setVisible(false);
+                    cardNumberLabel.setVisible(false);
                     cardTypeComboBox.setVisible(false);
                     expiryPT1.setVisible(false);
                     expirySlash.setVisible(false);
                     expiryPT2.setVisible(false);
-                    last4DigitsField.setVisible(false);
+                    cardNumberField.setVisible(false);
 
                 }
                 else{
@@ -428,5 +430,9 @@ public class Payment {
 
     public void setRole(String role) {
         this.roleLabel.setText(role);
+    }
+
+    private void createUIComponents() {
+        // TODO: place custom component creation code here
     }
 }

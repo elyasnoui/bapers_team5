@@ -311,8 +311,8 @@ public class DatabaseConnection {
                 statement = conn.prepareStatement("SELECT customer.firstName, customer.lastName, jobID, amountdue, discount FROM payment " +
                         "INNER JOIN customer ON payment.customerID = customer.ID WHERE customer.lastName LIKE '"+lastName+"%'");
             else if (lastName.isEmpty())
-                statement = conn.prepareStatement("SELECT staff.firstName, staff.lastName, jobID, amountdue, discount FROM payment " +
-                        "INNER JOIN staff ON payment.staffID = staff.ID WHERE staff.firstName LIKE '"+firstName+"%'");
+                statement = conn.prepareStatement("SELECT customer.firstName, customer.lastName, jobID, amountdue, discount FROM payment " +
+                        "INNER JOIN job ON payment.jobID = job.ID INNER JOIN customer ON job.ID = customer.ID WHERE customer.firstName LIKE '"+firstName+"%'");
             else
                 statement = conn.prepareStatement("SELECT customer.firstName, customer.lastName, jobID, amountdue, discount FROM payment INNER JOIN customer " +
                         "ON payment.customerID = customer.ID WHERE customer.firstName LIKE '" +
