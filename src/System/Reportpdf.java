@@ -283,7 +283,7 @@ public class Reportpdf {
         //subCatPart.add(new Paragraph("Hello"));
         addEmptyLine(subPara, 5);
 
-        Paragraph dayshift1 = new Paragraph("Day Shift: (5am-2:30pm)");
+        Paragraph dayshift1 = new Paragraph("Day Shift: (5am-2:30pm)", subFont);
         addEmptyLine(dayshift1,4);
 
         PdfPTable table = new PdfPTable(4);
@@ -298,7 +298,7 @@ public class Reportpdf {
         Paragraph empty = new Paragraph("");
         addEmptyLine(empty, 3);
 
-        Paragraph dayshift2 = new Paragraph("Day Shift 2: (2:30pm-10pm)");
+        Paragraph dayshift2 = new Paragraph("Day Shift 2: (2:30pm-10pm)", subFont);
         addEmptyLine(dayshift2,4);
 
         PdfPTable table2 = new PdfPTable(4);
@@ -311,7 +311,7 @@ public class Reportpdf {
         }
         Paragraph empty2 = new Paragraph("");
         addEmptyLine(empty2, 3);
-        Paragraph nightshift = new Paragraph("Night Shift: (10pm-5am)");
+        Paragraph nightshift = new Paragraph("Night Shift: (10pm-5am)", subFont);
         addEmptyLine(nightshift,4);
 
         PdfPTable table3 = new PdfPTable(4);

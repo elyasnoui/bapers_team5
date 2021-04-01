@@ -433,7 +433,7 @@
                     </constraints>
                     <properties>
                       <foreground color="-1"/>
-                      <text value="Label"/>
+                      <text value="Restore"/>
                     </properties>
                   </component>
                   <component id="7769d" class="javax.swing.JLabel" binding="jLabel1">
@@ -444,7 +444,7 @@
                     </constraints>
                     <properties>
                       <foreground color="-1"/>
-                      <text value="Label"/>
+                      <text value="Backup"/>
                     </properties>
                   </component>
                   <component id="dd2d5" class="javax.swing.JLabel">
