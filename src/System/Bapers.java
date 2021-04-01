@@ -12,6 +12,7 @@ public class Bapers {
     private final ApplicationWindow applicationWindow = new ApplicationWindow("Bapers Team 5");
 
     // TODO: Take out declaration when it no longer needs testing
+    private Form currentForm;
     private Login login = new Login(this);
     private Staff staff = new Staff(this);
     private Customer customer = new Customer(this);
@@ -57,13 +58,13 @@ public class Bapers {
 
         //applicationWindow.add(customer.getPanel());
 
-        applicationWindow.add(job.getMainPanel());
+        //applicationWindow.add(job.getMainPanel());
 
         //applicationWindow.add(task.getMainPanel());
 
         //applicationWindow.add(availableTask.getMainPanel());
 
-        //applicationWindow.add(payment.getMainPanel());
+        applicationWindow.add(payment.getMainPanel());
 
         //applicationWindow.add(database.getMainPanel());
 
@@ -154,10 +155,12 @@ public class Bapers {
             case "jobs":
                 job = new Job(this);
                 applicationWindow.add(job.getMainPanel());
+                currentForm = job;
                 break;
             case "customers":
                 customer = new Customer(this);
                 applicationWindow.add(customer.getPanel());
+                currentForm = customer;
                 break;
             case "payments":
                 payment = new Payment(this);
@@ -189,6 +192,10 @@ public class Bapers {
         }
         updateUserDetails();
         applicationWindow.setVisible(true);
+    }
+
+    public Form getCurrentForm() {
+        return currentForm;
     }
 
     public static void main(String[] args) {

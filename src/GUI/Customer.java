@@ -17,7 +17,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class Customer extends JFrame{
+public class Customer extends Form {
 
     private Bapers system;
     private JPanel mainPanel;
@@ -50,7 +50,6 @@ public class Customer extends JFrame{
     private JButton createCancelButton;
     private JPanel tablePanel;
     private ImageIcon bannerIcon;
-
     private JCheckBox createVcCheckBox;
     private JLabel createAgreedDiscountLabel;
     private JLabel createDiscountRateLabel;
@@ -104,6 +103,7 @@ public class Customer extends JFrame{
     private boolean flexibleDiscountsSelected = false;
     private boolean variableDiscountsSelected = false;
     private boolean initialising = false;
+    private boolean comingFromJobs = false;
 
     private boolean isError[] = new boolean[7];
 
@@ -341,6 +341,11 @@ public class Customer extends JFrame{
         createCancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (comingFromJobs) {
+                    system.changeScreen("jobs", mainPanel);
+                    ((Job) system.getCurrentForm()).switchToCreateLookup();
+                }
+
                 createPanel.setVisible(false);
                 buttonPanel.setVisible(true);
                 tablePanel.setVisible(true);
@@ -397,8 +402,13 @@ public class Customer extends JFrame{
                             if (DatabaseConnection.addCustomer(createCompanyField.getText(), title, createFirstNameField.getText(),
                                     createLastNameField.getText(), createContactNumberField.getText(), address, createEmailField.getText())) {
                                 int ID = DatabaseConnection.getNextID("customer");
-                                if (DatabaseConnection.addValuedCustomer(ID, String.valueOf(createAgreedDiscountComboBox.getSelectedItem()), value))
+                                if (DatabaseConnection.addValuedCustomer(ID, String.valueOf(createAgreedDiscountComboBox.getSelectedItem()), value)) {
+                                    if (comingFromJobs) {
+                                        system.changeScreen("jobs", mainPanel);
+                                        ((Job) system.getCurrentForm()).switchToCreateLookup();
+                                    }
                                     system.changeScreen("customers", mainPanel);
+                                }
                                 else JOptionPane.showMessageDialog(mainPanel, "Couldn't insert valued customer, regular customer created");
                             } else JOptionPane.showMessageDialog(mainPanel, "Couldn't insert customer");
                         } catch (SQLException exception) { exception.printStackTrace(); }
@@ -409,6 +419,10 @@ public class Customer extends JFrame{
                         try {
                             if (DatabaseConnection.addCustomer(createCompanyField.getText(), title, createFirstNameField.getText(),
                                     createLastNameField.getText(), createContactNumberField.getText(), address, createEmailField.getText())) {
+                                if (comingFromJobs) {
+                                    system.changeScreen("jobs", mainPanel);
+                                    ((Job) system.getCurrentForm()).switchToCreateLookup();
+                                }
                                 system.changeScreen("customers", mainPanel);
                             } else JOptionPane.showMessageDialog(mainPanel, "Couldn't insert customer");
                         } catch (SQLException exception) { exception.printStackTrace(); }
@@ -1068,6 +1082,14 @@ public class Customer extends JFrame{
         createButton.removeMouseListener(ApplicationWindow.highlightListener);
         editButton.removeMouseListener(ApplicationWindow.highlightListener);
         deleteButton.removeMouseListener(ApplicationWindow.highlightListener);
+    }
+
+    public void switchCreate() {
+        comingFromJobs = true;
+        buttonPanel.setVisible(false);
+        tablePanel.setVisible(false);
+        createPanel.setVisible(true);
+        resetCreatePanel();
     }
 
     public JPanel getPanel() {
