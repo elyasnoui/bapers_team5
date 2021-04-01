@@ -4,6 +4,7 @@ import System.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.*;
+import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -85,6 +86,8 @@ public class Payment {
     private List<String[]> cardData;
     private List<String[]> cashData;
     private List<String[]> jobLookupData;
+    private int customerID;
+    private int staffID;
     private static DecimalFormat df2 = new DecimalFormat("0.00");
 
     SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
@@ -250,7 +253,8 @@ public class Payment {
                 createJobIDField.setText(String.valueOf(jobTable.getValueAt(jobTable.getSelectedRow(), 0)));
                 createTotalBeforeChargesField.setText(String.valueOf(jobTable.getValueAt(jobTable.getSelectedRow(), 3)));
                 double price = Double.parseDouble(createTotalBeforeChargesField.getText());
-                int customerID = Integer.parseInt(jobLookupData.get(jobTable.getSelectedRow())[6]);
+                customerID = Integer.parseInt(jobLookupData.get(jobTable.getSelectedRow())[6]);
+                staffID = Integer.parseInt(jobLookupData.get(jobTable.getSelectedRow())[6]);
                 double surcharge = 0;
                 switch (jobLookupData.get(jobTable.getSelectedRow())[5]) {
                     case "1":
@@ -376,12 +380,32 @@ public class Payment {
                     case 1:
                         if (createExpiryDateField.getText().matches(ApplicationWindow.expiryRegex) &&
                         createLastFourDigitsField.getText().matches(ApplicationWindow.last4Digits)) {
-
+                            try {
+                                if (DatabaseConnection.addPayment(Integer.parseInt(createJobIDField.getText()), Double.parseDouble(createFinalTotalField.getText())
+                                , Double.parseDouble(createDiscountsField.getText()), String.valueOf(createPaymentTypeComboBox.getSelectedItem()), customerID, ApplicationWindow.staffID)) {
+                                    if (DatabaseConnection.addCard(Integer.parseInt(createJobIDField.getText()), String.valueOf(createCardTypeComboBox.getSelectedItem()), createExpiryDateField.getText(),
+                                            Integer.parseInt(createLastFourDigitsField.getText()))) {
+                                        if (!DatabaseConnection.updateJobStatus(Integer.parseInt(createJobIDField.getText()), "Paid"))
+                                            JOptionPane.showMessageDialog(mainPanel, "Couldn't update job status.");
+                                    } else JOptionPane.showMessageDialog(mainPanel, "Couldn't add card.");
+                                } else JOptionPane.showMessageDialog(mainPanel, "Couldn't add payment.");
+                            } catch (SQLException exception) { exception.printStackTrace(); }
                         } else JOptionPane.showMessageDialog(mainPanel, "Please check your card details");
-
                         break;
                     case 2:
-                        
+                        if (createCashPaidField.getText().matches(ApplicationWindow.money) && Double.parseDouble(createCashPaidField.getText()) >=
+                        Double.parseDouble(createFinalTotalField.getText().substring(1))) {
+                            try {
+                                if (DatabaseConnection.addPayment(Integer.parseInt(createJobIDField.getText()), Double.parseDouble(createFinalTotalField.getText())
+                                        , Double.parseDouble(createDiscountsField.getText()), String.valueOf(createPaymentTypeComboBox.getSelectedItem()), customerID, ApplicationWindow.staffID)) {
+                                    if (!DatabaseConnection.addCash(Integer.parseInt(createJobIDField.getText()), Double.parseDouble(createCashPaidField.getText()),
+                                            Double.parseDouble(createChangeGivenValue.getText()))) {
+                                        if (!DatabaseConnection.updateJobStatus(Integer.parseInt(createJobIDField.getText()), "Paid"))
+                                            JOptionPane.showMessageDialog(mainPanel, "Couldn't update job status.");
+                                    } else JOptionPane.showMessageDialog(mainPanel, "Couldn't add cash..");
+                                } else JOptionPane.showMessageDialog(mainPanel, "Couldn't add payment.");
+                            } catch (SQLException exception) { exception.printStackTrace(); }
+                        } else JOptionPane.showMessageDialog(mainPanel, "You can only pay at or above the total amount");
 
                         break;
                     default:
@@ -407,9 +431,10 @@ public class Payment {
                     try {
                         if (Double.parseDouble(createCashPaidField.getText()) >
                                 Double.parseDouble(createFinalTotalField.getText().substring(1))) {
-                            createChangeGivenValue.setText("£"+String.valueOf(df2.format(Math.abs(Double.parseDouble(
-                                    createFinalTotalField.getText().substring(1)) - Double.parseDouble(createCashPaidField.getText())))));
-                        }
+                            createCashPaidField.setBorder(null);
+                            createChangeGivenValue.setText("£"+ df2.format(Math.abs(Double.parseDouble(
+                                    createFinalTotalField.getText().substring(1)) - Double.parseDouble(createCashPaidField.getText()))));
+                        } else createCashPaidField.setBorder(ApplicationWindow.borderError);
                     } catch (NumberFormatException ignored) {}
                 }
             }

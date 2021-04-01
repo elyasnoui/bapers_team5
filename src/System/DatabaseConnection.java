@@ -767,18 +767,13 @@ public class DatabaseConnection {
 
     // Inserting a new payment record
     public static boolean
-        addPayment(final int jobID, final double amountDue, final int isPaid, final double discount,
+        addPayment(final int jobID, final double amountDue, final double discount,
                    final String paymentType, final int customerID, final int staffID) throws SQLException {
         Connection conn = Connect();
         assert conn != null;
         PreparedStatement statement = conn.prepareStatement(
-                "INSERT INTO payment (jobID, amountDue, isPaid, discount, paymentType, customerID, staffID) SELECT * " +
-                        "FROM (SELECT '"+jobID+"', '"+amountDue+"', '"+isPaid+"', '"+discount+"', '"+paymentType+"', " +
-                        "'"+customerID+"', '"+staffID+"') AS tmp WHERE NOT EXISTS (SELECT jobID, amountDue, isPaid, " +
-                        "discount, paymentType, customerID, staffID FROM payment WHERE jobID = '"+jobID+"' AND " +
-                        "amountDue = '"+amountDue+"' AND isPaid = '"+isPaid+"' AND discount = '"+discount+"' AND " +
-                        "paymentType = '"+paymentType+"' AND customerID = '"+customerID+"' AND staffID = '"+staffID+"') LIMIT 1"
-        );
+                "INSERT IGNORE INTO job (jobID, amountDue, discount, paymentType, customerID, staffID) " +
+                        "VALUES ('"+jobID+"', '"+amountDue+"', '"+discount+"', '"+paymentType+"', '"+customerID+"', '"+staffID+"')");
         return executeStatement(statement);
     }
 
@@ -890,13 +885,22 @@ public class DatabaseConnection {
         return executeStatement(statement);
     }
 
+    public static boolean updateJobStatus(final int ID, final String status) throws SQLException {
+        Connection conn = Connect();
+        assert conn != null;
+        PreparedStatement statement = conn.prepareStatement(
+                "UPDATE job SET status = '"+status+"' WHERE ID = "+ID
+        );
+        return executeStatement(statement);
+    }
+
     public static boolean updateJobPrice(final int ID, final double price) throws SQLException {
-            Connection conn = Connect();
-            assert conn != null;
-            PreparedStatement statement = conn.prepareStatement(
-                    "UPDATE job SET price = '"+price+"' WHERE ID = "+ID
-            );
-            return executeStatement(statement);
+        Connection conn = Connect();
+        assert conn != null;
+        PreparedStatement statement = conn.prepareStatement(
+                "UPDATE job SET price = '"+price+"' WHERE ID = "+ID
+        );
+        return executeStatement(statement);
     }
 
     // Editing an existing job record
@@ -1106,8 +1110,9 @@ public class DatabaseConnection {
         try {
             assert conn != null;
             PreparedStatement statement = conn.prepareStatement(
-                    "SELECT username, role FROM staff WHERE username = '"+username+"' AND password = '"+md5(new String(password))+"'",
+                    "SELECT username, role, ID FROM staff WHERE username = '"+username+"' AND password = '"+md5(new String(password))+"'",
                     ResultSet.TYPE_SCROLL_SENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE,
                     ResultSet.CONCUR_UPDATABLE
             );
             ResultSet res = statement.executeQuery();
@@ -1118,6 +1123,7 @@ public class DatabaseConnection {
             if (count == 1 && res.getString("username").equals(username)) {
                 ApplicationWindow.username = res.getString("username");
                 ApplicationWindow.role = res.getString("role");
+                ApplicationWindow.staffID = Integer.parseInt(res.getString("ID"));
                 return true;
             }
         } catch (NoSuchAlgorithmException | SQLException | UnsupportedEncodingException e) {

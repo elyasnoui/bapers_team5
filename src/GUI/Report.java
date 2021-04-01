@@ -61,20 +61,12 @@ public class Report {
     private List<String[]> jobData;
     private List<String[]> taskData;
     private List<String[]> reportData;
-    private List<String[]> performanceReportData;
-    private List<String[]> summaryReportData;
-    private List<String[]> jobsReportData;
     private final String[] tableColumns = {
             "ID",
             "Report Type",
-            "Content",
             "Date Generated",
             "Start Date",
             "End date",
-            "No. Staff",
-            "No. Jobs",
-            "No. Tasks",
-            "Customer ID"
     };
     private final String[] reportTypes = {
             "Please select a type",
@@ -87,41 +79,7 @@ public class Report {
     public Report(Bapers system) {
         this.system = system;
 
-        try {
-            reportData = DatabaseConnection.getData("report");
-            performanceReportData = DatabaseConnection.getData("performanceReport");
-            summaryReportData = DatabaseConnection.getData("summaryReport");
-            jobsReportData = DatabaseConnection.getData("jobReport");
-            assert reportData != null && performanceReportData != null && summaryReportData != null && jobsReportData != null;
-            List<String[]> reportTypesData = Stream.concat(performanceReportData.stream(), summaryReportData.stream())
-                    .collect(Collectors.toList());
-            reportTypesData = Stream.concat(reportTypesData.stream(), jobsReportData.stream()).collect(Collectors.toList());
-            String[] temp;
-            for (String[] rts : reportTypesData) {
-                int i = 0;
-                for (String[] rs : reportData) {
-                    if (rts[0].equals(rs[0])) {
-                        switch (rs[1]) {
-                            case "Performance Report":
-                                temp = new String[] { rs[0], rs[1], rs[2], rs[3].substring(0,16), rs[4], rs[5], rts[0], "", "", "" };
-                                break;
-                            case "Job Report":
-                                temp = new String[] { rs[0], rs[1], rs[2], rs[3].substring(0,16), rs[4], rs[5], "", rts[0], "" , rts[1] };
-                                break;
-                            case "Summary Report":
-                                temp = new String[] { rs[0], rs[1], rs[2], rs[3].substring(0,16), rs[4], rs[5], "", "", rts[0], "" };
-                                break;
-                            case "Customer Sales Report":
-                                temp = new String[] { rs[0], rs[1], rs[2], rs[3].substring(0,16), rs[4], rs[5], "", rts[0], "" , ""};
-                                break;
-                            default:
-                                temp = new String[] { rs[0], "Invalid Report" };
-                                break;
-                        } reportData.set(i, temp);
-                    } i++;
-                }
-            }
-        } catch (Exception e) { e.printStackTrace(); }
+        reportData = DatabaseConnection.getData("report");
 
         bannerIcon = new ImageIcon("data/banners/report.png");
         bannerLabel.setIcon(bannerIcon);
@@ -432,8 +390,8 @@ public class Report {
                         break;
 
                     case "Job Report":
-                        int ID = Integer.parseInt(String.valueOf(table.getModel().getValueAt(table.getSelectedRow(), 9)));
-                        jobData = DatabaseConnection.jobReportWithID(rowData[4],rowData[5], 1);
+                        int ID = Integer.parseInt(String.valueOf(table.getModel().getValueAt(table.getSelectedRow(), 0)));
+                        jobData = DatabaseConnection.jobReportWithID(rowData[3],rowData[4], 1);
 
                         assert jobData != null;
                         List<String[]> jobReportData = new ArrayList<>();

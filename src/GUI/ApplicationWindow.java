@@ -17,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 public class ApplicationWindow extends JFrame {
     public static String username;
     public static String role;
+    public static int staffID;
     private List<String[]> jobData;
 
     public static String money = "[0-9]+(.[0-9]{2})?";
