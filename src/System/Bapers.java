@@ -136,8 +136,8 @@ public class Bapers {
         payment.setUsername(ApplicationWindow.username);
         payment.setRole(ApplicationWindow.role);
 
-        report.setUsername(ApplicationWindow.username);
-        report.setRole(ApplicationWindow.role);
+        //report.setUsername(ApplicationWindow.username);
+        //report.setRole(ApplicationWindow.role);
 
         database.setUsername(ApplicationWindow.username);
         database.setRole(ApplicationWindow.role);

@@ -79,7 +79,7 @@ public class Report {
     public Report(Bapers system) {
         this.system = system;
 
-        reportData = DatabaseConnection.getData("report");
+        //reportData = DatabaseConnection.getData("report");
 
         bannerIcon = new ImageIcon("data/banners/report.png");
         bannerLabel.setIcon(bannerIcon);
@@ -329,7 +329,6 @@ public class Report {
                             nightShift.set(i, newRow);
                         }
 
-
                         try {
                             reportpdf3.createSummaryReport(dayShift1,dayShift2,nightShift);
                         } catch (BadElementException badElementException) {
@@ -337,9 +336,6 @@ public class Report {
                         } catch (DocumentException documentException) {
                             documentException.printStackTrace();
                         }
-
-
-
 
                         break;
                     case "Customer Sales Report":

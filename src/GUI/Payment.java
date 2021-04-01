@@ -305,10 +305,9 @@ public class Payment {
                             discount = price/100 * Double.parseDouble(fTemp[1]);
                             break;
                     }
-                    createDiscountsField.setText("£"+df2.format(discount));
-                    createVatField.setText("£"+df2.format(price*0.2));
-
                 }
+                createVatField.setText("£"+df2.format(price*0.2));
+                createDiscountsField.setText("£"+df2.format(discount));
                 double finalPrice = (price+price*0.2)+surcharge-discount;
                 createFinalTotalField.setText("£"+df2.format(finalPrice));
 
@@ -382,7 +381,7 @@ public class Payment {
                         createLastFourDigitsField.getText().matches(ApplicationWindow.last4Digits)) {
                             try {
                                 if (DatabaseConnection.addPayment(Integer.parseInt(createJobIDField.getText()), Double.parseDouble(createFinalTotalField.getText().substring(1))
-                                , Double.parseDouble(createDiscountsField.getText().substring(1)), String.valueOf(createPaymentTypeComboBox.getSelectedItem()), customerID, ApplicationWindow.staffID)) {
+                                , Double.parseDouble(createDiscountsField.getText().substring(1)), String.valueOf(createPaymentTypeComboBox.getSelectedItem()), customerID, 4)) {
                                     if (DatabaseConnection.addCard(Integer.parseInt(createJobIDField.getText()), String.valueOf(createCardTypeComboBox.getSelectedItem()), createExpiryDateField.getText(),
                                             Integer.parseInt(createLastFourDigitsField.getText()))) {
                                         if (!DatabaseConnection.updateJobStatus(Integer.parseInt(createJobIDField.getText()), "Paid"))
@@ -397,11 +396,12 @@ public class Payment {
                         Double.parseDouble(createFinalTotalField.getText().substring(1))) {
                             try {
                                 if (DatabaseConnection.addPayment(Integer.parseInt(createJobIDField.getText()), Double.parseDouble(createFinalTotalField.getText().substring(1))
-                                        , Double.parseDouble(createDiscountsField.getText()), String.valueOf(createPaymentTypeComboBox.getSelectedItem()), customerID, ApplicationWindow.staffID)) {
-                                    if (!DatabaseConnection.addCash(Integer.parseInt(createJobIDField.getText()), Double.parseDouble(createCashPaidField.getText().substring(1)),
+                                        , Double.parseDouble(createDiscountsField.getText().substring(1)), String.valueOf(createPaymentTypeComboBox.getSelectedItem()), customerID, 4)) {
+                                    if (!DatabaseConnection.addCash(Integer.parseInt(createJobIDField.getText()), Double.parseDouble(createCashPaidField.getText()),
                                             Double.parseDouble(createChangeGivenValue.getText().substring(1)))) {
-                                        if (!DatabaseConnection.updateJobStatus(Integer.parseInt(createJobIDField.getText()), "Paid"))
+                                        if (!DatabaseConnection.updateJobStatus(Integer.parseInt(createJobIDField.getText()), "Paid")) {
                                             JOptionPane.showMessageDialog(mainPanel, "Couldn't update job status.");
+                                        } else system.changeScreen("payment", mainPanel);
                                     } else JOptionPane.showMessageDialog(mainPanel, "Couldn't add cash..");
                                 } else JOptionPane.showMessageDialog(mainPanel, "Couldn't add payment.");
                             } catch (SQLException exception) { exception.printStackTrace(); }

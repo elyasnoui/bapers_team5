@@ -273,7 +273,6 @@ public class DatabaseConnection {
                             "OR (startDate >= '"+fromDate+"' AND endDate <= '"+toDate+"') " +
                             "ORDER BY task.date");
 
-
             return returnList(statement);
         } catch (SQLException exception) { exception.printStackTrace(); }
         return null;
@@ -289,7 +288,6 @@ public class DatabaseConnection {
                     "AND task.date <= '"+toDate+"') " +
                     "OR (task.date >= '"+fromDate+"' AND task.date <= '"+toDate+"') " +
                     "ORDER BY staffID, availableTaskID");
-
 
             return returnList(statement);
         } catch (SQLException exception) { exception.printStackTrace(); }
@@ -772,7 +770,7 @@ public class DatabaseConnection {
         Connection conn = Connect();
         assert conn != null;
         PreparedStatement statement = conn.prepareStatement(
-                "INSERT IGNORE INTO job (jobID, amountDue, discount, paymentType, customerID, staffID) " +
+                "INSERT IGNORE INTO payment (jobID, amountDue, discount, paymentType, customerID, staffID) " +
                         "VALUES ('"+jobID+"', '"+amountDue+"', '"+discount+"', '"+paymentType+"', '"+customerID+"', '"+staffID+"')");
         return executeStatement(statement);
     }
